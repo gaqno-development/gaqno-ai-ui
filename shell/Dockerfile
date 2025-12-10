@@ -4,14 +4,11 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 
-# Copy package files (monorepo structure)
+# Copy package files (standalone repository structure)
 COPY package.json package-lock.json* ./
-COPY apps/shell/package.json ./apps/shell/
-COPY packages/core/package.json ./packages/core/
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/config/package.json ./packages/config/
 
 # Install dependencies
+# Note: @repo packages should be published to npm or use git dependencies
 RUN npm ci --legacy-peer-deps
 
 # Rebuild the source code only when needed
@@ -23,7 +20,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build the app
-WORKDIR /app/apps/shell
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -36,16 +32,14 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy public folder
-COPY --from=builder /app/apps/shell/public ./public
+COPY --from=builder /app/public ./public
 
 # Copy standalone build
 # Next.js standalone output structure:
-# - .next/standalone/apps/shell/ (app code)
-# - .next/standalone/node_modules/ (dependencies)
-# - .next/standalone/package.json
-# - .next/standalone/server.js (entry point)
-COPY --from=builder --chown=nextjs:nodejs /app/apps/shell/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/shell/.next/static ./apps/shell/.next/static
+# - .next/standalone/ (app code and dependencies)
+# - .next/static/ (static assets)
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
@@ -55,5 +49,4 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # The standalone build creates server.js in the root of standalone directory
-# Next.js transpiles @repo packages and includes them in standalone/node_modules
 CMD ["node", "server.js"]
