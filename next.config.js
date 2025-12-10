@@ -5,6 +5,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   transpilePackages: ["@gaqno-dev/ui", "@gaqno-dev/core"],
+  assetPrefix: "/books",
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
