@@ -19,7 +19,12 @@ WORKDIR /app
 ENV NODE_ENV=production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-COPY --from=builder /app/public ./public
+
+# Create public directory (Next.js standalone doesn't require it, but some apps might)
+# The public folder is optional - static assets go to .next/static in standalone builds
+RUN mkdir -p ./public
+
+# Copy standalone build
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 USER nextjs
