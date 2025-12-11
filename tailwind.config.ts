@@ -7,6 +7,7 @@ const config: Config = {
     "../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   presets: [sharedConfig],
+  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
 };
 
 export default config;
