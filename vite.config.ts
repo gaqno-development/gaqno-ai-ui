@@ -25,7 +25,20 @@ export default defineConfig({
 				'./BookCoverPage': './src/pages/BookCoverPage.tsx',
 				'./BookExportPage': './src/pages/BookExportPage.tsx',
 			},
-			shared: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query'],
+			shared: {
+				react: {
+					requiredVersion: '^18.0.0',
+				},
+				'react-dom': {
+					requiredVersion: '^18.0.0',
+				},
+				'react-router-dom': {
+					requiredVersion: '^6.0.0',
+				},
+				'@tanstack/react-query': {
+					requiredVersion: '^5.0.0',
+				},
+			},
 		}),
 	],
 	resolve: {
