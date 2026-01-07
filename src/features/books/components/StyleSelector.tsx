@@ -1,8 +1,8 @@
 
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { cn } from '@gaqno-dev/frontcore/lib/utils'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { cn } from '@gaqno-development/frontcore/lib/utils'
+import { Button } from '@gaqno-development/frontcore/components/ui'
 
 const STYLES = [
   {

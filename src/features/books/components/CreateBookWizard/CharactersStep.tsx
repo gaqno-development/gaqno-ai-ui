@@ -1,22 +1,22 @@
 
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { Input } from '@gaqno-dev/frontcore/components/ui'
-import { Label } from '@gaqno-dev/frontcore/components/ui'
-import { Textarea } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { Input } from '@gaqno-development/frontcore/components/ui'
+import { Label } from '@gaqno-development/frontcore/components/ui'
+import { Textarea } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
 import { AISuggestionButton } from '../AISuggestionButton'
 import { User, Plus, Trash2, Sparkles, Loader2 } from 'lucide-react'
 import { useSupabaseClient } from '@/utils/supabaseClient'
-import { useUIStore } from '@gaqno-dev/frontcore/store/uiStore'
+import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gaqno-dev/frontcore/components/ui'
+} from '@gaqno-development/frontcore/components/ui'
 
 interface ICharacter {
   id: string

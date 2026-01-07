@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { coreAxiosClient } from '@gaqno-dev/frontcore/utils/api';
+import { coreAxiosClient } from '@gaqno-development/frontcore/utils/api';
 import type { IBookToneStyle, ICreateBookToneStyleInput, IUpdateBookToneStyleInput } from '@/features/books/types/books';
 
 const aiClient = coreAxiosClient.ai;

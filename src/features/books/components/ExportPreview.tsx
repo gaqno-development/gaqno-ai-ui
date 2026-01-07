@@ -1,6 +1,6 @@
 
 
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
 import { useBook } from '../hooks/useBooks'
 import { useBookActiveCover } from '../hooks/useBookCover'
 import { BookOpen } from 'lucide-react'

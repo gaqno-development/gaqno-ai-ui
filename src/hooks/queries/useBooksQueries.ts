@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useTenant, useAuth } from '@gaqno-dev/frontcore/contexts';
-import { coreAxiosClient } from '@gaqno-dev/frontcore/utils/api';
+import { useTenant, useAuth } from '@gaqno-development/frontcore/contexts';
+import { coreAxiosClient } from '@gaqno-development/frontcore/utils/api';
 import { transformers } from '@/lib/api-transformers';
 import type { IBook, IBookBlueprint, IBookCover, IBookHistory, IBookCharacter, IBookGlossary, IBookExport } from '@/features/books/types/books';
 

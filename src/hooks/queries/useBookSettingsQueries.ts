@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { coreAxiosClient } from '@gaqno-dev/frontcore/utils/api';
+import { coreAxiosClient } from '@gaqno-development/frontcore/utils/api';
 
 const aiClient = coreAxiosClient.ai;
 

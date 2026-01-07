@@ -1,6 +1,6 @@
 import { useBooksQueries } from '@/hooks/queries/useBooksQueries'
 import { useBooksMutations } from '@/hooks/mutations/useBooksMutations'
-import { coreAxiosClient } from '@gaqno-dev/frontcore/utils/api'
+import { coreAxiosClient } from '@gaqno-development/frontcore/utils/api'
 import { transformers } from '@/lib/api-transformers'
 import {
   ICreateBookHistoryInput,

@@ -6,12 +6,12 @@ import { useBookCharacters } from '../hooks/useBookCharacters'
 import { useSupabaseClient } from '@/utils/supabaseClient'
 import { ChapterStatus } from '../types/books'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
 import { BookOpen, CheckCircle2, Circle, ChevronDown, ChevronRight, Loader2 } from 'lucide-react'
-import { cn } from '@gaqno-dev/frontcore/lib/utils'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaqno-dev/frontcore/components/ui'
+import { cn } from '@gaqno-development/frontcore/lib/utils'
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaqno-development/frontcore/components/ui'
 import { calculatePages } from '../utils/pageCalculator'
-import { useUIStore } from '@gaqno-dev/frontcore/store/uiStore'
+import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 
 interface IBlueprintStructureProps {
   bookId: string

@@ -1,10 +1,10 @@
 
 
 import { useState } from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
 import { Loader2, Sparkles, Check, X, RefreshCw } from 'lucide-react'
-import { cn } from '@gaqno-dev/frontcore/lib/utils'
+import { cn } from '@gaqno-development/frontcore/lib/utils'
 
 interface IAISuggestionPopoverProps {
   onGenerate: () => Promise<string>

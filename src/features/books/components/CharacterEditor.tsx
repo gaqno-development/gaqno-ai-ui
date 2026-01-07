@@ -1,20 +1,20 @@
 
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
-import { Input } from '@gaqno-dev/frontcore/components/ui'
-import { Label } from '@gaqno-dev/frontcore/components/ui'
-import { Textarea } from '@gaqno-dev/frontcore/components/ui'
-import { Avatar, AvatarFallback, AvatarImage } from '@gaqno-dev/frontcore/components/ui'
-import { Badge } from '@gaqno-dev/frontcore/components/ui'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
+import { Input } from '@gaqno-development/frontcore/components/ui'
+import { Label } from '@gaqno-development/frontcore/components/ui'
+import { Textarea } from '@gaqno-development/frontcore/components/ui'
+import { Avatar, AvatarFallback, AvatarImage } from '@gaqno-development/frontcore/components/ui'
+import { Badge } from '@gaqno-development/frontcore/components/ui'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gaqno-development/frontcore/components/ui'
 import { useBookCharacters } from '../hooks/useBookCharacters'
 import { useBook } from '../hooks/useBooks'
 import { useBookBlueprint } from '../hooks/useBookBlueprint'
 import { useSupabaseClient } from '@/utils/supabaseClient'
-import { useAuth } from '@gaqno-dev/frontcore/contexts'
-import { useUIStore } from '@gaqno-dev/frontcore/store/uiStore'
+import { useAuth } from '@gaqno-development/frontcore/contexts'
+import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import { IBookCharacter } from '../types/books'
 import { ICharacterDetails, CharacterRole } from '../types/character'
 import { Wand2, Loader2, Image as ImageIcon, Save, User } from 'lucide-react'
@@ -24,7 +24,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gaqno-dev/frontcore/components/ui'
+} from '@gaqno-development/frontcore/components/ui'
 
 interface ICharacterEditorProps {
   bookId: string

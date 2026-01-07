@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useBook } from '../hooks/useBooks'
-import { Tabs, TabsList, TabsTrigger } from '@gaqno-dev/frontcore/components/ui'
+import { Tabs, TabsList, TabsTrigger } from '@gaqno-development/frontcore/components/ui'
 import { BookOpen, FileText, Image, Download } from 'lucide-react'
 
 interface IBookNavigationHeaderProps {

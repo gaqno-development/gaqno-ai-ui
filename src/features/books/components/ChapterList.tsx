@@ -1,8 +1,8 @@
 
 
 import { IBookChapter } from '../types/books'
-import { Card, CardContent } from '@gaqno-dev/frontcore/components/ui'
-import { cn } from '@gaqno-dev/frontcore/lib/utils'
+import { Card, CardContent } from '@gaqno-development/frontcore/components/ui'
+import { cn } from '@gaqno-development/frontcore/lib/utils'
 import { useBook } from '../hooks/useBooks'
 import { calculatePages } from '../utils/pageCalculator'
 

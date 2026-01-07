@@ -1,7 +1,7 @@
 
 
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { Alert, AlertDescription } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { Alert, AlertDescription } from '@gaqno-development/frontcore/components/ui'
 import { AlertTriangle } from 'lucide-react'
 
 interface IConsistencyAlertsProps {

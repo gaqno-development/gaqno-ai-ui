@@ -4,7 +4,7 @@ import { ChapterList } from '@/features/books/components/ChapterList'
 import { ChapterEditor } from '@/features/books/components/ChapterEditor'
 import { useBookChapters } from '@/features/books/hooks/useBookChapters'
 import { IBookChapter } from '@/features/books/types/books'
-import { LoadingSkeleton } from '@gaqno-dev/frontcore/components/ui'
+import { LoadingSkeleton } from '@gaqno-development/frontcore/components/ui'
 
 export default function BookChaptersPage() {
   const { id } = useParams<{ id: string }>()

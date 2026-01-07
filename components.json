@@ -5,7 +5,7 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "@gaqno-dev/frontcore/styles/globals.css",
+    "css": "@gaqno-development/frontcore/styles/globals.css",
     "baseColor": "neutral",
     "cssVariables": true
   },
@@ -14,8 +14,8 @@
     "components": "@/components",
     "hooks": "@/hooks",
     "lib": "@/lib",
-    "utils": "@gaqno-dev/frontcore/lib/utils",
-    "ui": "@gaqno-dev/frontcore/components/ui"
+    "utils": "@gaqno-development/frontcore/lib/utils",
+    "ui": "@gaqno-development/frontcore/components/ui"
   }
 }
 

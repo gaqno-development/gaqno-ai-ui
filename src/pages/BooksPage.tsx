@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
 import { CreateBookWizard } from '@/features/books/components/CreateBookWizard'
 import { useBooks } from '@/features/books/hooks/useBooks'
 import { BookOpen, Plus } from 'lucide-react'
-import { EmptyState } from '@gaqno-dev/frontcore/components/ui'
-import { LoadingSkeleton } from '@gaqno-dev/frontcore/components/ui'
+import { EmptyState } from '@gaqno-development/frontcore/components/ui'
+import { LoadingSkeleton } from '@gaqno-development/frontcore/components/ui'
 
 export default function BooksPage() {
   const navigate = useNavigate()

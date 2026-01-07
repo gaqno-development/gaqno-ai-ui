@@ -1,4 +1,4 @@
-import { useTenant, useAuth } from '@gaqno-dev/frontcore/contexts'
+import { useTenant, useAuth } from '@gaqno-development/frontcore/contexts'
 import { useBooksQueries } from '@/hooks/queries/useBooksQueries'
 import { useBooksMutations } from '@/hooks/mutations/useBooksMutations'
 import {

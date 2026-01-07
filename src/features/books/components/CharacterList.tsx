@@ -1,14 +1,14 @@
 
 
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@gaqno-dev/frontcore/components/ui'
-import { Input } from '@gaqno-dev/frontcore/components/ui'
-import { Label } from '@gaqno-dev/frontcore/components/ui'
-import { Textarea } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@gaqno-development/frontcore/components/ui'
+import { Input } from '@gaqno-development/frontcore/components/ui'
+import { Label } from '@gaqno-development/frontcore/components/ui'
+import { Textarea } from '@gaqno-development/frontcore/components/ui'
 import { useBookCharacters } from '../hooks/useBookCharacters'
-import { Avatar, AvatarImage, AvatarFallback } from '@gaqno-dev/frontcore/components/ui'
+import { Avatar, AvatarImage, AvatarFallback } from '@gaqno-development/frontcore/components/ui'
 import { Plus } from 'lucide-react'
 
 interface ICharacterListProps {

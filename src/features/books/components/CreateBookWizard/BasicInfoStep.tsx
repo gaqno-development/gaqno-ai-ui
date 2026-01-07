@@ -1,16 +1,16 @@
 
 
 import { useFormContext } from 'react-hook-form'
-import { Input } from '@gaqno-dev/frontcore/components/ui'
-import { Label } from '@gaqno-dev/frontcore/components/ui'
-import { Textarea } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
+import { Input } from '@gaqno-development/frontcore/components/ui'
+import { Label } from '@gaqno-development/frontcore/components/ui'
+import { Textarea } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
 import { GenreSelector } from '../GenreSelector'
 import { AISuggestionButton } from '../AISuggestionButton'
 import { useSupabaseClient } from '@/utils/supabaseClient'
 import { useState } from 'react'
 import { Sparkles, Loader2 } from 'lucide-react'
-import { useUIStore } from '@gaqno-dev/frontcore/store/uiStore'
+import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 
 interface IBasicInfoStepProps {
   onGenreSelect: (genre: string) => void

@@ -1,17 +1,17 @@
 
 
 import { useMemo, useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
 import { CharacterList } from './CharacterList'
 import { ConsistencyAlerts } from './ConsistencyAlerts'
 import { useBook, useBooks } from '../hooks/useBooks'
 import { useBookChapters } from '../hooks/useBookChapters'
 import { formatPageInfo, calculatePages } from '../utils/pageCalculator'
 import { BookOpen, FileText, Settings, Save } from 'lucide-react'
-import { Input } from '@gaqno-dev/frontcore/components/ui'
-import { Label } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
-import { useUIStore } from '@gaqno-dev/frontcore/store/uiStore'
+import { Input } from '@gaqno-development/frontcore/components/ui'
+import { Label } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
+import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 
 interface IBlueprintContextPanelProps {
   bookId: string

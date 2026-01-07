@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { BookBlueprintPanel } from '@/features/books/components/BookBlueprintPanel'
 import { useBook } from '@/features/books/hooks/useBooks'
-import { LoadingSkeleton } from '@gaqno-dev/frontcore/components/ui'
-import { EmptyState } from '@gaqno-dev/frontcore/components/ui'
+import { LoadingSkeleton } from '@gaqno-development/frontcore/components/ui'
+import { EmptyState } from '@gaqno-development/frontcore/components/ui'
 import { BookX } from 'lucide-react'
 
 export default function BookDetailPage() {

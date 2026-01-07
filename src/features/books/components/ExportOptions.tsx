@@ -1,7 +1,7 @@
 
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-dev/frontcore/components/ui'
-import { Button } from '@gaqno-dev/frontcore/components/ui'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui'
+import { Button } from '@gaqno-development/frontcore/components/ui'
 import { useBookExports } from '../hooks/useBookExport'
 import { ExportFormat, ExportStatus } from '../types/books'
 import { FileText, Download } from 'lucide-react'
