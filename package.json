@@ -40,6 +40,6 @@
     "vite-plugin-top-level-await": "^1.6.0"
   },
   "overrides": {
-    "@gaqno-development/core": "npm:@gaqno-development/frontcore@^1.0.4"
+    "@gaqno-development/core": "npm:@gaqno-dev/frontcore@^1.0.4"
   }
 }
