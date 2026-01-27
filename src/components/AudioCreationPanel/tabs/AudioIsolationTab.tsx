@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/fro
 import { Button, Label } from '@gaqno-development/frontcore/components/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@gaqno-development/frontcore/components/ui';
 import { Shield } from 'lucide-react';
+import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { useAudioIsolationMutations } from '@/hooks/mutations/useAudioMutations';
 
 export function AudioIsolationTab() {
@@ -76,17 +77,7 @@ export function AudioIsolationTab() {
           </Button>
         </CardContent>
       </Card>
-      {audioUrl && (
-        <Card>
-          <CardHeader><CardTitle>Isolated audio</CardTitle></CardHeader>
-          <CardContent>
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </CardContent>
-        </Card>
-      )}
+      {audioUrl && <GeneratedAudioCard audioUrl={audioUrl} title="Isolated audio" />}
     </form>
   );
 }

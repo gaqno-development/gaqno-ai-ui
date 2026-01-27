@@ -3,6 +3,7 @@ import { Controller } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Textarea, Label, Input } from '@gaqno-development/frontcore/components/ui';
 import { BookOpen } from 'lucide-react';
+import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { usePodcastTab } from './hooks/usePodcastTab';
 
 export function PodcastTab() {
@@ -104,20 +105,15 @@ export function PodcastTab() {
         </CardContent>
       </Card>
       {audioUrl && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Áudio gerado</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Seu navegador não suporta o elemento de áudio.
-            </audio>
+        <GeneratedAudioCard
+          audioUrl={audioUrl}
+          title="Áudio gerado"
+          extra={
             <a download="podcast.mp3" href={audioUrl} className="text-sm underline">
               Baixar
             </a>
-          </CardContent>
-        </Card>
+          }
+        />
       )}
     </form>
   );

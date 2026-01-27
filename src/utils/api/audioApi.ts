@@ -1,3 +1,4 @@
+import { getAiServiceBaseUrl } from '@/lib/env';
 import type {
   MusicStreamRequest,
   RealtimeSttTokenResponse,
@@ -7,18 +8,6 @@ import type {
   TranscribeResponse,
   VoiceChangerRequest,
 } from '@/types/audio/audio';
-
-const getViteEnv = (key: string, defaultValue: string = ''): string => {
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
-    return import.meta.env[key] as string;
-  }
-  return defaultValue;
-};
-
-const getApiBaseUrl = (): string => {
-  const aiServiceUrl = getViteEnv('VITE_AI_SERVICE_URL', 'https://api.gaqno.com.br/ai');
-  return aiServiceUrl.replace(/\/$/, '');
-};
 
 async function handleError(response: Response): Promise<never> {
   const error = await response.json().catch(() => ({ message: `HTTP Error ${response.status}` }));
@@ -32,7 +21,7 @@ export const audioApi = {
     stability?: number;
     similarityBoost?: number;
   }): Promise<Blob> {
-    const response = await fetch(`${getApiBaseUrl()}/audio/text-to-speech`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/audio/text-to-speech`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +56,7 @@ export const audioApi = {
       form.append('tag_audio_events', String(params.tag_audio_events));
     if (params.diarize != null) form.append('diarize', String(params.diarize));
 
-    const response = await fetch(`${getApiBaseUrl()}/audio/speech-to-text`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/audio/speech-to-text`, {
       method: 'POST',
       body: form,
     });
@@ -78,7 +67,7 @@ export const audioApi = {
 
   async getRealtimeSttToken(): Promise<RealtimeSttTokenResponse> {
     const response = await fetch(
-      `${getApiBaseUrl()}/audio/speech-to-text/realtime-token`,
+      `${getAiServiceBaseUrl()}/audio/speech-to-text/realtime-token`,
       { method: 'POST' },
     );
     if (!response.ok) await handleError(response);
@@ -87,7 +76,7 @@ export const audioApi = {
 
   async getTtsStreamInputToken(): Promise<TtsStreamInputTokenResponse> {
     const response = await fetch(
-      `${getApiBaseUrl()}/audio/tts-stream-input-token`,
+      `${getAiServiceBaseUrl()}/audio/tts-stream-input-token`,
       { method: 'POST' },
     );
     if (!response.ok) await handleError(response);
@@ -98,7 +87,7 @@ export const audioApi = {
     body: MusicStreamRequest,
     outputFormat?: string,
   ): Promise<Blob> {
-    let url = `${getApiBaseUrl()}/audio/music/stream`;
+    let url = `${getAiServiceBaseUrl()}/audio/music/stream`;
     if (outputFormat) {
       url += `?output_format=${encodeURIComponent(outputFormat)}`;
     }
@@ -124,7 +113,7 @@ export const audioApi = {
     if (query?.remove_background_noise != null)
       params.set('remove_background_noise', String(query.remove_background_noise));
     const qs = params.toString();
-    const url = `${getApiBaseUrl()}/audio/voice-changer/${encodeURIComponent(voiceId)}${qs ? `?${qs}` : ''}`;
+    const url = `${getAiServiceBaseUrl()}/audio/voice-changer/${encodeURIComponent(voiceId)}${qs ? `?${qs}` : ''}`;
     const response = await fetch(url, { method: 'POST', body: form });
     if (!response.ok) await handleError(response);
     return await response.blob();
@@ -134,7 +123,7 @@ export const audioApi = {
     body: SoundEffectRequest,
     outputFormat?: string,
   ): Promise<Blob> {
-    let url = `${getApiBaseUrl()}/audio/sound-effects`;
+    let url = `${getAiServiceBaseUrl()}/audio/sound-effects`;
     if (outputFormat) {
       url += `?output_format=${encodeURIComponent(outputFormat)}`;
     }
@@ -153,7 +142,7 @@ export const audioApi = {
   ): Promise<Blob> {
     const form = new FormData();
     form.append('audio', audio);
-    let url = `${getApiBaseUrl()}/audio/audio-isolation/stream`;
+    let url = `${getAiServiceBaseUrl()}/audio/audio-isolation/stream`;
     if (fileFormat) {
       url += `?file_format=${encodeURIComponent(fileFormat)}`;
     }

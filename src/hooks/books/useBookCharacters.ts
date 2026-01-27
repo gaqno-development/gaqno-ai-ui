@@ -1,66 +1,45 @@
-import { useBookMutations } from '@/hooks/mutations/useBookMutations'
-import {
-  ICreateBookCharacterInput,
-  IUpdateBookCharacterInput,
-} from '@/types/books/books'
+import type { ICreateBookCharacterInput, IUpdateBookCharacterInput } from '@/types/books/books';
+import { createUseBookEntity } from './createUseBookEntity';
+
+const useBookEntity = createUseBookEntity({
+  getQuery: (q, bookId) => q.getCharacters(bookId),
+  getCreateMutate: (m) => m.createCharacter,
+  getUpdateMutate: (m) => m.updateCharacter,
+  getDeleteMutate: (m) => m.deleteCharacter,
+  createAdapter: (input) => ({
+    bookId: input.book_id,
+    data: {
+      name: input.name,
+      description: input.description,
+      avatar_url: input.avatar_url,
+      metadata: input.metadata,
+    },
+  }),
+  updateAdapter: (characterId, input) => ({
+    characterId,
+    data: {
+      name: input.name,
+      description: input.description,
+      avatar_url: input.avatar_url,
+      metadata: input.metadata,
+    },
+  }),
+  createError: 'Failed to create character',
+  updateError: 'Failed to update character',
+  deleteError: 'Failed to delete character',
+});
 
 export const useBookCharacters = (bookId: string | null) => {
-  const { queries, mutations } = useBookMutations()
-
-  const { data: characters, isLoading, refetch } = queries.getCharacters(bookId || '')
-
-  const createCharacter = async (input: ICreateBookCharacterInput) => {
-    try {
-      const result = await mutations.createCharacter.mutateAsync({
-        bookId: input.book_id,
-        data: {
-          name: input.name,
-          description: input.description,
-          avatar_url: input.avatar_url,
-          metadata: input.metadata,
-        }
-      })
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to create character' }
-    }
-  }
-
-  const updateCharacter = async (characterId: string, input: IUpdateBookCharacterInput) => {
-    try {
-      const result = await mutations.updateCharacter.mutateAsync({
-        characterId,
-        data: {
-          name: input.name,
-          description: input.description,
-          avatar_url: input.avatar_url,
-          metadata: input.metadata,
-        }
-      })
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to update character' }
-    }
-  }
-
-  const deleteCharacter = async (characterId: string) => {
-    try {
-      await mutations.deleteCharacter.mutateAsync(characterId)
-      return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to delete character' }
-    }
-  }
-
+  const raw = useBookEntity(bookId);
   return {
-    characters: characters || [],
-    isLoading,
-    refetch,
-    createCharacter,
-    updateCharacter,
-    deleteCharacter,
-    isCreating: mutations.createCharacter.isPending,
-    isUpdating: mutations.updateCharacter.isPending,
-    isDeleting: mutations.deleteCharacter.isPending,
-  }
-}
+    characters: raw.items,
+    isLoading: raw.isLoading,
+    refetch: raw.refetch,
+    createCharacter: raw.create,
+    updateCharacter: raw.update,
+    deleteCharacter: raw.remove,
+    isCreating: raw.isCreating,
+    isUpdating: raw.isUpdating,
+    isDeleting: raw.isDeleting,
+  };
+};

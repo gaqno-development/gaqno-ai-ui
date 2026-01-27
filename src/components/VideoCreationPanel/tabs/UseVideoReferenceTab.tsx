@@ -1,6 +1,6 @@
-import { VideoCreationPanel } from '../VideoCreationPanel';
+import { VideoTab } from './VideoTab';
 import { VideoMode } from '@/types/videos/video-types';
 
 export function UseVideoReferenceTab() {
-  return <VideoCreationPanel defaultMode={VideoMode.USE_VIDEO_REFERENCE} />;
+  return <VideoTab mode={VideoMode.USE_VIDEO_REFERENCE} />;
 }

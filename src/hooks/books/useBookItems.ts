@@ -1,50 +1,29 @@
-import { useBookMutations } from '@/hooks/mutations/useBookMutations'
-import {
-  ICreateBookItemInput,
-  IUpdateBookItemInput,
-} from '@/types/books/books'
+import type { ICreateBookItemInput, IUpdateBookItemInput } from '@/types/books/books';
+import { createUseBookEntity } from './createUseBookEntity';
+
+const useBookEntity = createUseBookEntity({
+  getQuery: (q, bookId) => q.getItemsByBookId(bookId),
+  getCreateMutate: (m) => m.createItem,
+  getUpdateMutate: (m) => m.updateItem,
+  getDeleteMutate: (m) => m.deleteItem,
+  createAdapter: (input) => input,
+  updateAdapter: (itemId, input) => ({ id: itemId, data: input }),
+  createError: 'Failed to create item',
+  updateError: 'Failed to update item',
+  deleteError: 'Failed to delete item',
+});
 
 export const useBookItems = (bookId: string | null) => {
-  const { queries, mutations } = useBookMutations()
-
-  const { data: items, isLoading, refetch } = queries.getItemsByBookId(bookId || '')
-
-  const createItem = async (input: ICreateBookItemInput) => {
-    try {
-      const result = await mutations.createItem.mutateAsync(input)
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to create item' }
-    }
-  }
-
-  const updateItem = async (itemId: string, input: IUpdateBookItemInput) => {
-    try {
-      const result = await mutations.updateItem.mutateAsync({ id: itemId, data: input })
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to update item' }
-    }
-  }
-
-  const deleteItem = async (itemId: string) => {
-    try {
-      await mutations.deleteItem.mutateAsync(itemId)
-      return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to delete item' }
-    }
-  }
-
+  const raw = useBookEntity(bookId);
   return {
-    items: items || [],
-    isLoading,
-    refetch,
-    createItem,
-    updateItem,
-    deleteItem,
-    isCreating: mutations.createItem.isPending,
-    isUpdating: mutations.updateItem.isPending,
-    isDeleting: mutations.deleteItem.isPending,
-  }
-}
+    items: raw.items,
+    isLoading: raw.isLoading,
+    refetch: raw.refetch,
+    createItem: raw.create,
+    updateItem: raw.update,
+    deleteItem: raw.remove,
+    isCreating: raw.isCreating,
+    isUpdating: raw.isUpdating,
+    isDeleting: raw.isDeleting,
+  };
+};

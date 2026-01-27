@@ -1,14 +1,4 @@
-const getViteEnv = (key: string, defaultValue: string = ''): string => {
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
-    return import.meta.env[key] as string;
-  }
-  return defaultValue;
-};
-
-const getApiBaseUrl = (): string => {
-  const aiServiceUrl = getViteEnv('VITE_AI_SERVICE_URL', 'https://api.gaqno.com.br/ai');
-  return aiServiceUrl.replace(/\/$/, '');
-};
+import { getAiServiceBaseUrl } from '@/lib/env';
 
 export const booksApi = {
   async generateBlueprint(body: {
@@ -17,7 +7,7 @@ export const booksApi = {
     description?: string;
     bookContext?: Record<string, any>;
   }): Promise<any> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/ai/books/generate-blueprint`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/ai/books/generate-blueprint`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,7 +28,7 @@ export const booksApi = {
     characterName?: string;
     bookContext?: Record<string, any>;
   }): Promise<{ characterDetails?: any }> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/ai/books/analyze-character`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/ai/books/analyze-character`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +48,7 @@ export const booksApi = {
     characterName?: string;
     characterDescription?: string;
   }): Promise<{ imageUrl?: string; avatarPrompt?: string }> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/ai/books/generate-character-avatar`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/ai/books/generate-character-avatar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +73,7 @@ export const booksApi = {
     previousChapter?: any;
     characters?: Array<any>;
   }): Promise<{ analysis: string }> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/ai/books/analyze-context`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/ai/books/analyze-context`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +109,7 @@ export const booksApi = {
     expanded?: boolean;
     expansionAttempts?: number;
   }> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/ai/books/generate-chapter`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/ai/books/generate-chapter`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Textarea, Label } from '@gaqno-development/frontcore/components/ui';
 import { Volume2 } from 'lucide-react';
+import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -56,17 +57,7 @@ export function TtsTab() {
           </Button>
         </CardContent>
       </Card>
-      {audioUrl && (
-        <Card>
-          <CardHeader><CardTitle>Generated Audio</CardTitle></CardHeader>
-          <CardContent>
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </CardContent>
-        </Card>
-      )}
+      {audioUrl && <GeneratedAudioCard audioUrl={audioUrl} title="Generated Audio" />}
     </form>
   );
 }

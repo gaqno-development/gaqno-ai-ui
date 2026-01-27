@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import { booksApi } from '@/utils/api/booksApi'
 import type { IStructureStepProps } from '../types'
+import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
 export function useStructureStep({ bookContext, onStructureChange, structure }: IStructureStepProps) {
   const { addNotification } = useUIStore()
@@ -9,8 +10,7 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
   const [plotSummary, setPlotSummary] = useState('')
   const [initialChapters, setInitialChapters] = useState('')
   const [mainConflict, setMainConflict] = useState('')
-  const [generatingFor, setGeneratingFor] = useState<string | null>(null)
-  const [isGeneratingAll, setIsGeneratingAll] = useState(false)
+  const { generatingFor, setGeneratingFor, isGeneratingAll, guardGenerateAll, runWithGeneratingAll } = useWizardStepGeneration()
 
   useEffect(() => {
     if (!structure) return
@@ -88,53 +88,44 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
   }
 
   const handleGenerateAll = async () => {
-    if (!bookContext?.title && !bookContext?.description) {
-      addNotification({
-        type: 'warning',
-        title: 'Informações necessárias',
-        message: 'Preencha pelo menos o título ou a premissa do livro antes de gerar a estrutura.',
-        duration: 5000,
-      })
-      return
-    }
-    setIsGeneratingAll(true)
-    try {
-      const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma estrutura completa da história incluindo: resumo do enredo em 3 atos (introdução, desenvolvimento, conclusão), lista de capítulos iniciais sugeridos com títulos e resumos, e o conflito principal que impulsiona a narrativa.`
-      const data = await booksApi.generateBlueprint({
-        title: bookContext?.title || 'Novo Livro',
-        genre: bookContext?.genre || 'fiction',
-        description: prompt,
-      })
-      const blueprint = data?.blueprint || data
-      const structureData = (blueprint?.structure || {}) as Record<string, unknown>
-      const summary = (blueprint?.summary || data?.summary || '') as string
-      const chArr = structureData.chapters as Array<{ title?: string; number?: number; summary?: string }> | undefined
+    if (guardGenerateAll(bookContext, 'Preencha pelo menos o título ou a premissa do livro antes de gerar a estrutura.')) return
+    await runWithGeneratingAll(async () => {
+      try {
+        const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma estrutura completa da história incluindo: resumo do enredo em 3 atos (introdução, desenvolvimento, conclusão), lista de capítulos iniciais sugeridos com títulos e resumos, e o conflito principal que impulsiona a narrativa.`
+        const data = await booksApi.generateBlueprint({
+          title: bookContext?.title || 'Novo Livro',
+          genre: bookContext?.genre || 'fiction',
+          description: prompt,
+        })
+        const blueprint = data?.blueprint || data
+        const structureData = (blueprint?.structure || {}) as Record<string, unknown>
+        const summary = (blueprint?.summary || data?.summary || '') as string
+        const chArr = structureData.chapters as Array<{ title?: string; number?: number; summary?: string }> | undefined
 
-      let newPlot = (structureData.plot_summary as string) || summary || ''
-      let newChapters = (structureData.initial_chapters as string) || (Array.isArray(chArr) ? chArr.map((ch, idx) => `${idx + 1}. ${ch.title || `Capítulo ${ch.number ?? idx + 1}`}: ${ch.summary || ''}`).join('\n') : '')
-      let newConflict = (structureData.main_conflict || structureData.conflict || (summary ? summary.substring(0, 200) : '')) as string
+        let newPlot = (structureData.plot_summary as string) || summary || ''
+        let newChapters = (structureData.initial_chapters as string) || (Array.isArray(chArr) ? chArr.map((ch, idx) => `${idx + 1}. ${ch.title || `Capítulo ${ch.number ?? idx + 1}`}: ${ch.summary || ''}`).join('\n') : '')
+        let newConflict = (structureData.main_conflict || structureData.conflict || (summary ? summary.substring(0, 200) : '')) as string
 
-      setPlotSummary(newPlot)
-      setInitialChapters(newChapters)
-      setMainConflict(newConflict)
-      onStructureChange?.({ plotSummary: newPlot, initialChapters: newChapters, mainConflict: newConflict })
+        setPlotSummary(newPlot)
+        setInitialChapters(newChapters)
+        setMainConflict(newConflict)
+        onStructureChange?.({ plotSummary: newPlot, initialChapters: newChapters, mainConflict: newConflict })
 
-      addNotification({
-        type: 'success',
-        title: 'Estrutura gerada!',
-        message: 'Todos os campos da estrutura foram preenchidos com sucesso.',
-        duration: 3000,
-      })
-    } catch (err: unknown) {
-      addNotification({
-        type: 'error',
-        title: 'Erro ao gerar estrutura',
-        message: err instanceof Error ? err.message : 'Não foi possível gerar a estrutura automaticamente.',
-        duration: 5000,
-      })
-    } finally {
-      setIsGeneratingAll(false)
-    }
+        addNotification({
+          type: 'success',
+          title: 'Estrutura gerada!',
+          message: 'Todos os campos da estrutura foram preenchidos com sucesso.',
+          duration: 3000,
+        })
+      } catch (err: unknown) {
+        addNotification({
+          type: 'error',
+          title: 'Erro ao gerar estrutura',
+          message: err instanceof Error ? err.message : 'Não foi possível gerar a estrutura automaticamente.',
+          duration: 5000,
+        })
+      }
+    })
   }
 
   const applyPlotSummary = (v: string) => {

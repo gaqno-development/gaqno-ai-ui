@@ -1,59 +1,32 @@
-import { useBookMutations } from '@/hooks/mutations/useBookMutations'
-import {
-  ICreateBookGlossaryInput,
-  IUpdateBookGlossaryInput,
-} from '@/types/books/books'
+import type { ICreateBookGlossaryInput, IUpdateBookGlossaryInput } from '@/types/books/books';
+import { createUseBookEntity } from './createUseBookEntity';
+
+const useBookEntity = createUseBookEntity({
+  getQuery: (q, bookId) => q.getGlossary(bookId),
+  getCreateMutate: (m) => m.createGlossaryTerm,
+  getUpdateMutate: (m) => m.updateGlossaryTerm,
+  getDeleteMutate: (m) => m.deleteGlossaryTerm,
+  createAdapter: (input) => ({
+    bookId: input.book_id,
+    data: { term: input.term, definition: input.definition },
+  }),
+  updateAdapter: (glossaryId, input) => ({ glossaryId, data: input }),
+  createError: 'Failed to create glossary term',
+  updateError: 'Failed to update glossary term',
+  deleteError: 'Failed to delete glossary term',
+});
 
 export const useBookGlossary = (bookId: string | null) => {
-  const { queries, mutations } = useBookMutations()
-
-  const { data: glossary, isLoading, refetch } = queries.getGlossary(bookId || '')
-
-  const createGlossaryTerm = async (input: ICreateBookGlossaryInput) => {
-    try {
-      const result = await mutations.createGlossaryTerm.mutateAsync({
-        bookId: input.book_id,
-        data: {
-          term: input.term,
-          definition: input.definition,
-        }
-      })
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to create glossary term' }
-    }
-  }
-
-  const updateGlossaryTerm = async (glossaryId: string, input: IUpdateBookGlossaryInput) => {
-    try {
-      const result = await mutations.updateGlossaryTerm.mutateAsync({
-        glossaryId,
-        data: input
-      })
-      return { success: true, data: result }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to update glossary term' }
-    }
-  }
-
-  const deleteGlossaryTerm = async (glossaryId: string) => {
-    try {
-      await mutations.deleteGlossaryTerm.mutateAsync(glossaryId)
-      return { success: true }
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Failed to delete glossary term' }
-    }
-  }
-
+  const raw = useBookEntity(bookId);
   return {
-    glossary: glossary || [],
-    isLoading,
-    refetch,
-    createGlossaryTerm,
-    updateGlossaryTerm,
-    deleteGlossaryTerm,
-    isCreating: mutations.createGlossaryTerm.isPending,
-    isUpdating: mutations.updateGlossaryTerm.isPending,
-    isDeleting: mutations.deleteGlossaryTerm.isPending,
-  }
-}
+    glossary: raw.items,
+    isLoading: raw.isLoading,
+    refetch: raw.refetch,
+    createGlossaryTerm: raw.create,
+    updateGlossaryTerm: raw.update,
+    deleteGlossaryTerm: raw.remove,
+    isCreating: raw.isCreating,
+    isUpdating: raw.isUpdating,
+    isDeleting: raw.isDeleting,
+  };
+};

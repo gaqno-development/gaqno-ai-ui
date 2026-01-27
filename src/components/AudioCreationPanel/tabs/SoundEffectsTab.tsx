@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Textarea, Label } from '@gaqno-development/frontcore/components/ui';
 import { Zap } from 'lucide-react';
+import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { useSoundEffectMutations } from '@/hooks/mutations/useAudioMutations';
 
 export function SoundEffectsTab() {
@@ -50,17 +51,7 @@ export function SoundEffectsTab() {
           </Button>
         </CardContent>
       </Card>
-      {audioUrl && (
-        <Card>
-          <CardHeader><CardTitle>Generated Sound</CardTitle></CardHeader>
-          <CardContent>
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </CardContent>
-        </Card>
-      )}
+      {audioUrl && <GeneratedAudioCard audioUrl={audioUrl} title="Generated Sound" />}
     </form>
   );
 }

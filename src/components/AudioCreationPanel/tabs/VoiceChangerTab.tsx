@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Label, Input } from '@gaqno-development/frontcore/components/ui';
 import { UserCircle } from 'lucide-react';
+import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { useVoiceChangerMutations } from '@/hooks/mutations/useAudioMutations';
 
 export function VoiceChangerTab() {
@@ -68,17 +69,7 @@ export function VoiceChangerTab() {
           </Button>
         </CardContent>
       </Card>
-      {audioUrl && (
-        <Card>
-          <CardHeader><CardTitle>Result</CardTitle></CardHeader>
-          <CardContent>
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </CardContent>
-        </Card>
-      )}
+      {audioUrl && <GeneratedAudioCard audioUrl={audioUrl} title="Result" />}
     </form>
   );
 }

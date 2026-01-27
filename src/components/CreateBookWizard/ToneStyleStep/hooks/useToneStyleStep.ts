@@ -3,12 +3,12 @@ import { useFormContext } from 'react-hook-form'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import { booksApi } from '@/utils/api/booksApi'
 import type { IToneStyleStepProps } from '../types'
+import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
 export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   const { addNotification } = useUIStore()
   const { register, setValue } = useFormContext()
-  const [generatingFor, setGeneratingFor] = useState<string | null>(null)
-  const [isGeneratingAll, setIsGeneratingAll] = useState(false)
+  const { generatingFor, setGeneratingFor, isGeneratingAll, guardGenerateAll, runWithGeneratingAll } = useWizardStepGeneration()
 
   const handleGenerateTone = async (): Promise<string> => {
     setGeneratingFor('tone')
@@ -79,49 +79,40 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   }
 
   const handleGenerateAll = async () => {
-    if (!bookContext?.title && !bookContext?.description) {
-      addNotification({
-        type: 'warning',
-        title: 'Informações necessárias',
-        message: 'Preencha pelo menos o título ou a premissa do livro antes de gerar tom e estilo.',
-        duration: 5000,
-      })
-      return
-    }
-    setIsGeneratingAll(true)
-    try {
-      const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma análise completa de tom e estilo narrativo incluindo: tom narrativo (leve, sombrio, épico, etc.), ritmo (rápido, contemplativo, equilibrado, etc.), público-alvo apropriado e temas centrais/mensagens que o livro explora.`
-      const data = await booksApi.generateBlueprint({
-        title: bookContext?.title || 'Novo Livro',
-        genre: bookContext?.genre || 'fiction',
-        description: prompt,
-      })
-      const blueprint = data?.blueprint || data
-      const summary = (blueprint?.summary || data?.summary || '') as string
-      const tone = summary.includes('sombrio') ? 'sombrio' : summary.includes('leve') ? 'leve' : summary.includes('épico') ? 'épico' : 'equilibrado'
-      const pacingVal = summary.includes('rápido') ? 'rápido' : summary.includes('contemplativo') ? 'contemplativo' : 'equilibrado'
-      const audience = summary.includes('jovem') ? 'Jovens adultos' : summary.includes('adulto') ? 'Adultos' : 'Público geral'
-      const themes = summary || 'Temas universais de crescimento e descoberta'
-      setValue('narrative_tone', tone)
-      setValue('pacing', pacingVal)
-      setValue('target_audience', audience)
-      setValue('central_themes', themes)
-      addNotification({
-        type: 'success',
-        title: 'Tom e estilo gerados!',
-        message: 'Todos os campos de tom e estilo foram preenchidos com sucesso.',
-        duration: 3000,
-      })
-    } catch (err: unknown) {
-      addNotification({
-        type: 'error',
-        title: 'Erro ao gerar tom e estilo',
-        message: err instanceof Error ? err.message : 'Não foi possível gerar os campos automaticamente.',
-        duration: 5000,
-      })
-    } finally {
-      setIsGeneratingAll(false)
-    }
+    if (guardGenerateAll(bookContext, 'Preencha pelo menos o título ou a premissa do livro antes de gerar tom e estilo.')) return
+    await runWithGeneratingAll(async () => {
+      try {
+        const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma análise completa de tom e estilo narrativo incluindo: tom narrativo (leve, sombrio, épico, etc.), ritmo (rápido, contemplativo, equilibrado, etc.), público-alvo apropriado e temas centrais/mensagens que o livro explora.`
+        const data = await booksApi.generateBlueprint({
+          title: bookContext?.title || 'Novo Livro',
+          genre: bookContext?.genre || 'fiction',
+          description: prompt,
+        })
+        const blueprint = data?.blueprint || data
+        const summary = (blueprint?.summary || data?.summary || '') as string
+        const tone = summary.includes('sombrio') ? 'sombrio' : summary.includes('leve') ? 'leve' : summary.includes('épico') ? 'épico' : 'equilibrado'
+        const pacingVal = summary.includes('rápido') ? 'rápido' : summary.includes('contemplativo') ? 'contemplativo' : 'equilibrado'
+        const audience = summary.includes('jovem') ? 'Jovens adultos' : summary.includes('adulto') ? 'Adultos' : 'Público geral'
+        const themes = summary || 'Temas universais de crescimento e descoberta'
+        setValue('narrative_tone', tone)
+        setValue('pacing', pacingVal)
+        setValue('target_audience', audience)
+        setValue('central_themes', themes)
+        addNotification({
+          type: 'success',
+          title: 'Tom e estilo gerados!',
+          message: 'Todos os campos de tom e estilo foram preenchidos com sucesso.',
+          duration: 3000,
+        })
+      } catch (err: unknown) {
+        addNotification({
+          type: 'error',
+          title: 'Erro ao gerar tom e estilo',
+          message: err instanceof Error ? err.message : 'Não foi possível gerar os campos automaticamente.',
+          duration: 5000,
+        })
+      }
+    })
   }
 
   return {

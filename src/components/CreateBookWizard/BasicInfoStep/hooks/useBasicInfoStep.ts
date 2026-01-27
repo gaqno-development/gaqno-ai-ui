@@ -4,6 +4,7 @@ import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import { booksApi } from '@/utils/api/booksApi'
 import type { IBasicInfoStepProps } from '../types'
 import { GENRE_LABELS } from '../types'
+import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
 export function useBasicInfoStep({
   onGenreSelect,
@@ -14,7 +15,7 @@ export function useBasicInfoStep({
   const { register, setValue, watch, formState: { errors } } = useFormContext()
   const [isGeneratingTitle, setIsGeneratingTitle] = useState(false)
   const [isGeneratingPremise, setIsGeneratingPremise] = useState(false)
-  const [isGeneratingAll, setIsGeneratingAll] = useState(false)
+  const { isGeneratingAll, runWithGeneratingAll } = useWizardStepGeneration()
 
   const title = watch('title')
   const description = watch('description')
@@ -69,53 +70,52 @@ export function useBasicInfoStep({
   }
 
   const handleGenerateAll = async () => {
-    setIsGeneratingAll(true)
-    try {
-      if (onGenerateCompleteBlueprint) {
-        await onGenerateCompleteBlueprint()
+    await runWithGeneratingAll(async () => {
+      try {
+        if (onGenerateCompleteBlueprint) {
+          await onGenerateCompleteBlueprint()
+          addNotification({
+            type: 'success',
+            title: 'Blueprint completo gerado!',
+            message: 'Todos os steps foram preenchidos com sucesso. Navegue pelos steps para revisar.',
+            duration: 5000,
+          })
+        } else {
+          const data = await booksApi.generateBlueprint({
+            title: 'Gere um livro completo com título, gênero e premissa envolvente',
+            genre: 'fiction',
+            description: 'Crie uma ideia original e criativa para um livro, incluindo título atraente, gênero apropriado e uma premissa detalhada.',
+          })
+          const blueprint = data?.blueprint || data
+          if (blueprint?.title) {
+            const generatedTitle = typeof blueprint.title === 'string' ? blueprint.title : JSON.stringify(blueprint.title)
+            setValue('title', generatedTitle)
+          }
+          if (blueprint?.genre || data?.genre) {
+            const genre = blueprint?.genre || data?.genre
+            if (typeof genre === 'string') onGenreSelect(genre)
+          }
+          if (blueprint?.summary || blueprint?.description || data?.summary) {
+            const generatedPremise = blueprint?.summary || blueprint?.description || data?.summary
+            const premise = typeof generatedPremise === 'string' ? generatedPremise : JSON.stringify(generatedPremise)
+            setValue('description', premise)
+          }
+          addNotification({
+            type: 'success',
+            title: 'Campos preenchidos!',
+            message: 'Título, gênero e premissa foram gerados com sucesso.',
+            duration: 3000,
+          })
+        }
+      } catch (err: unknown) {
         addNotification({
-          type: 'success',
-          title: 'Blueprint completo gerado!',
-          message: 'Todos os steps foram preenchidos com sucesso. Navegue pelos steps para revisar.',
+          type: 'error',
+          title: 'Erro ao gerar',
+          message: err instanceof Error ? err.message : 'Não foi possível gerar os campos automaticamente.',
           duration: 5000,
         })
-      } else {
-        const data = await booksApi.generateBlueprint({
-          title: 'Gere um livro completo com título, gênero e premissa envolvente',
-          genre: 'fiction',
-          description: 'Crie uma ideia original e criativa para um livro, incluindo título atraente, gênero apropriado e uma premissa detalhada.',
-        })
-        const blueprint = data?.blueprint || data
-        if (blueprint?.title) {
-          const generatedTitle = typeof blueprint.title === 'string' ? blueprint.title : JSON.stringify(blueprint.title)
-          setValue('title', generatedTitle)
-        }
-        if (blueprint?.genre || data?.genre) {
-          const genre = blueprint?.genre || data?.genre
-          if (typeof genre === 'string') onGenreSelect(genre)
-        }
-        if (blueprint?.summary || blueprint?.description || data?.summary) {
-          const generatedPremise = blueprint?.summary || blueprint?.description || data?.summary
-          const premise = typeof generatedPremise === 'string' ? generatedPremise : JSON.stringify(generatedPremise)
-          setValue('description', premise)
-        }
-        addNotification({
-          type: 'success',
-          title: 'Campos preenchidos!',
-          message: 'Título, gênero e premissa foram gerados com sucesso.',
-          duration: 3000,
-        })
       }
-    } catch (err: unknown) {
-      addNotification({
-        type: 'error',
-        title: 'Erro ao gerar',
-        message: err instanceof Error ? err.message : 'Não foi possível gerar os campos automaticamente.',
-        duration: 5000,
-      })
-    } finally {
-      setIsGeneratingAll(false)
-    }
+    })
   }
 
   return {

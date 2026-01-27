@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
 import { booksApi } from '@/utils/api/booksApi'
 import type { ICharacter, ICharactersStepProps } from '../types'
+import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
 export function useCharactersStep({ characters, onCharactersChange, bookContext }: ICharactersStepProps) {
   const { addNotification } = useUIStore()
-  const [generatingFor, setGeneratingFor] = useState<string | null>(null)
-  const [isGeneratingAll, setIsGeneratingAll] = useState(false)
+  const { generatingFor, setGeneratingFor, isGeneratingAll, guardGenerateAll, runWithGeneratingAll } = useWizardStepGeneration()
 
   const handleAddCharacter = () => {
     const newCharacter: ICharacter = {
@@ -58,74 +58,65 @@ export function useCharactersStep({ characters, onCharactersChange, bookContext 
   }
 
   const handleGenerateAll = async () => {
-    if (!bookContext?.title && !bookContext?.description) {
-      addNotification({
-        type: 'warning',
-        title: 'Informações necessárias',
-        message: 'Preencha pelo menos o título ou a premissa do livro antes de gerar personagens.',
-        duration: 5000,
-      })
-      return
-    }
-    setIsGeneratingAll(true)
-    try {
-      const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere um elenco inicial de 3 a 5 personagens principais. Para cada personagem, forneça: nome, papel na história (protagonista, antagonista, coadjuvante, secundário), descrição física, personalidade, motivações e arco narrativo inicial.`
-      const data = await booksApi.generateBlueprint({
-        title: bookContext?.title || 'Novo Livro',
-        genre: bookContext?.genre || 'fiction',
-        description: prompt,
-      })
-      const blueprint = data?.blueprint || data
-      const charactersData = blueprint?.characters || []
-
-      if (Array.isArray(charactersData) && charactersData.length > 0) {
-        const newCharacters: ICharacter[] = charactersData.map((char: Record<string, unknown>, idx: number) => {
-          let description = (char.description || char.backstory || char.summary || '') as string
-          const parts: string[] = []
-          if (char.personality) parts.push(`Personalidade: ${char.personality}`)
-          if (char.motivations) parts.push(`Motivações: ${char.motivations}`)
-          if (char.physical_description) parts.push(`Aparência: ${char.physical_description}`)
-          if (char.arc) parts.push(`Arco narrativo: ${char.arc}`)
-          if (parts.length > 0) description = description ? `${description}\n\n${parts.join('\n')}` : parts.join('\n')
-          let role = char.role as string | undefined
-          if (!role) {
-            const nameLower = ((char.name as string) || '').toLowerCase()
-            if (nameLower.includes('protagonist') || nameLower.includes('protagonista') || idx === 0) role = 'protagonist'
-            else if (nameLower.includes('antagonist') || nameLower.includes('antagonista') || idx === 1) role = 'antagonist'
-            else role = 'supporting'
-          }
-          return {
-            id: `temp-${Date.now()}-${idx}`,
-            name: (char.name as string) || `Personagem ${idx + 1}`,
-            description: description.trim(),
-            role,
-          }
+    if (guardGenerateAll(bookContext, 'Preencha pelo menos o título ou a premissa do livro antes de gerar personagens.')) return
+    await runWithGeneratingAll(async () => {
+      try {
+        const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere um elenco inicial de 3 a 5 personagens principais. Para cada personagem, forneça: nome, papel na história (protagonista, antagonista, coadjuvante, secundário), descrição física, personalidade, motivações e arco narrativo inicial.`
+        const data = await booksApi.generateBlueprint({
+          title: bookContext?.title || 'Novo Livro',
+          genre: bookContext?.genre || 'fiction',
+          description: prompt,
         })
-        onCharactersChange(newCharacters)
-      } else {
-        const newCharacters: ICharacter[] = [
-          { id: `temp-${Date.now()}-1`, name: 'Protagonista', description: 'O personagem principal da história.', role: 'protagonist' },
-          { id: `temp-${Date.now()}-2`, name: 'Antagonista', description: 'O personagem que se opõe ao protagonista.', role: 'antagonist' },
-          { id: `temp-${Date.now()}-3`, name: 'Coadjuvante', description: 'Um personagem importante que apoia o protagonista.', role: 'supporting' },
-        ]
-        onCharactersChange(newCharacters)
+        const blueprint = data?.blueprint || data
+        const charactersData = blueprint?.characters || []
+
+        if (Array.isArray(charactersData) && charactersData.length > 0) {
+          const newCharacters: ICharacter[] = charactersData.map((char: Record<string, unknown>, idx: number) => {
+            let description = (char.description || char.backstory || char.summary || '') as string
+            const parts: string[] = []
+            if (char.personality) parts.push(`Personalidade: ${char.personality}`)
+            if (char.motivations) parts.push(`Motivações: ${char.motivations}`)
+            if (char.physical_description) parts.push(`Aparência: ${char.physical_description}`)
+            if (char.arc) parts.push(`Arco narrativo: ${char.arc}`)
+            if (parts.length > 0) description = description ? `${description}\n\n${parts.join('\n')}` : parts.join('\n')
+            let role = char.role as string | undefined
+            if (!role) {
+              const nameLower = ((char.name as string) || '').toLowerCase()
+              if (nameLower.includes('protagonist') || nameLower.includes('protagonista') || idx === 0) role = 'protagonist'
+              else if (nameLower.includes('antagonist') || nameLower.includes('antagonista') || idx === 1) role = 'antagonist'
+              else role = 'supporting'
+            }
+            return {
+              id: `temp-${Date.now()}-${idx}`,
+              name: (char.name as string) || `Personagem ${idx + 1}`,
+              description: description.trim(),
+              role,
+            }
+          })
+          onCharactersChange(newCharacters)
+        } else {
+          const newCharacters: ICharacter[] = [
+            { id: `temp-${Date.now()}-1`, name: 'Protagonista', description: 'O personagem principal da história.', role: 'protagonist' },
+            { id: `temp-${Date.now()}-2`, name: 'Antagonista', description: 'O personagem que se opõe ao protagonista.', role: 'antagonist' },
+            { id: `temp-${Date.now()}-3`, name: 'Coadjuvante', description: 'Um personagem importante que apoia o protagonista.', role: 'supporting' },
+          ]
+          onCharactersChange(newCharacters)
+        }
+        addNotification({
+          type: 'success',
+          title: 'Personagens gerados!',
+          message: 'O elenco inicial foi gerado com sucesso. Você pode editá-los conforme necessário.',
+          duration: 3000,
+        })
+      } catch (err: unknown) {
+        addNotification({
+          type: 'error',
+          title: 'Erro ao gerar personagens',
+          message: err instanceof Error ? err.message : 'Não foi possível gerar os personagens automaticamente.',
+          duration: 5000,
+        })
       }
-      addNotification({
-        type: 'success',
-        title: 'Personagens gerados!',
-        message: 'O elenco inicial foi gerado com sucesso. Você pode editá-los conforme necessário.',
-        duration: 3000,
-      })
-    } catch (err: unknown) {
-      addNotification({
-        type: 'error',
-        title: 'Erro ao gerar personagens',
-        message: err instanceof Error ? err.message : 'Não foi possível gerar os personagens automaticamente.',
-        duration: 5000,
-      })
-    } finally {
-      setIsGeneratingAll(false)
-    }
+    })
   }
 
   return {

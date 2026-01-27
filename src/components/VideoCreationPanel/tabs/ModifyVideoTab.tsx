@@ -1,6 +1,6 @@
-import { VideoCreationPanel } from '../VideoCreationPanel';
+import { VideoTab } from './VideoTab';
 import { VideoMode } from '@/types/videos/video-types';
 
 export function ModifyVideoTab() {
-  return <VideoCreationPanel defaultMode={VideoMode.MODIFY_VIDEO} />;
+  return <VideoTab mode={VideoMode.MODIFY_VIDEO} />;
 }

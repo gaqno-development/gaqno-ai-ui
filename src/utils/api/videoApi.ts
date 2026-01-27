@@ -1,18 +1,8 @@
-const getViteEnv = (key: string, defaultValue: string = ''): string => {
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
-    return import.meta.env[key] as string;
-  }
-  return defaultValue;
-};
-
-const getApiBaseUrl = (): string => {
-  const aiServiceUrl = getViteEnv('VITE_AI_SERVICE_URL', 'https://api.gaqno.com.br/ai');
-  return aiServiceUrl.replace(/\/$/, '');
-};
+import { getAiServiceBaseUrl } from '@/lib/env';
 
 export const videoApi = {
   async getModels(): Promise<any[]> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/videos/models`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/videos/models`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -41,7 +31,7 @@ export const videoApi = {
       aspect_ratio?: string;
     };
   }): Promise<any> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/videos/generate`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/videos/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,7 +48,7 @@ export const videoApi = {
   },
 
   async getVideoStatus(videoId: string): Promise<any> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/videos/${videoId}/status`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/videos/${videoId}/status`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +68,7 @@ export const videoApi = {
     formData.append('file', file);
     formData.append('type', type);
 
-    const response = await fetch(`${getApiBaseUrl()}/v1/videos/upload-asset`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/videos/upload-asset`, {
       method: 'POST',
       body: formData,
     });

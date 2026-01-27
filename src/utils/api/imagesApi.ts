@@ -1,14 +1,4 @@
-const getViteEnv = (key: string, defaultValue: string = ''): string => {
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
-    return import.meta.env[key] as string;
-  }
-  return defaultValue;
-};
-
-const getApiBaseUrl = (): string => {
-  const aiServiceUrl = getViteEnv('VITE_AI_SERVICE_URL', 'https://api.gaqno.com.br/ai');
-  return aiServiceUrl.replace(/\/$/, '');
-};
+import { getAiServiceBaseUrl } from '@/lib/env';
 
 export const imagesApi = {
   async generateImage(body: {
@@ -17,7 +7,7 @@ export const imagesApi = {
     aspect_ratio?: string;
     negative_tags?: string[];
   }): Promise<any> {
-    const response = await fetch(`${getApiBaseUrl()}/v1/images/generate`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/images/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +27,7 @@ export const imagesApi = {
     const form = new FormData();
     form.append('image', file);
     form.append('instruction', instruction);
-    const response = await fetch(`${getApiBaseUrl()}/v1/images/edit`, {
+    const response = await fetch(`${getAiServiceBaseUrl()}/v1/images/edit`, {
       method: 'POST',
       body: form,
     });
