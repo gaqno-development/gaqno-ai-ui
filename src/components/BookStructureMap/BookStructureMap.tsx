@@ -6,7 +6,7 @@ import { Input } from '@gaqno-development/frontcore/components/ui';
 import { Label } from '@gaqno-development/frontcore/components/ui';
 import { Textarea } from '@gaqno-development/frontcore/components/ui';
 import { BookIcon, UsersIcon } from '@gaqno-development/frontcore/components/icons';
-import { Plus } from 'lucide-react';
+import { Plus, BookOpen } from 'lucide-react';
 import { useBookStructureMap } from './hooks/useBookStructureMap';
 import type { BookStructureMapProps } from './types';
 
@@ -37,14 +37,14 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-          <CardTitle className="text-sm flex items-center gap-2">
-            <BookOpen className="h-4 w-4" />
-            Capítulos
-          </CardTitle>
-          <Button size="sm" variant="ghost" onClick={() => setShowChapterDialog(true)}>
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
+            <CardTitle className="text-sm flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Capítulos
+            </CardTitle>
+            <Button size="sm" variant="ghost" onClick={() => setShowChapterDialog(true)}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <ScrollArea className="h-[calc(100vh-20rem)] max-h-[400px]">

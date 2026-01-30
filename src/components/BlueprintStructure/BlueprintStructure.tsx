@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaqno-development/frontcore/components/ui';
 import { BookIcon, DownChevron, RightChevron } from '@gaqno-development/frontcore/components/icons';
-import { Circle, Loader2 } from 'lucide-react';
+import { Circle, Loader2, ChevronRight } from 'lucide-react';
 import { cn } from '@gaqno-development/frontcore/lib/utils';
 import { useBlueprintStructure } from './hooks/useBlueprintStructure';
 import { SECTION_NAMES, SECTION_ORDER } from './hooks/useBlueprintStructure';

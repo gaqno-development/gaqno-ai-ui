@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { IBasicInfoStepProps } from '../types'
 import { GENRE_LABELS } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
@@ -32,7 +32,7 @@ export function useBasicInfoStep({
       if (premise) {
         prompt += `. A premissa do livro é: ${premise.substring(0, 300)}`
       }
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: prompt,
         genre: genre || 'fiction',
         description: premise || 'Uma história envolvente',
@@ -55,7 +55,7 @@ export function useBasicInfoStep({
       if (bookTitle) prompt += ` intitulado "${bookTitle}"`
       if (genre) prompt += ` ${GENRE_LABELS[genre] || `do gênero ${genre}`}`
       prompt += '. A premissa deve incluir os elementos principais da história, personagens principais e o conflito central.'
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookTitle || 'Novo Livro',
         genre: genre || 'fiction',
         description: prompt,
@@ -81,7 +81,7 @@ export function useBasicInfoStep({
             duration: 5000,
           })
         } else {
-          const data = await booksApi.generateBlueprint({
+          const data = await aiApi.generateBlueprint({
             title: 'Gere um livro completo com título, gênero e premissa envolvente',
             genre: 'fiction',
             description: 'Crie uma ideia original e criativa para um livro, incluindo título atraente, gênero apropriado e uma premissa detalhada.',

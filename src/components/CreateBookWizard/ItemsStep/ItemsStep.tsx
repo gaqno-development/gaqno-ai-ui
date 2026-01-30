@@ -42,7 +42,7 @@ export function ItemsStep(props: IItemsStepProps) {
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4" />
+                <SparklesIcon className="h-4 w-4" />
                 Gerar Tudo com IA
               </>
             )}

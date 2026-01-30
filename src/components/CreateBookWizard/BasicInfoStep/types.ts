@@ -1,6 +1,8 @@
 export interface IBasicInfoStepProps {
   onGenreSelect: (genre: string) => void
   selectedGenre?: string | null
+  selectedModel?: string
+  onModelChange?: (model: string) => void
   onGenerateCompleteBlueprint?: () => Promise<void>
 }
 

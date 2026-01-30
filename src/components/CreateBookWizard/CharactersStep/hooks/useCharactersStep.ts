@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { ICharacter, ICharactersStepProps } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
@@ -29,7 +29,7 @@ export function useCharactersStep({ characters, onCharactersChange, bookContext 
   const handleGenerateCharacterDetails = async (characterId: string, characterName: string): Promise<string> => {
     setGeneratingFor(characterId)
     try {
-      const data = await booksApi.analyzeCharacter({
+      const data = await aiApi.analyzeCharacter({
         characterName,
         characterDescription: characters.find((c) => c.id === characterId)?.description || undefined,
         bookContext: {
@@ -62,7 +62,7 @@ export function useCharactersStep({ characters, onCharactersChange, bookContext 
     await runWithGeneratingAll(async () => {
       try {
         const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere um elenco inicial de 3 a 5 personagens principais. Para cada personagem, forneça: nome, papel na história (protagonista, antagonista, coadjuvante, secundário), descrição física, personalidade, motivações e arco narrativo inicial.`
-        const data = await booksApi.generateBlueprint({
+        const data = await aiApi.generateBlueprint({
           title: bookContext?.title || 'Novo Livro',
           genre: bookContext?.genre || 'fiction',
           description: prompt,

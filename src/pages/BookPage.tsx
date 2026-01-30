@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { BookIcon, FileDescriptionIcon } from '@gaqno-development/frontcore/components/icons';
 import { Image, Download } from 'lucide-react';
-import { SectionWithSubNav } from '@/components/SectionWithSubNav'
+import { SectionWithSubNav } from '@gaqno-development/frontcore/components/SectionWithSubNav'
 import { useBook } from '@/hooks/books/useBooks'
 import { BooksListPage } from '@/pages/books/BooksListPage'
 import { BookBlueprintView } from '@/pages/books/BookBlueprintView'
@@ -54,6 +54,7 @@ export default function BookPage() {
         segmentToComponent={SEGMENT_TO_COMPONENT}
         title={book?.title ?? 'Livro'}
         variant="vertical"
+        breadcrumbRoot={{ label: 'AI', href: '/ai/books' }}
       />
     )
   }

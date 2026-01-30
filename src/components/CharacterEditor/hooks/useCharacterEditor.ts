@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useBookCharacters } from '@/hooks/books/useBookCharacters';
 import { useBook } from '@/hooks/books/useBooks';
 import { useBookBlueprint } from '@/hooks/books/useBookBlueprint';
-import { booksApi } from '@/utils/api/booksApi';
+import { aiApi } from '@/utils/api/aiApi';
 import { useAuth } from '@gaqno-development/frontcore/contexts';
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore';
 import type { ICharacterDetails } from '@/types/books/character';
@@ -50,7 +50,7 @@ export const useCharacterEditor = (bookId: string, characterId?: string) => {
     setIsAnalyzing(true);
     try {
       if (!user) throw new Error('Você precisa estar autenticado');
-      const data = await booksApi.analyzeCharacter({
+      const data = await aiApi.analyzeCharacter({
         characterName: name,
         characterDescription: description || undefined,
         bookContext: {
@@ -94,7 +94,7 @@ export const useCharacterEditor = (bookId: string, characterId?: string) => {
     setIsGeneratingAvatar(true);
     try {
       if (!user) throw new Error('Você precisa estar autenticado');
-      const data = await booksApi.generateCharacterAvatar({
+      const data = await aiApi.generateCharacterAvatar({
         characterName: name,
         characterDescription: description || undefined || undefined,
       });

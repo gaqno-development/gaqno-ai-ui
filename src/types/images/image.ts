@@ -2,6 +2,7 @@ export interface ImageGenerationRequest {
   prompt: string;
   style?: string;
   aspect_ratio?: string;
+  model?: string;
   negative_tags?: string[];
 }
 

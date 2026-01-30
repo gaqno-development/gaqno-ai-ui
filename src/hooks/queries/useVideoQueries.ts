@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { videoApi } from '@/utils/api/videoApi';
+import { aiApi } from '@/utils/api/aiApi';
 import type { VideoModel } from '@/types/videos';
 
 export const useVideoModelsQueries = () => {
   const getAll = useQuery<VideoModel[]>({
     queryKey: ['video-models'],
-    queryFn: async () => {
-      const response = await videoApi.getModels();
-      return response.data || response;
-    },
+    queryFn: () => aiApi.getVideoModels() as Promise<VideoModel[]>,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -21,9 +18,7 @@ export const useVideoGenerationQueries = () => {
   const getStatus = (videoId: string) => {
     return useQuery({
       queryKey: ['video-generation', videoId],
-      queryFn: async () => {
-        return await videoApi.getVideoStatus(videoId);
-      },
+      queryFn: () => aiApi.getVideoStatus(videoId),
       enabled: !!videoId,
       refetchInterval: (query) => {
         const data = query.state.data;

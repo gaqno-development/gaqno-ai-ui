@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { FileDescriptionIcon, PenIcon, PaintIcon } from '@gaqno-development/frontcore/components/icons';
-import { SectionWithSubNav } from '@/components/SectionWithSubNav';
+import { SectionWithSubNav } from '@gaqno-development/frontcore/components/SectionWithSubNav';
 
 const TextToImageTab = lazy(() => import('@/components/ImageCreationPanel/tabs/TextToImageTab').then((m) => ({ default: m.TextToImageTab })));
 const EditImageTab = lazy(() => import('@/components/ImageCreationPanel/tabs/EditImageTab').then((m) => ({ default: m.EditImageTab })));
@@ -27,6 +27,7 @@ export default function ImagesSection() {
       segmentToComponent={SEGMENT_TO_COMPONENT}
       title="Imagens"
       variant="vertical"
+      breadcrumbRoot={{ label: 'AI', href: '/ai/books' }}
     />
   );
 }

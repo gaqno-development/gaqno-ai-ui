@@ -1,4 +1,2 @@
-export * from './booksApi';
-export * from './videoApi';
-export * from './imagesApi';
+export * from './aiApi';
 export * from './audioApi';

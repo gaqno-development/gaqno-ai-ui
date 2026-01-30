@@ -6,7 +6,7 @@ import { useCharactersStep } from './hooks/useCharactersStep'
 import type { ICharactersStepProps } from './types'
 import { CHARACTER_ROLES } from './types'
 import { UserIcon, TrashIcon, SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, Loader2, Trash2 } from 'lucide-react';
 
 export function CharactersStep(props: ICharactersStepProps) {
   const {

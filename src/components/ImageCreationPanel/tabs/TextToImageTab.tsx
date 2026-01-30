@@ -21,7 +21,7 @@ export function TextToImageTab() {
   } = useImageCreationPanel();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -43,7 +43,28 @@ export function TextToImageTab() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="model">Model</Label>
+              <Controller
+                name="model"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    value={field.value ?? 'dall-e-3'}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger id="model">
+                      <SelectValue placeholder="Select model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dall-e-3">DALL-E 3</SelectItem>
+                      <SelectItem value="dall-e-2">DALL-E 2</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
             <div>
               <Label htmlFor="style">Style (Optional)</Label>
               <Controller
@@ -65,7 +86,6 @@ export function TextToImageTab() {
                 )}
               />
             </div>
-
             <div>
               <Label htmlFor="aspect_ratio">Aspect Ratio</Label>
               <Controller

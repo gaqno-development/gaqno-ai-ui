@@ -8,6 +8,7 @@ const imageFormSchema = z.object({
   prompt: z.string().min(1, 'Prompt is required'),
   style: z.string().optional(),
   aspect_ratio: z.string().optional(),
+  model: z.string().optional(),
 });
 
 export type ImageFormData = z.infer<typeof imageFormSchema>;
@@ -22,6 +23,7 @@ export const useImageCreationPanel = () => {
       prompt: '',
       style: '',
       aspect_ratio: '16:9',
+      model: 'dall-e-3',
     },
   });
 
@@ -34,6 +36,7 @@ export const useImageCreationPanel = () => {
           prompt: data.prompt,
           style: data.style || undefined,
           aspect_ratio: data.aspect_ratio || undefined,
+          model: data.model || undefined,
         });
         setGeneratedImageUrl(result.imageUrl);
       } catch (error) {

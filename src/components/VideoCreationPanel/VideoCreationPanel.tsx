@@ -37,7 +37,7 @@ export const VideoCreationPanel: React.FC<VideoCreationPanelProps> = ({ classNam
 
   return (
     <div className={className}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
         <div className="flex items-center justify-between">
           <div className="inline-flex rounded-md border border-input bg-background p-1">
             <Button

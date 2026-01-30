@@ -43,7 +43,7 @@ export function StructureStep(props: IStructureStepProps) {
           </CardHeader>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 p-6">
             <div className="flex items-center justify-end pb-2 border-b">
               <Button
                 type="button"

@@ -19,7 +19,7 @@ export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) 
   } = useBookForm(onSubmit, defaultValues);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
       <div className="space-y-2">
         <Label htmlFor="title">Título do Livro</Label>
         <Input

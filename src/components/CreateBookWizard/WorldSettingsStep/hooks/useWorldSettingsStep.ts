@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { ISetting, IWorldSettingsStepProps } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
@@ -29,7 +29,7 @@ export function useWorldSettingsStep({ settings, onSettingsChange, bookContext }
     setGeneratingFor(settingId)
     try {
       const prompt = `Crie uma descrição detalhada para o cenário "${settingName}" no livro "${bookContext?.title || 'Novo Livro'}" do gênero ${bookContext?.genre || 'ficção'}. A descrição deve incluir características físicas, atmosfera, importância na história.`
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: prompt,
@@ -48,7 +48,7 @@ export function useWorldSettingsStep({ settings, onSettingsChange, bookContext }
     await runWithGeneratingAll(async () => {
       try {
         const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere 3 a 5 cenários principais onde a história se desenrola. Para cada cenário, forneça: nome, descrição detalhada (características físicas, atmosfera, importância na história) e opcionalmente uma linha do tempo ou contexto histórico.`
-        const data = await booksApi.generateBlueprint({
+        const data = await aiApi.generateBlueprint({
           title: bookContext?.title || 'Novo Livro',
           genre: bookContext?.genre || 'fiction',
           description: prompt,

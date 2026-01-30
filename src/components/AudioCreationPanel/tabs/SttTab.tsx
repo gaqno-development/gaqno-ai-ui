@@ -73,7 +73,7 @@ export function SttTab() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <Card>
         <CardHeader>
           <CardTitle>Speech to Text (file)</CardTitle>

@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { Volume2Icon, ShieldCheck, BookIcon } from '@gaqno-development/frontcore/components/icons';
 import { Mic, Music, Mic2, Wand2 } from 'lucide-react';
-import { SectionWithSubNav } from '@/components/SectionWithSubNav';
+import { SectionWithSubNav } from '@gaqno-development/frontcore/components/SectionWithSubNav';
 
 const TtsTab = lazy(() => import('@/components/AudioCreationPanel/tabs/TtsTab').then((m) => ({ default: m.TtsTab })));
 const SttTab = lazy(() => import('@/components/AudioCreationPanel/tabs/SttTab').then((m) => ({ default: m.SttTab })));
@@ -40,6 +40,7 @@ export default function AudioSection() {
       segmentToComponent={SEGMENT_TO_COMPONENT}
       title="Áudio"
       variant="vertical"
+      breadcrumbRoot={{ label: 'AI', href: '/ai/books' }}
     />
   );
 }

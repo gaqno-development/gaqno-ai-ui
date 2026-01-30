@@ -1,6 +1,7 @@
-import { Input, Label, Textarea, Button } from '@gaqno-development/frontcore/components/ui'
+import { Input, Label, Textarea, Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@gaqno-development/frontcore/components/ui'
 import { GenreSelector } from '../../GenreSelector'
 import { AISuggestionButton } from '../../AISuggestionButton'
+import { AIModelSelect } from '../../AIModelSelect'
 import { useBasicInfoStep } from './hooks/useBasicInfoStep'
 import type { IBasicInfoStepProps } from './types'
 import { SparklesIcon } from '@gaqno-development/frontcore/components/icons';
@@ -20,27 +21,51 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
   } = useBasicInfoStep(props)
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-end pb-2 border-b">
-        <Button
-          type="button"
-          onClick={handleGenerateAll}
-          disabled={isGeneratingAll || isGeneratingTitle || isGeneratingPremise}
-          variant="outline"
-          className="gap-2"
-        >
-          {isGeneratingAll ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Gerando...
-            </>
-          ) : (
-            <>
-              <SparklesIcon className="h-4 w-4" />
-              Gerar Tudo com IA
-            </>
-          )}
-        </Button>
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between gap-4 pb-2 border-b">
+        <AIModelSelect
+          value={props.selectedModel}
+          onValueChange={props.onModelChange}
+          placeholder="Modelo de IA"
+          loadingPlaceholder="Carregando modelos..."
+          className="w-[220px]"
+        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="inline-flex">
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    void handleGenerateAll()
+                  }}
+                  disabled={isGeneratingAll || isGeneratingTitle || isGeneratingPremise || !props.selectedGenre}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  {isGeneratingAll ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Gerando...
+                    </>
+                  ) : (
+                    <>
+                      <SparklesIcon className="h-4 w-4" />
+                      Gerar Tudo com IA
+                    </>
+                  )}
+                </Button>
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {props.selectedGenre
+                ? 'Gera título, gênero e premissa com IA'
+                : 'Selecione pelo menos um gênero para usar esta função'}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       <div className="space-y-2">

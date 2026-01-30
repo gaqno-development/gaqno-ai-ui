@@ -32,6 +32,8 @@ export function CreateBookWizard() {
     getProgress,
     selectedGenre,
     setSelectedGenre,
+    selectedModel,
+    setSelectedModel,
     isSaving,
     isCreatingBook,
     isCreating,
@@ -49,6 +51,8 @@ export function CreateBookWizard() {
           <BasicInfoStep
             onGenreSelect={setSelectedGenre}
             selectedGenre={selectedGenre}
+            selectedModel={selectedModel}
+            onModelChange={setSelectedModel}
             onGenerateCompleteBlueprint={handleGenerateCompleteBlueprint}
           />
         );
@@ -77,7 +81,7 @@ export function CreateBookWizard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          <div className="space-y-6 p-6">
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">

@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useVideoModels, useVideoGeneration, useVideoUpload } from '@/hooks/videos/useVideoGeneration';
-import { videoApi } from '@/utils/api/videoApi';
+import { aiApi } from '@/utils/api/aiApi';
 
-vi.mock('@/utils/videoApi');
+vi.mock('@/utils/api/aiApi');
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -27,7 +27,7 @@ describe('useVideoModels', () => {
     const mockModels = [
       { id: 'kling-o1', name: 'Kling O1', provider: 'kling' },
     ];
-    vi.mocked(videoApi.getModels).mockResolvedValue({ data: mockModels });
+    vi.mocked(aiApi.getVideoModels).mockResolvedValue(mockModels as never);
 
     const { result } = renderHook(() => useVideoModels(), {
       wrapper: createWrapper(),
@@ -52,7 +52,7 @@ describe('useVideoGeneration', () => {
       status: 'pending',
       created_at: new Date().toISOString(),
     };
-    vi.mocked(videoApi.generateVideo).mockResolvedValue(mockResponse);
+    vi.mocked(aiApi.generateVideo).mockResolvedValue(mockResponse as never);
 
     const { result } = renderHook(() => useVideoGeneration(), {
       wrapper: createWrapper(),
@@ -85,7 +85,7 @@ describe('useVideoUpload', () => {
       url: 'https://example.com/video.mp4',
       type: 'video',
     };
-    vi.mocked(videoApi.uploadAsset).mockResolvedValue(mockResponse);
+    vi.mocked(aiApi.uploadVideoAsset).mockResolvedValue(mockResponse as never);
 
     const { result } = renderHook(() => useVideoUpload(), {
       wrapper: createWrapper(),

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { IToneStyleStepProps } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
@@ -13,7 +13,7 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   const handleGenerateTone = async (): Promise<string> => {
     setGeneratingFor('tone')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: `Sugira um tom narrativo apropriado para: ${bookContext?.description || 'um livro'}`,
@@ -30,7 +30,7 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   const handleGeneratePacing = async (): Promise<string> => {
     setGeneratingFor('pacing')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: `Sugira um ritmo narrativo apropriado para: ${bookContext?.description || 'um livro'}`,
@@ -47,7 +47,7 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   const handleGenerateAudience = async (): Promise<string> => {
     setGeneratingFor('audience')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: `Sugira um público-alvo para: ${bookContext?.description || 'um livro'}`,
@@ -64,7 +64,7 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
   const handleGenerateThemes = async (): Promise<string> => {
     setGeneratingFor('themes')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: `Sugira temas centrais e mensagens para: ${bookContext?.description || 'um livro'}`,
@@ -83,7 +83,7 @@ export function useToneStyleStep({ bookContext }: IToneStyleStepProps) {
     await runWithGeneratingAll(async () => {
       try {
         const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma análise completa de tom e estilo narrativo incluindo: tom narrativo (leve, sombrio, épico, etc.), ritmo (rápido, contemplativo, equilibrado, etc.), público-alvo apropriado e temas centrais/mensagens que o livro explora.`
-        const data = await booksApi.generateBlueprint({
+        const data = await aiApi.generateBlueprint({
           title: bookContext?.title || 'Novo Livro',
           genre: bookContext?.genre || 'fiction',
           description: prompt,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { IStructureStepProps } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
@@ -22,7 +22,7 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
   const handleGeneratePlotSummary = async (): Promise<string> => {
     setGeneratingFor('plot')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: bookContext?.description || 'Um livro interessante',
@@ -42,7 +42,7 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
   const handleGenerateChapters = async (): Promise<string> => {
     setGeneratingFor('chapters')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: bookContext?.description || 'Um livro interessante',
@@ -70,7 +70,7 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
   const handleGenerateConflict = async (): Promise<string> => {
     setGeneratingFor('conflict')
     try {
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: `Descreva o conflito principal para: ${bookContext?.description || 'um livro'}`,
@@ -92,7 +92,7 @@ export function useStructureStep({ bookContext, onStructureChange, structure }: 
     await runWithGeneratingAll(async () => {
       try {
         const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere uma estrutura completa da história incluindo: resumo do enredo em 3 atos (introdução, desenvolvimento, conclusão), lista de capítulos iniciais sugeridos com títulos e resumos, e o conflito principal que impulsiona a narrativa.`
-        const data = await booksApi.generateBlueprint({
+        const data = await aiApi.generateBlueprint({
           title: bookContext?.title || 'Novo Livro',
           genre: bookContext?.genre || 'fiction',
           description: prompt,

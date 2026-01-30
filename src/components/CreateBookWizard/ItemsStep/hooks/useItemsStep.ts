@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore'
-import { booksApi } from '@/utils/api/booksApi'
+import { aiApi } from '@/utils/api/aiApi'
 import type { IItem, IItemsStepProps } from '../types'
 import { useWizardStepGeneration } from '../../shared/useWizardStepGeneration'
 
@@ -39,7 +39,7 @@ export function useItemsStep({ items, onItemsChange, bookContext }: IItemsStepPr
         origin: `Descreva a origem do objeto "${itemName}" no livro "${bookContext?.title || 'Novo Livro'}"`,
         relevance: `Explique a relevância do objeto "${itemName}" para a história do livro "${bookContext?.title || 'Novo Livro'}"`,
       }
-      const data = await booksApi.generateBlueprint({
+      const data = await aiApi.generateBlueprint({
         title: bookContext?.title || 'Novo Livro',
         genre: bookContext?.genre || 'fiction',
         description: prompts[field],
@@ -58,7 +58,7 @@ export function useItemsStep({ items, onItemsChange, bookContext }: IItemsStepPr
     await runWithGeneratingAll(async () => {
       try {
         const prompt = `Baseado no livro "${bookContext?.title || 'Novo Livro'}" ${bookContext?.genre ? `do gênero ${bookContext.genre}` : ''}, ${bookContext?.description ? `com a premissa: ${bookContext.description.substring(0, 200)}` : ''}. Gere 2 a 4 itens, objetos ou artefatos importantes para a história. Para cada item, forneça: nome, função narrativa, origem e relevância para a história.`
-        const data = await booksApi.generateBlueprint({
+        const data = await aiApi.generateBlueprint({
           title: bookContext?.title || 'Novo Livro',
           genre: bookContext?.genre || 'fiction',
           description: prompt,

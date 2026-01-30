@@ -5,11 +5,39 @@ import { useCreateBookWizard } from '@/hooks/books/useCreateBookWizard';
 import { BookStatus } from '@/types/books/books';
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore';
 import { useAuth } from '@gaqno-development/frontcore/contexts';
-import { booksApi } from '@/utils/api/booksApi';
+import { aiApi } from '@/utils/api/aiApi';
 import { useBooksMutations } from '@/hooks/mutations/useBooksMutations';
 import { useBookSettingsMutations } from '@/hooks/mutations/useBookSettingsMutations';
 import { useBookItemsMutations } from '@/hooks/mutations/useBookItemsMutations';
 import { useBookToneStyleMutations } from '@/hooks/mutations/useBookToneStyleMutations';
+
+function normalizeBlueprintResponse(raw: unknown): Record<string, unknown> {
+  if (!raw || typeof raw !== 'object') return {};
+  const obj = raw as Record<string, unknown>;
+  const summaryRaw = obj.summary;
+  if (typeof summaryRaw === 'string' && summaryRaw.includes('```')) {
+    const jsonBlock = summaryRaw.match(/```(?:json)?\s*([\s\S]*?)```/)?.[1]?.trim();
+    if (jsonBlock) {
+      try {
+        const inner = JSON.parse(jsonBlock) as Record<string, unknown>;
+        return {
+          title: obj.title ?? inner.title,
+          genre: obj.genre ?? inner.genre,
+          summary: typeof inner.summary === 'string' ? inner.summary : summaryRaw,
+          description: inner.description ?? obj.description,
+          chapters: inner.chapters ?? obj.chapters,
+          sections: inner.sections ?? obj.sections,
+          characters: inner.characters ?? obj.characters,
+          context: inner.context ?? obj.context,
+          structure: inner.structure ?? obj.structure ?? (inner.chapters || inner.plot_summary ? { chapters: inner.chapters, plot_summary: inner.plot_summary, main_conflict: inner.main_conflict, initial_chapters: inner.initial_chapters } : obj.structure),
+        };
+      } catch {
+        // keep raw if parse fails
+      }
+    }
+  }
+  return obj as Record<string, unknown>;
+}
 
 export const STEP_TITLES = [
   'Informações Básicas',
@@ -26,6 +54,7 @@ export const useCreateBookWizardPage = () => {
   const { createBook, isCreating } = useBooks();
   const { addNotification } = useUIStore();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
   const [isCreatingBook, setIsCreatingBook] = useState(false);
 
@@ -49,22 +78,23 @@ export const useCreateBookWizardPage = () => {
   };
 
   const handleGenerateCompleteBlueprint = useCallback(async () => {
-    if (!formValues.title?.trim() && !formValues.description?.trim()) {
+    const genre = selectedGenre || formValues.genre;
+    if (!genre?.trim()) {
       addNotification({
         type: 'warning',
-        title: 'Informações necessárias',
-        message: 'Preencha pelo menos o título ou a premissa antes de gerar o blueprint completo.',
+        title: 'Gênero necessário',
+        message: 'Selecione um gênero (ex.: fantasia, ficção, romance) para gerar o blueprint com IA.',
         duration: 5000,
       });
       return;
     }
     try {
-      const data = await booksApi.generateBlueprint({
-        title: formValues.title || 'Novo Livro',
-        genre: selectedGenre || formValues.genre || 'fiction',
-        description: formValues.description || 'Uma história envolvente',
+      const data = await aiApi.generateBlueprint({
+        title: formValues.title?.trim() || undefined,
+        genre: genre.trim(),
+        description: formValues.description?.trim() || undefined,
       });
-      const blueprint = data?.blueprint || data;
+      const blueprint = normalizeBlueprintResponse(data?.blueprint || data);
       const context = blueprint?.context || {};
 
       if (blueprint?.title) form.setValue('title', blueprint.title);
@@ -249,6 +279,8 @@ export const useCreateBookWizardPage = () => {
     form,
     selectedGenre,
     setSelectedGenre,
+    selectedModel,
+    setSelectedModel,
     isSaving,
     isCreatingBook,
     isCreating,

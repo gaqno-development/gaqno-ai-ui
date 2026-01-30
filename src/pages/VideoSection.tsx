@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import { FileDescriptionIcon } from '@gaqno-development/frontcore/components/icons';
 import { Video, Film } from 'lucide-react';
-import { SectionWithSubNav } from '@/components/SectionWithSubNav';
+import { SectionWithSubNav } from '@gaqno-development/frontcore/components/SectionWithSubNav';
 
 const ModifyVideoTab = lazy(() =>
   import('@/components/VideoCreationPanel/tabs/ModifyVideoTab').then((m) => ({ default: m.ModifyVideoTab }))
@@ -34,6 +34,7 @@ export default function VideoSection() {
       segmentToComponent={SEGMENT_TO_COMPONENT}
       title="Vídeo"
       variant="vertical"
+      breadcrumbRoot={{ label: 'AI', href: '/ai/books' }}
     />
   );
 }

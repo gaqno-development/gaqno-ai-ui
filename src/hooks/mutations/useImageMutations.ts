@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import { imagesApi } from '@/utils/api/imagesApi';
+import { aiApi } from '@/utils/api/aiApi';
 import type { ImageGenerationRequest } from '@/types/images';
 
 export const useImageGenerationMutations = () => {
   const generate = useMutation({
     mutationFn: async (request: ImageGenerationRequest) => {
-      return await imagesApi.generateImage(request);
+      return await aiApi.generateImage(request);
     },
   });
 
@@ -17,7 +17,7 @@ export const useImageGenerationMutations = () => {
 export const useImageEditMutations = () => {
   const edit = useMutation({
     mutationFn: async ({ file, instruction }: { file: File; instruction: string }) => {
-      return await imagesApi.editImage(file, instruction);
+      return await aiApi.editImage(file, instruction);
     },
   });
 

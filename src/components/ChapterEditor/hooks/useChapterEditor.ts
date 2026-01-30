@@ -4,7 +4,7 @@ import { useBookChapters } from '@/hooks/books/useBookChapters';
 import { useBook } from '@/hooks/books/useBooks';
 import { useBookBlueprint } from '@/hooks/books/useBookBlueprint';
 import { useBookCharacters } from '@/hooks/books/useBookCharacters';
-import { booksApi } from '@/utils/api/booksApi';
+import { aiApi } from '@/utils/api/aiApi';
 import { useAuth } from '@gaqno-development/frontcore/contexts';
 import { calculatePages, formatPageInfo } from '@/utils/pageCalculator';
 
@@ -146,7 +146,7 @@ export const useChapterEditor = (bookId: string, chapterId?: string) => {
 
       let contextualAnalysis: unknown = null;
       try {
-        const analyzeData = await booksApi.analyzeContext({
+        const analyzeData = await aiApi.analyzeContext({
           bookContext: {
             title: book.title,
             genre: book.genre || undefined,
@@ -176,7 +176,7 @@ export const useChapterEditor = (bookId: string, chapterId?: string) => {
       const minWordsPerChapter = minPagesPerChapter * 250;
       setTargetWordCount(minWordsPerChapter);
 
-      const data = await booksApi.generateChapter({
+      const data = await aiApi.generateChapter({
         bookContext: {
           title: book.title,
           genre: book.genre || undefined,

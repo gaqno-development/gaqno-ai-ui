@@ -36,8 +36,8 @@ export function TextToVideoTab() {
   const isSubmitDisabled = !prompt.trim() || !selectedModel || generate.isPending;
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="space-y-6 p-6">
+      <form onSubmit={handleSubmit} className="space-y-6 p-6">
         <Card>
           <CardHeader>
             <CardTitle>Texto para Vídeo</CardTitle>
