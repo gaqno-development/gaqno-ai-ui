@@ -27,7 +27,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 RUN echo 'server { listen 3002; server_name _; root /usr/share/nginx/html; index index.html; \
     location /ai/assets/ { alias /usr/share/nginx/html/assets/; add_header Cache-Control "public, immutable"; add_header Access-Control-Allow-Origin "*"; } \
     location /assets/ { alias /usr/share/nginx/html/assets/; add_header Cache-Control "public, immutable"; add_header Access-Control-Allow-Origin "*"; } \
-    location / { return 302 /dashboard; } }' > /etc/nginx/conf.d/default.conf
+    location / { return 302 /; } }' > /etc/nginx/conf.d/default.conf
 
 EXPOSE 3002
 CMD ["nginx", "-g", "daemon off;"]
