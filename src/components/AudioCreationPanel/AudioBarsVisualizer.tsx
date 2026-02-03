@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 const BAR_COUNT = 12;
 const FFT_SIZE = 256;
@@ -9,7 +9,7 @@ const LOADING_WAVE_SPEED = 0.008;
 const LOADING_MIN = 18;
 const LOADING_MAX = 92;
 
-export type AudioBarsVisualizerState = 'idle' | 'loading' | 'playing';
+export type AudioBarsVisualizerState = "idle" | "loading" | "playing";
 
 export interface AudioBarsVisualizerProps {
   state: AudioBarsVisualizerState;
@@ -27,37 +27,56 @@ function waveHeight(phase: number, barIndex: number): number {
 export function AudioBarsVisualizer({
   state,
   audioRef,
-  className = '',
+  className = "",
 }: AudioBarsVisualizerProps) {
   const [levels, setLevels] = useState<number[]>(() =>
-    Array.from({ length: BAR_COUNT }, () => IDLE_HEIGHT_PERCENT),
+    Array.from({ length: BAR_COUNT }, () => IDLE_HEIGHT_PERCENT)
   );
   const analyserRef = useRef<AnalyserNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+  const connectedElementRef = useRef<HTMLAudioElement | null>(null);
   const frameRef = useRef<number>(0);
   const dataArrayRef = useRef<Uint8Array | null>(null);
   const loadingPhaseRef = useRef(0);
 
   useEffect(() => {
-    if (state !== 'playing' || !audioRef?.current) {
+    if (state !== "playing" || !audioRef?.current) {
       setLevels(Array.from({ length: BAR_COUNT }, () => IDLE_HEIGHT_PERCENT));
       return;
     }
 
     const el = audioRef.current;
-    const audioContext = new AudioContext();
-    const source = audioContext.createMediaElementSource(el);
-    const analyser = audioContext.createAnalyser();
-    analyser.fftSize = FFT_SIZE;
-    analyser.smoothingTimeConstant = SMOOTHING;
-    source.connect(analyser);
-    analyser.connect(audioContext.destination);
+    let audioContext = audioContextRef.current;
+    let source = sourceRef.current;
+    let analyser = analyserRef.current;
 
-    audioContextRef.current = audioContext;
-    sourceRef.current = source;
-    analyserRef.current = analyser;
-    dataArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
+    const elementChanged = connectedElementRef.current !== el;
+    if (elementChanged && source) {
+      source.disconnect();
+      analyser?.disconnect();
+      audioContext?.close();
+      audioContextRef.current = null;
+      sourceRef.current = null;
+      analyserRef.current = null;
+      connectedElementRef.current = null;
+    }
+
+    const needsInit = !source || !audioContext;
+    if (needsInit) {
+      audioContext = new AudioContext();
+      source = audioContext.createMediaElementSource(el);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = FFT_SIZE;
+      analyser.smoothingTimeConstant = SMOOTHING;
+      source.connect(analyser);
+      analyser.connect(audioContext.destination);
+      audioContextRef.current = audioContext;
+      sourceRef.current = source;
+      analyserRef.current = analyser;
+      connectedElementRef.current = el;
+      dataArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
+    }
 
     const binsPerBar = Math.floor(analyser.frequencyBinCount / BAR_COUNT);
 
@@ -85,24 +104,33 @@ export function AudioBarsVisualizer({
 
     return () => {
       cancelAnimationFrame(frameRef.current);
-      source.disconnect();
-      analyser.disconnect();
-      analyserRef.current = null;
-      sourceRef.current = null;
-      audioContextRef.current?.close();
-      audioContextRef.current = null;
     };
   }, [state, audioRef]);
 
   useEffect(() => {
-    if (state !== 'loading') return;
+    return () => {
+      if (sourceRef.current) {
+        sourceRef.current.disconnect();
+        sourceRef.current = null;
+      }
+      if (analyserRef.current) {
+        analyserRef.current.disconnect();
+        analyserRef.current = null;
+      }
+      audioContextRef.current?.close();
+      audioContextRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (state !== "loading") return;
 
     const loop = () => {
       loadingPhaseRef.current += LOADING_WAVE_SPEED;
       setLevels(
         Array.from({ length: BAR_COUNT }, (_, i) =>
-          waveHeight(loadingPhaseRef.current, i),
-        ),
+          waveHeight(loadingPhaseRef.current, i)
+        )
       );
       frameRef.current = requestAnimationFrame(loop);
     };
@@ -111,7 +139,7 @@ export function AudioBarsVisualizer({
   }, [state]);
 
   useEffect(() => {
-    if (state === 'idle') {
+    if (state === "idle") {
       setLevels(Array.from({ length: BAR_COUNT }, () => IDLE_HEIGHT_PERCENT));
     }
   }, [state]);
@@ -121,11 +149,11 @@ export function AudioBarsVisualizer({
       className={`flex items-end justify-center gap-1 h-14 ${className}`}
       role="img"
       aria-label={
-        state === 'loading'
-          ? 'Generating audio'
-          : state === 'playing'
-            ? 'Audio level'
-            : 'Audio visualizer'
+        state === "loading"
+          ? "Generating audio"
+          : state === "playing"
+            ? "Audio level"
+            : "Audio visualizer"
       }
     >
       {levels.map((height, i) => (
