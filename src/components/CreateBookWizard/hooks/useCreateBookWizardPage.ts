@@ -5,6 +5,7 @@ import { useCreateBookWizard } from '@/hooks/books/useCreateBookWizard';
 import { BookStatus } from '@/types/books/books';
 import { useUIStore } from '@gaqno-development/frontcore/store/uiStore';
 import { useAuth } from '@gaqno-development/frontcore/contexts';
+import { useAIModelPreferences } from '@gaqno-development/frontcore/hooks';
 import { aiApi } from '@/utils/api/aiApi';
 import { useBooksMutations } from '@/hooks/mutations/useBooksMutations';
 import { useBookSettingsMutations } from '@/hooks/mutations/useBookSettingsMutations';
@@ -53,6 +54,7 @@ export const useCreateBookWizardPage = () => {
   const { user } = useAuth();
   const { createBook, isCreating } = useBooks();
   const { addNotification } = useUIStore();
+  const [preferences] = useAIModelPreferences();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
@@ -69,6 +71,12 @@ export const useCreateBookWizardPage = () => {
   useEffect(() => {
     loadDraft();
   }, [loadDraft]);
+
+  useEffect(() => {
+    if (preferences.text?.model && !selectedModel) {
+      setSelectedModel(preferences.text.model);
+    }
+  }, [preferences.text?.model, selectedModel]);
 
   const formValues = form.watch();
   const bookContext = {

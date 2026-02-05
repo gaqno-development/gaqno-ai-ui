@@ -1,5 +1,5 @@
-import { createAxiosClient } from '@gaqno-development/frontcore/utils/api';
-import { getAiServiceBaseUrl } from '@/lib/env';
+import { createAxiosClient } from "@gaqno-development/frontcore/utils/api";
+import { getAiServiceBaseUrl } from "@/lib/env";
 
 export interface AIModel {
   id: string;
@@ -26,12 +26,48 @@ export interface GenerateObjectOptions extends GenerateTextOptions {
   schema?: Record<string, unknown>;
 }
 
+export interface ImageModelInfo {
+  id: string;
+  name: string;
+}
+
+export interface ImageProviderInfo {
+  id: string;
+  name: string;
+  models: ImageModelInfo[];
+}
+
+export interface ImageModelsResponse {
+  providers: ImageProviderInfo[];
+}
+
+export interface ModelsRegistryResponse {
+  text: {
+    providers: ImageProviderInfo[];
+    defaultProvider: string;
+    defaultModel: string;
+  };
+  image: {
+    providers: ImageProviderInfo[];
+    defaultProvider: string;
+    defaultModel: string;
+  };
+}
+
 export interface GenerateImageOptions {
   prompt: string;
   style?: string;
   aspect_ratio?: string;
   model?: string;
+  provider?:
+    | "openai"
+    | "gemini"
+    | "vertex"
+    | "replicate"
+    | "fireworks"
+    | "auto";
   negative_tags?: string[];
+  negative_prompt?: string;
 }
 
 export interface GenerateBlueprintBody {
@@ -86,14 +122,17 @@ export interface GenerateVideoBody {
   };
 }
 
-const DEFAULT_SYSTEM = 'You are a helpful assistant.';
+const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
 const client = createAxiosClient({
   baseURL: getAiServiceBaseUrl(),
   timeout: 180000,
 });
 
-function textPayload(options: GenerateTextOptions, systemDefault = DEFAULT_SYSTEM) {
+function textPayload(
+  options: GenerateTextOptions,
+  systemDefault = DEFAULT_SYSTEM
+) {
   return {
     model: options.model,
     system_prompt: options.systemPrompt ?? systemDefault,
@@ -104,24 +143,45 @@ function textPayload(options: GenerateTextOptions, systemDefault = DEFAULT_SYSTE
 }
 
 export const aiApi = {
+  async getImageModels(): Promise<ImageModelsResponse> {
+    const { data } = await client.get<ImageModelsResponse>("/v1/images/models");
+    return data;
+  },
+
+  async getModelsRegistry(): Promise<ModelsRegistryResponse> {
+    const { data } = await client.get<ModelsRegistryResponse>(
+      "/v1/models/registry"
+    );
+    return data;
+  },
+
   async getModels(): Promise<AIModel[]> {
-    const { data } = await client.get<AIModelsResponse>('/v1/models');
+    const { data } = await client.get<AIModelsResponse>("/v1/models");
     return data.data ?? [];
   },
 
   async generateText(options: GenerateTextOptions): Promise<string> {
-    const { data } = await client.post<{ content?: string }>('/v1/responses', textPayload(options));
-    return typeof data.content === 'string' ? data.content : JSON.stringify(data);
+    const { data } = await client.post<{ content?: string }>(
+      "/v1/responses",
+      textPayload(options)
+    );
+    return typeof data.content === "string"
+      ? data.content
+      : JSON.stringify(data);
   },
 
   async streamText(
     options: GenerateTextOptions,
-    signal?: AbortSignal,
+    signal?: AbortSignal
   ): Promise<ReadableStream<Uint8Array>> {
-    const { data } = await client.post<ArrayBuffer>('/v1/responses/stream', textPayload(options), {
-      responseType: 'arraybuffer',
-      signal,
-    });
+    const { data } = await client.post<ArrayBuffer>(
+      "/v1/responses/stream",
+      textPayload(options),
+      {
+        responseType: "arraybuffer",
+        signal,
+      }
+    );
     const buf = new Uint8Array(data);
     return new ReadableStream({
       start(ctrl) {
@@ -132,50 +192,79 @@ export const aiApi = {
   },
 
   async generateObject<T = Record<string, unknown>>(
-    options: GenerateObjectOptions,
+    options: GenerateObjectOptions
   ): Promise<T> {
     const body = {
-      ...textPayload(options, 'You are a helpful assistant. Return valid JSON only.'),
+      ...textPayload(
+        options,
+        "You are a helpful assistant. Return valid JSON only."
+      ),
       response_format: options.schema
-        ? { type: 'json_schema', json_schema: { name: 'response', strict: true, schema: options.schema } }
-        : 'json',
+        ? {
+            type: "json_schema",
+            json_schema: {
+              name: "response",
+              strict: true,
+              schema: options.schema,
+            },
+          }
+        : "json",
     };
-    const { data } = await client.post<{ content?: unknown } | T>('/v1/responses', body);
-    const out = data && typeof data === 'object' && 'content' in data ? (data as { content: T }).content : data;
+    const { data } = await client.post<{ content?: unknown } | T>(
+      "/v1/responses",
+      body
+    );
+    const out =
+      data && typeof data === "object" && "content" in data
+        ? (data as { content: T }).content
+        : data;
     return out as T;
   },
 
   async generateImage(
-    options: GenerateImageOptions,
+    options: GenerateImageOptions
   ): Promise<{ imageUrl: string; metadata: Record<string, unknown> }> {
-    const { data } = await client.post<{ imageUrl: string; metadata: Record<string, unknown> }>(
-      '/v1/images/generate',
-      {
-        prompt: options.prompt,
-        style: options.style,
-        aspect_ratio: options.aspect_ratio,
-        model: options.model,
-        negative_tags: options.negative_tags,
-      },
+    const { data } = await client.post<{
+      imageUrl: string;
+      metadata: Record<string, unknown>;
+    }>("/v1/images/generate", {
+      prompt: options.prompt,
+      style: options.style,
+      aspect_ratio: options.aspect_ratio,
+      model: options.model,
+      provider: options.provider,
+      negative_tags: options.negative_tags,
+      negative_prompt: options.negative_prompt,
+    });
+    return data;
+  },
+
+  async editImage(
+    file: File,
+    instruction: string
+  ): Promise<{ imageUrl: string }> {
+    const form = new FormData();
+    form.append("image", file);
+    form.append("instruction", instruction);
+    const { data } = await client.post<{ imageUrl: string }>(
+      "/v1/images/edit",
+      form
     );
     return data;
   },
 
-  async editImage(file: File, instruction: string): Promise<{ imageUrl: string }> {
-    const form = new FormData();
-    form.append('image', file);
-    form.append('instruction', instruction);
-    const { data } = await client.post<{ imageUrl: string }>('/v1/images/edit', form);
-    return data;
-  },
-
   async generateBlueprint(body: GenerateBlueprintBody): Promise<unknown> {
-    const { data } = await client.post('/v1/ai/books/generate-blueprint', body);
+    const { data } = await client.post("/v1/ai/books/generate-blueprint", body);
     return data;
   },
 
-  async analyzeCharacter(body: AnalyzeCharacterBody): Promise<{ characterDetails?: unknown }> {
-    const { data } = await client.post<{ characterDetails?: unknown }>('/v1/ai/books/analyze-character', body);
+  async analyzeCharacter(
+    body: AnalyzeCharacterBody
+  ): Promise<{ characterDetails?: unknown }> {
+    const { data } = await client.post<{ characterDetails?: unknown }>(
+      "/v1/ai/books/analyze-character",
+      body
+    );
     return data;
   },
 
@@ -183,15 +272,20 @@ export const aiApi = {
     characterName?: string;
     characterDescription?: string;
   }): Promise<{ imageUrl?: string; avatarPrompt?: string }> {
-    const { data } = await client.post<{ imageUrl?: string; avatarPrompt?: string }>(
-      '/v1/ai/books/generate-character-avatar',
-      body,
-    );
+    const { data } = await client.post<{
+      imageUrl?: string;
+      avatarPrompt?: string;
+    }>("/v1/ai/books/generate-character-avatar", body);
     return data;
   },
 
-  async analyzeContext(body: AnalyzeContextBody): Promise<{ analysis: string }> {
-    const { data } = await client.post<{ analysis: string }>('/v1/ai/books/analyze-context', body);
+  async analyzeContext(
+    body: AnalyzeContextBody
+  ): Promise<{ analysis: string }> {
+    const { data } = await client.post<{ analysis: string }>(
+      "/v1/ai/books/analyze-context",
+      body
+    );
     return data;
   },
 
@@ -203,17 +297,19 @@ export const aiApi = {
     expanded?: boolean;
     expansionAttempts?: number;
   }> {
-    const { data } = await client.post('/v1/ai/books/generate-chapter', body);
+    const { data } = await client.post("/v1/ai/books/generate-chapter", body);
     return data;
   },
 
   async getVideoModels(): Promise<unknown[]> {
-    const { data } = await client.get<{ data?: unknown[] }>('/v1/videos/models');
+    const { data } = await client.get<{ data?: unknown[] }>(
+      "/v1/videos/models"
+    );
     return data?.data ?? [];
   },
 
   async generateVideo(body: GenerateVideoBody): Promise<unknown> {
-    const { data } = await client.post('/v1/videos/generate', body);
+    const { data } = await client.post("/v1/videos/generate", body);
     return data;
   },
 
@@ -222,11 +318,14 @@ export const aiApi = {
     return data;
   },
 
-  async uploadVideoAsset(file: File, type: 'video' | 'image'): Promise<unknown> {
+  async uploadVideoAsset(
+    file: File,
+    type: "video" | "image"
+  ): Promise<unknown> {
     const form = new FormData();
-    form.append('file', file);
-    form.append('type', type);
-    const { data } = await client.post('/v1/videos/upload-asset', form);
+    form.append("file", file);
+    form.append("type", type);
+    const { data } = await client.post("/v1/videos/upload-asset", form);
     return data;
   },
 };
