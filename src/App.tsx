@@ -2,18 +2,20 @@ import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider, QueryProvider, TenantProvider } from '@gaqno-development/frontcore'
 import { BookIcon } from '@gaqno-development/frontcore/components/icons';
-import { Music, Image, Video } from 'lucide-react';
+import { Music, Image, Video, Database } from 'lucide-react';
 import { AIPageLayout } from './layouts/AIPageLayout'
 import BookPage from './pages/BookPage'
 import AudioSection from './pages/AudioSection'
 import ImagesSection from './pages/ImagesSection'
 import VideoSection from './pages/VideoSection'
+import { ProductDataDiscoveryPage } from './pages/ProductDataDiscoveryPage'
 
 const AI_TABS = [
   { id: 'books', label: 'Books', icon: BookIcon },
   { id: 'audio', label: 'Audio', icon: Music },
   { id: 'images', label: 'Images', icon: Image },
   { id: 'video', label: 'Video', icon: Video },
+  { id: 'discovery', label: 'Discovery', icon: Database },
 ] as const
 
 const VIEW_ROUTES: Record<string, string> = {
@@ -21,6 +23,7 @@ const VIEW_ROUTES: Record<string, string> = {
   audio: '/ai/audio/tts',
   images: '/ai/images/text',
   video: '/ai/video/modify',
+  discovery: '/ai/discovery',
 }
 
 function viewFromPathname(pathname: string): string | null {
@@ -28,6 +31,7 @@ function viewFromPathname(pathname: string): string | null {
   if (pathname.startsWith('/ai/audio')) return 'audio'
   if (pathname.startsWith('/ai/images')) return 'images'
   if (pathname.startsWith('/ai/video')) return 'video'
+  if (pathname.startsWith('/ai/discovery')) return 'discovery'
   return null
 }
 
@@ -54,6 +58,7 @@ function AIPage() {
     if (pathname.startsWith('/ai/audio')) return <AudioSection />
     if (pathname.startsWith('/ai/images')) return <ImagesSection />
     if (pathname.startsWith('/ai/video')) return <VideoSection />
+    if (pathname.startsWith('/ai/discovery')) return <ProductDataDiscoveryPage />
     if (pathname === '/ai' || pathname === '/ai/') return null
     return <BookPage />
   }
