@@ -122,6 +122,21 @@ export interface GenerateVideoBody {
   };
 }
 
+export interface ErpProduct {
+  id: string;
+  name: string;
+  price: number;
+  tenantId: string;
+  category?: string;
+  imageUrls?: string[];
+}
+
+export interface ErpProductsQuery {
+  tenantId?: string;
+  limit?: number;
+  offset?: number;
+}
+
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
 const client = createAxiosClient({
@@ -327,5 +342,16 @@ export const aiApi = {
     form.append("type", type);
     const { data } = await client.post("/v1/videos/upload-asset", form);
     return data;
+  },
+
+  async getErpProducts(query?: ErpProductsQuery): Promise<ErpProduct[]> {
+    const params = new URLSearchParams();
+    if (query?.tenantId) params.set("tenantId", query.tenantId);
+    if (query?.limit != null) params.set("limit", String(query.limit));
+    if (query?.offset != null) params.set("offset", String(query.offset));
+    const qs = params.toString();
+    const url = qs ? `/erp/products?${qs}` : "/erp/products";
+    const { data } = await client.get<ErpProduct[]>(url);
+    return Array.isArray(data) ? data : [];
   },
 };

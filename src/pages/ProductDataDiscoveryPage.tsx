@@ -5,6 +5,7 @@ import {
   CardTitle,
 } from "@gaqno-development/frontcore/components/ui";
 import { Badge } from "@gaqno-development/frontcore/components/ui";
+import { useErpProductsQueries } from "@/hooks/queries/useErpProductsQueries";
 
 const INVENTORY = {
   pdv: {
@@ -24,10 +25,17 @@ const INVENTORY = {
     gapsForAi: ["category", "images", "marketingCopy", "tags"],
   },
   erp: {
-    service: "gaqno-erp-ui (no backend)",
+    service: "gaqno-ai-service (GET /erp/products)",
     sourceOfTruth: false,
-    fields: [],
-    gapsForAi: ["name", "price", "category", "images", "api"],
+    fields: [
+      { name: "id", type: "UUID", required: true },
+      { name: "tenantId", type: "UUID", required: true },
+      { name: "name", type: "string", required: true },
+      { name: "price", type: "number", required: true },
+      { name: "category", type: "string", required: false },
+      { name: "imageUrls", type: "string[]", required: false },
+    ],
+    gapsForAi: ["description", "sku", "stock", "marketingCopy", "tags"],
   },
   crm: {
     service: "gaqno-crm-ui (no backend)",
@@ -38,6 +46,11 @@ const INVENTORY = {
 } as const;
 
 export function ProductDataDiscoveryPage() {
+  const { getProducts } = useErpProductsQueries({ limit: 20 });
+  const products = getProducts.data ?? [];
+  const isLoading = getProducts.isLoading;
+  const isError = getProducts.isError;
+
   return (
     <div className="space-y-6">
       <div>
@@ -86,7 +99,50 @@ export function ProductDataDiscoveryPage() {
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Product Data Contract (MVP)</CardTitle>
+            <CardTitle className="text-base">ERP products (live)</CardTitle>
+            <Badge variant="outline" className="text-xs">
+              GET /erp/products
+            </Badge>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Sample from gaqno-ai-service. Contract-aligned (GAQNO-1162).
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          {isLoading && (
+            <p className="text-muted-foreground">Loading products…</p>
+          )}
+          {isError && (
+            <p className="text-destructive">Failed to load ERP products.</p>
+          )}
+          {!isLoading && !isError && (
+            <>
+              <p>
+                <span className="font-medium">Count: </span>
+                {products.length}
+              </p>
+              {products.length > 0 && (
+                <ul className="list-inside list-disc space-y-1 text-muted-foreground">
+                  {products.slice(0, 5).map((p) => (
+                    <li key={p.id}>
+                      {p.name} — {p.price} {p.category ? `(${p.category})` : ""}
+                    </li>
+                  ))}
+                  {products.length > 5 && (
+                    <li>… and {products.length - 5} more</li>
+                  )}
+                </ul>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base">
+              Product Data Contract (MVP)
+            </CardTitle>
             <Badge variant="outline" className="text-xs">
               v1.0.0
             </Badge>
