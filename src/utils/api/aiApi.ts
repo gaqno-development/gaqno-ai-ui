@@ -510,10 +510,16 @@ export const aiApi = {
     return data;
   },
 
-  async listCampaigns(tenantId: string): Promise<CampaignRecord[]> {
+  async listCampaigns(
+    tenantId: string,
+    options?: { limit?: number; offset?: number }
+  ): Promise<CampaignRecord[]> {
+    const params: Record<string, string | number> = { tenantId };
+    if (options?.limit != null) params.limit = options.limit;
+    if (options?.offset != null) params.offset = options.offset;
     const { data } = await client.get<CampaignRecord[]>(
       "/attribution/campaigns",
-      { params: { tenantId } }
+      { params }
     );
     return data ?? [];
   },
