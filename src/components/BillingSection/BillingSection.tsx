@@ -78,6 +78,11 @@ export function BillingSection() {
         )}
         {summary && (
           <div className="space-y-2 rounded-md border p-3 text-sm">
+            {summary.sourceAvailable === false && (
+              <p className="text-amber-600 dark:text-amber-500 text-xs font-medium">
+                Source temporarily unavailable. GMV and fee may show zero.
+              </p>
+            )}
             <div className="grid gap-2 sm:grid-cols-2">
               <div>
                 <span className="text-muted-foreground">Period: </span>

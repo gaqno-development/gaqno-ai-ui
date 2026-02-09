@@ -202,6 +202,7 @@ export interface AttributionReport {
   confidence: number;
   confidenceExplanation: string;
   source: string;
+  sourceAvailable: boolean;
 }
 
 export interface BillingSummary {
@@ -213,6 +214,7 @@ export interface BillingSummary {
   feeAmount: number;
   currency: string;
   summaryExplanation?: string;
+  sourceAvailable: boolean;
 }
 
 export interface VideoTemplateSummary {
