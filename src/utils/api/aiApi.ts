@@ -202,6 +202,7 @@ export interface AttributionReport {
   confidence: number;
   confidenceExplanation: string;
   source: string;
+  sourceAvailable: boolean;
 }
 
 export interface BillingSummary {
@@ -213,6 +214,7 @@ export interface BillingSummary {
   feeAmount: number;
   currency: string;
   summaryExplanation?: string;
+  sourceAvailable: boolean;
 }
 
 export interface VideoTemplateSummary {
@@ -510,10 +512,16 @@ export const aiApi = {
     return data;
   },
 
-  async listCampaigns(tenantId: string): Promise<CampaignRecord[]> {
+  async listCampaigns(
+    tenantId: string,
+    options?: { limit?: number; offset?: number }
+  ): Promise<CampaignRecord[]> {
+    const params: Record<string, string | number> = { tenantId };
+    if (options?.limit != null) params.limit = options.limit;
+    if (options?.offset != null) params.offset = options.offset;
     const { data } = await client.get<CampaignRecord[]>(
       "/attribution/campaigns",
-      { params: { tenantId } }
+      { params }
     );
     return data ?? [];
   },

@@ -169,13 +169,21 @@ export function AttributionSection() {
             )}
             {report && (
               <div className="space-y-2 text-sm">
+                {report.sourceAvailable === false && (
+                  <p className="text-amber-600 dark:text-amber-500 text-xs font-medium">
+                    Source temporarily unavailable. GMV and transaction count
+                    may show zero.
+                  </p>
+                )}
                 <div className="grid gap-2 sm:grid-cols-2">
                   <div>
                     <span className="text-muted-foreground">GMV: </span>
                     <strong>{report.gmv.toLocaleString()}</strong>
                   </div>
                   <div>
-                    <span className="text-muted-foreground">Transactions: </span>
+                    <span className="text-muted-foreground">
+                      Transactions:{" "}
+                    </span>
                     <strong>{report.transactionCount}</strong>
                   </div>
                   <div>
