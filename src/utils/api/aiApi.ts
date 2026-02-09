@@ -122,6 +122,36 @@ export interface GenerateVideoBody {
   };
 }
 
+export interface ProductProfileRequestProduct {
+  id: string;
+  name: string;
+  price: number;
+  tenantId: string;
+  description?: string;
+  sku?: string;
+  stock?: number;
+  category?: string;
+  imageUrls?: string[];
+}
+
+export interface BuildProductProfileRequest {
+  product: ProductProfileRequestProduct;
+  inferMissing?: boolean;
+}
+
+export interface SemanticFieldValue {
+  value: string | string[] | number | null;
+  confidence: number;
+  source: "provided" | "inferred";
+}
+
+export interface ProductProfileResponse {
+  productId: string;
+  tenantId: string;
+  profile: Record<string, SemanticFieldValue>;
+  overallConfidence: number;
+}
+
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
 const client = createAxiosClient({
@@ -326,6 +356,16 @@ export const aiApi = {
     form.append("file", file);
     form.append("type", type);
     const { data } = await client.post("/v1/videos/upload-asset", form);
+    return data;
+  },
+
+  async buildProductProfile(
+    request: BuildProductProfileRequest
+  ): Promise<ProductProfileResponse> {
+    const { data } = await client.post<ProductProfileResponse>(
+      "/product-profile/build",
+      request
+    );
     return data;
   },
 };
