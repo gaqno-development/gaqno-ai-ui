@@ -7,6 +7,7 @@ import {
 import { Badge } from "@gaqno-development/frontcore/components/ui";
 import { ProductProfileSection } from "@/components/ProductProfileSection";
 import { ProductContentSection } from "@/components/ProductContentSection";
+import { VideoTemplateSection } from "@/components/VideoTemplateSection";
 
 const INVENTORY = {
   pdv: {
@@ -87,6 +88,7 @@ export function ProductDataDiscoveryPage() {
       </div>
       <ProductProfileSection />
       <ProductContentSection />
+      <VideoTemplateSection />
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">

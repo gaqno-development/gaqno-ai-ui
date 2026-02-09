@@ -171,6 +171,28 @@ export interface GenerateContentResponse {
   assumptions: string[];
 }
 
+export interface VideoTemplateSummary {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface GenerateVideoFromTemplateBody {
+  templateId: string;
+  product?: { name?: string; description?: string };
+  model?: string;
+}
+
+export interface VideoGenerationResponse {
+  id: string;
+  status: string;
+  created_at?: string;
+  video_url?: string;
+  thumbnail_url?: string;
+  progress?: number;
+  error?: string;
+}
+
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
 const client = createAxiosClient({
@@ -355,6 +377,23 @@ export const aiApi = {
       "/v1/videos/models"
     );
     return data?.data ?? [];
+  },
+
+  async getVideoTemplates(): Promise<VideoTemplateSummary[]> {
+    const { data } = await client.get<VideoTemplateSummary[]>(
+      "/v1/videos/templates"
+    );
+    return data ?? [];
+  },
+
+  async generateVideoFromTemplate(
+    body: GenerateVideoFromTemplateBody
+  ): Promise<VideoGenerationResponse> {
+    const { data } = await client.post<VideoGenerationResponse>(
+      "/v1/videos/generate-from-template",
+      body
+    );
+    return data;
   },
 
   async generateVideo(body: GenerateVideoBody): Promise<unknown> {
