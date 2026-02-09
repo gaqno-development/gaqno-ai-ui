@@ -171,6 +171,12 @@ export interface GenerateContentResponse {
   assumptions: string[];
 }
 
+export interface PublishDistributionBody {
+  to: string;
+  channelType: "whatsapp";
+  content: { text: string; mediaUrl?: string };
+}
+
 export interface VideoTemplateSummary {
   id: string;
   name: string;
@@ -434,6 +440,27 @@ export const aiApi = {
       "/product-content/generate",
       request
     );
+    return data;
+  },
+
+  async publishDistribution(
+    body: PublishDistributionBody
+  ): Promise<{ id: string; status: string }> {
+    const { data } = await client.post<{ id: string; status: string }>(
+      "/distribution/publish",
+      body
+    );
+    return data;
+  },
+
+  async getDistributionStatus(
+    id: string
+  ): Promise<{ id: string; status: string; deliveredAt?: string }> {
+    const { data } = await client.get<{
+      id: string;
+      status: string;
+      deliveredAt?: string;
+    }>(`/distribution/${id}/status`);
     return data;
   },
 };
