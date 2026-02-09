@@ -93,6 +93,7 @@ export function ProductDataDiscoveryPage() {
       <VideoTemplateSection />
       <DistributionSection />
       <AttributionSection />
+      <BillingSection />
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">

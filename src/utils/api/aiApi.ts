@@ -204,6 +204,17 @@ export interface AttributionReport {
   source: string;
 }
 
+export interface BillingSummary {
+  tenantId: string;
+  period: { from: string; to: string };
+  gmv: number;
+  transactionCount: number;
+  feeRatePercent: number;
+  feeAmount: number;
+  currency: string;
+  summaryExplanation?: string;
+}
+
 export interface VideoTemplateSummary {
   id: string;
   name: string;
@@ -523,6 +534,20 @@ export const aiApi = {
       `/attribution/campaigns/${campaignId}/report`,
       { params: { tenantId } }
     );
+    return data;
+  },
+
+  async getBillingSummary(
+    tenantId: string,
+    from?: string,
+    to?: string
+  ): Promise<BillingSummary> {
+    const params: Record<string, string> = { tenantId };
+    if (from) params.from = from;
+    if (to) params.to = to;
+    const { data } = await client.get<BillingSummary>("/billing/summary", {
+      params,
+    });
     return data;
   },
 };
