@@ -152,6 +152,25 @@ export interface ProductProfileResponse {
   overallConfidence: number;
 }
 
+export interface GenerateContentProductInput {
+  id: string;
+  name: string;
+  price: number;
+  tenantId: string;
+  description?: string;
+  category?: string;
+  imageUrls?: string[];
+}
+
+export interface GenerateContentRequest {
+  product: GenerateContentProductInput;
+}
+
+export interface GenerateContentResponse {
+  copy: string;
+  assumptions: string[];
+}
+
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
 const client = createAxiosClient({
@@ -364,6 +383,16 @@ export const aiApi = {
   ): Promise<ProductProfileResponse> {
     const { data } = await client.post<ProductProfileResponse>(
       "/product-profile/build",
+      request
+    );
+    return data;
+  },
+
+  async generateProductContent(
+    request: GenerateContentRequest
+  ): Promise<GenerateContentResponse> {
+    const { data } = await client.post<GenerateContentResponse>(
+      "/product-content/generate",
       request
     );
     return data;
