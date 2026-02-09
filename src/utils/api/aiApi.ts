@@ -177,6 +177,33 @@ export interface PublishDistributionBody {
   content: { text: string; mediaUrl?: string };
 }
 
+export interface CreateCampaignBody {
+  tenantId?: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+}
+
+export interface CampaignRecord {
+  id: string;
+  tenantId: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  createdAt: string;
+}
+
+export interface AttributionReport {
+  campaignId: string;
+  startAt: string;
+  endAt: string;
+  gmv: number;
+  transactionCount: number;
+  confidence: number;
+  confidenceExplanation: string;
+  source: string;
+}
+
 export interface VideoTemplateSummary {
   id: string;
   name: string;
@@ -461,6 +488,41 @@ export const aiApi = {
       status: string;
       deliveredAt?: string;
     }>(`/distribution/${id}/status`);
+    return data;
+  },
+
+  async createCampaign(body: CreateCampaignBody): Promise<CampaignRecord> {
+    const { data } = await client.post<CampaignRecord>(
+      "/attribution/campaigns",
+      body
+    );
+    return data;
+  },
+
+  async listCampaigns(tenantId: string): Promise<CampaignRecord[]> {
+    const { data } = await client.get<CampaignRecord[]>(
+      "/attribution/campaigns",
+      { params: { tenantId } }
+    );
+    return data ?? [];
+  },
+
+  async getCampaign(id: string, tenantId: string): Promise<CampaignRecord> {
+    const { data } = await client.get<CampaignRecord>(
+      `/attribution/campaigns/${id}`,
+      { params: { tenantId } }
+    );
+    return data;
+  },
+
+  async getAttributionReport(
+    campaignId: string,
+    tenantId: string
+  ): Promise<AttributionReport> {
+    const { data } = await client.get<AttributionReport>(
+      `/attribution/campaigns/${campaignId}/report`,
+      { params: { tenantId } }
+    );
     return data;
   },
 };
