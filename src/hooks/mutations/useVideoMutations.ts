@@ -1,24 +1,37 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { aiApi } from '@/utils/api/aiApi';
-import type { VideoGenerationRequest } from '@/types/videos';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { aiApi } from "@/utils/api/aiApi";
+import type { VideoGenerationRequest } from "@/types/videos";
+import type { GenerateVideoFromTemplateBody } from "@/utils/api/aiApi";
 
 export const useVideoMutations = () => {
   const queryClient = useQueryClient();
 
   const generate = useMutation({
-    mutationFn: (request: VideoGenerationRequest) => aiApi.generateVideo(request),
+    mutationFn: (request: VideoGenerationRequest) =>
+      aiApi.generateVideo(request),
     onSuccess: (data: { id?: string }) => {
-      if (data?.id) queryClient.setQueryData(['video-generation', data.id], data);
+      if (data?.id)
+        queryClient.setQueryData(["video-generation", data.id], data);
+    },
+  });
+
+  const generateFromTemplate = useMutation({
+    mutationFn: (body: GenerateVideoFromTemplateBody) =>
+      aiApi.generateVideoFromTemplate(body),
+    onSuccess: (data: { id?: string }) => {
+      if (data?.id)
+        queryClient.setQueryData(["video-generation", data.id], data);
     },
   });
 
   const upload = useMutation({
-    mutationFn: ({ file, type }: { file: File; type: 'video' | 'image' }) =>
+    mutationFn: ({ file, type }: { file: File; type: "video" | "image" }) =>
       aiApi.uploadVideoAsset(file, type),
   });
 
   return {
     generate,
+    generateFromTemplate,
     upload,
   };
 };

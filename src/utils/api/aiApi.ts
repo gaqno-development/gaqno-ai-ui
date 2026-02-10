@@ -1,5 +1,9 @@
 import { createAxiosClient } from "@gaqno-development/frontcore/utils/api";
 import { getAiServiceBaseUrl } from "@/lib/env";
+import type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+import type { BillingSummary } from "@gaqno-development/types/billing";
+import type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
+import type { VideoGenerationResponse } from "@gaqno-development/types/video";
 
 export interface AIModel {
   id: string;
@@ -127,6 +131,9 @@ export interface ErpProduct {
   name: string;
   price: number;
   tenantId: string;
+  description?: string;
+  sku?: string;
+  stock?: number;
   category?: string;
   imageUrls?: string[];
 }
@@ -135,6 +142,89 @@ export interface ErpProductsQuery {
   tenantId?: string;
   limit?: number;
   offset?: number;
+}
+
+export interface ProductProfileRequestProduct {
+  id: string;
+  name: string;
+  price: number;
+  tenantId: string;
+  description?: string;
+  sku?: string;
+  stock?: number;
+  category?: string;
+  imageUrls?: string[];
+}
+
+export interface BuildProductProfileRequest {
+  product: ProductProfileRequestProduct;
+  inferMissing?: boolean;
+}
+
+export interface SemanticFieldValue {
+  value: string | string[] | number | null;
+  confidence: number;
+  source: "provided" | "inferred";
+}
+
+export interface ProductProfileResponse {
+  productId: string;
+  tenantId: string;
+  profile: Record<string, SemanticFieldValue>;
+  overallConfidence: number;
+}
+
+export interface GenerateContentProductInput {
+  id: string;
+  name: string;
+  price: number;
+  tenantId: string;
+  description?: string;
+  category?: string;
+  imageUrls?: string[];
+}
+
+export interface GenerateContentRequest {
+  product: GenerateContentProductInput;
+}
+
+export interface GenerateContentResponse {
+  copy: string;
+  assumptions: string[];
+}
+
+export interface PublishDistributionBody {
+  to: string;
+  channelType: "whatsapp";
+  content: { text: string; mediaUrl?: string };
+}
+
+export interface CreateCampaignBody {
+  tenantId?: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+}
+
+export type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+export type { BillingSummary } from "@gaqno-development/types/billing";
+export type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
+export type { VideoGenerationResponse } from "@gaqno-development/types/video";
+
+export interface GenerateVideoFromTemplateBody {
+  templateId: string;
+  product?: { name?: string; description?: string };
+  model?: string;
+}
+
+export interface VideoGenerationResponse {
+  id: string;
+  status: string;
+  created_at?: string;
+  video_url?: string;
+  thumbnail_url?: string;
+  progress?: number;
+  error?: string;
 }
 
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
@@ -323,6 +413,23 @@ export const aiApi = {
     return data?.data ?? [];
   },
 
+  async getVideoTemplates(): Promise<VideoTemplateSummary[]> {
+    const { data } = await client.get<VideoTemplateSummary[]>(
+      "/v1/videos/templates"
+    );
+    return data ?? [];
+  },
+
+  async generateVideoFromTemplate(
+    body: GenerateVideoFromTemplateBody
+  ): Promise<VideoGenerationResponse> {
+    const { data } = await client.post<VideoGenerationResponse>(
+      "/v1/videos/generate-from-template",
+      body
+    );
+    return data;
+  },
+
   async generateVideo(body: GenerateVideoBody): Promise<unknown> {
     const { data } = await client.post("/v1/videos/generate", body);
     return data;
@@ -353,5 +460,101 @@ export const aiApi = {
     const url = qs ? `/erp/products?${qs}` : "/erp/products";
     const { data } = await client.get<ErpProduct[]>(url);
     return Array.isArray(data) ? data : [];
+  },
+
+  async buildProductProfile(
+    request: BuildProductProfileRequest
+  ): Promise<ProductProfileResponse> {
+    const { data } = await client.post<ProductProfileResponse>(
+      "/product-profile/build",
+      request
+    );
+    return data;
+  },
+
+  async generateProductContent(
+    request: GenerateContentRequest
+  ): Promise<GenerateContentResponse> {
+    const { data } = await client.post<GenerateContentResponse>(
+      "/product-content/generate",
+      request
+    );
+    return data;
+  },
+
+  async publishDistribution(
+    body: PublishDistributionBody
+  ): Promise<{ id: string; status: string }> {
+    const { data } = await client.post<{ id: string; status: string }>(
+      "/distribution/publish",
+      body
+    );
+    return data;
+  },
+
+  async getDistributionStatus(
+    id: string
+  ): Promise<{ id: string; status: string; deliveredAt?: string }> {
+    const { data } = await client.get<{
+      id: string;
+      status: string;
+      deliveredAt?: string;
+    }>(`/distribution/${id}/status`);
+    return data;
+  },
+
+  async createCampaign(body: CreateCampaignBody): Promise<CampaignRecord> {
+    const { data } = await client.post<CampaignRecord>(
+      "/attribution/campaigns",
+      body
+    );
+    return data;
+  },
+
+  async listCampaigns(
+    tenantId: string,
+    options?: { limit?: number; offset?: number }
+  ): Promise<CampaignRecord[]> {
+    const params: Record<string, string | number> = { tenantId };
+    if (options?.limit != null) params.limit = options.limit;
+    if (options?.offset != null) params.offset = options.offset;
+    const { data } = await client.get<CampaignRecord[]>(
+      "/attribution/campaigns",
+      { params }
+    );
+    return data ?? [];
+  },
+
+  async getCampaign(id: string, tenantId: string): Promise<CampaignRecord> {
+    const { data } = await client.get<CampaignRecord>(
+      `/attribution/campaigns/${id}`,
+      { params: { tenantId } }
+    );
+    return data;
+  },
+
+  async getAttributionReport(
+    campaignId: string,
+    tenantId: string
+  ): Promise<AttributionReport> {
+    const { data } = await client.get<AttributionReport>(
+      `/attribution/campaigns/${campaignId}/report`,
+      { params: { tenantId } }
+    );
+    return data;
+  },
+
+  async getBillingSummary(
+    tenantId: string,
+    from?: string,
+    to?: string
+  ): Promise<BillingSummary> {
+    const params: Record<string, string> = { tenantId };
+    if (from) params.from = from;
+    if (to) params.to = to;
+    const { data } = await client.get<BillingSummary>("/billing/summary", {
+      params,
+    });
+    return data;
   },
 };

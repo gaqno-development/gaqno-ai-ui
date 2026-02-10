@@ -6,6 +6,12 @@ import {
 } from "@gaqno-development/frontcore/components/ui";
 import { Badge } from "@gaqno-development/frontcore/components/ui";
 import { useErpProductsQueries } from "@/hooks/queries/useErpProductsQueries";
+import { ProductProfileSection } from "@/components/ProductProfileSection";
+import { ProductContentSection } from "@/components/ProductContentSection";
+import { VideoTemplateSection } from "@/components/VideoTemplateSection";
+import { DistributionSection } from "@/components/DistributionSection";
+import { AttributionSection } from "@/components/AttributionSection";
+import { BillingSection } from "@/components/BillingSection";
 
 const INVENTORY = {
   pdv: {
@@ -96,6 +102,12 @@ export function ProductDataDiscoveryPage() {
           </Card>
         ))}
       </div>
+      <ProductProfileSection />
+      <ProductContentSection />
+      <VideoTemplateSection />
+      <DistributionSection />
+      <AttributionSection />
+      <BillingSection />
       <Card>
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
