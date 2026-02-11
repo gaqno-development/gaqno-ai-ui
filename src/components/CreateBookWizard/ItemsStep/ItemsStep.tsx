@@ -1,10 +1,22 @@
-import { Card, CardContent, CardHeader } from '@gaqno-development/frontcore/components/ui'
-import { Input, Label, Textarea, Button } from '@gaqno-development/frontcore/components/ui'
-import { AISuggestionButton } from '../../AISuggestionButton'
-import { useItemsStep } from './hooks/useItemsStep'
-import type { IItemsStepProps } from './types'
-import { TrashIcon, SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { Package, Plus, Loader2 } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Input,
+  Label,
+  Textarea,
+  Button,
+} from "@gaqno-development/frontcore/components/ui";
+import { AISuggestionButton } from "../../AISuggestionButton";
+import { useItemsStep } from "@/hooks/useItemsStep";
+import type { IItemsStepProps } from "./types";
+import {
+  TrashIcon,
+  SparklesIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { Package, Plus, Loader2 } from "lucide-react";
 
 export function ItemsStep(props: IItemsStepProps) {
   const {
@@ -15,8 +27,8 @@ export function ItemsStep(props: IItemsStepProps) {
     handleUpdateItem,
     handleGenerateItemDetails,
     handleGenerateAll,
-  } = useItemsStep(props)
-  const { items } = props
+  } = useItemsStep(props);
+  const { items } = props;
 
   return (
     <div className="space-y-4">
@@ -47,7 +59,12 @@ export function ItemsStep(props: IItemsStepProps) {
               </>
             )}
           </Button>
-          <Button type="button" onClick={handleAddItem} size="sm" variant="outline">
+          <Button
+            type="button"
+            onClick={handleAddItem}
+            size="sm"
+            variant="outline"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Item
           </Button>
@@ -59,7 +76,8 @@ export function ItemsStep(props: IItemsStepProps) {
           <CardContent className="py-8 text-center">
             <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-sm text-muted-foreground">
-              Nenhum item adicionado ainda. Clique em &quot;Adicionar Item&quot; para começar.
+              Nenhum item adicionado ainda. Clique em &quot;Adicionar Item&quot;
+              para começar.
             </p>
           </CardContent>
         </Card>
@@ -75,12 +93,19 @@ export function ItemsStep(props: IItemsStepProps) {
                       <Input
                         placeholder="Nome do item"
                         value={item.name}
-                        onChange={(e) => handleUpdateItem(item.id, 'name', e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateItem(item.id, "name", e.target.value)
+                        }
                         className="max-w-xs"
                       />
                     </div>
                   </div>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => handleRemoveItem(item.id)}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveItem(item.id)}
+                  >
                     <TrashIcon className="h-4 w-4" />
                   </Button>
                 </div>
@@ -90,15 +115,29 @@ export function ItemsStep(props: IItemsStepProps) {
                   <div className="flex items-center justify-between">
                     <Label>Função Narrativa</Label>
                     <AISuggestionButton
-                      onGenerate={() => handleGenerateItemDetails(item.id, 'function', item.name || 'Item')}
-                      onAccept={(suggestion) => handleUpdateItem(item.id, 'function', suggestion)}
-                      disabled={generatingFor === `${item.id}-function` || isGeneratingAll || !item.name}
+                      onGenerate={() =>
+                        handleGenerateItemDetails(
+                          item.id,
+                          "function",
+                          item.name || "Item"
+                        )
+                      }
+                      onAccept={(suggestion) =>
+                        handleUpdateItem(item.id, "function", suggestion)
+                      }
+                      disabled={
+                        generatingFor === `${item.id}-function` ||
+                        isGeneratingAll ||
+                        !item.name
+                      }
                     />
                   </div>
                   <Textarea
                     placeholder="Qual a função deste item na narrativa?"
-                    value={item.function || ''}
-                    onChange={(e) => handleUpdateItem(item.id, 'function', e.target.value)}
+                    value={item.function || ""}
+                    onChange={(e) =>
+                      handleUpdateItem(item.id, "function", e.target.value)
+                    }
                     rows={2}
                   />
                 </div>
@@ -106,15 +145,29 @@ export function ItemsStep(props: IItemsStepProps) {
                   <div className="flex items-center justify-between">
                     <Label>Origem</Label>
                     <AISuggestionButton
-                      onGenerate={() => handleGenerateItemDetails(item.id, 'origin', item.name || 'Item')}
-                      onAccept={(suggestion) => handleUpdateItem(item.id, 'origin', suggestion)}
-                      disabled={generatingFor === `${item.id}-origin` || isGeneratingAll || !item.name}
+                      onGenerate={() =>
+                        handleGenerateItemDetails(
+                          item.id,
+                          "origin",
+                          item.name || "Item"
+                        )
+                      }
+                      onAccept={(suggestion) =>
+                        handleUpdateItem(item.id, "origin", suggestion)
+                      }
+                      disabled={
+                        generatingFor === `${item.id}-origin` ||
+                        isGeneratingAll ||
+                        !item.name
+                      }
                     />
                   </div>
                   <Textarea
                     placeholder="De onde vem este item? Como foi criado ou obtido?"
-                    value={item.origin || ''}
-                    onChange={(e) => handleUpdateItem(item.id, 'origin', e.target.value)}
+                    value={item.origin || ""}
+                    onChange={(e) =>
+                      handleUpdateItem(item.id, "origin", e.target.value)
+                    }
                     rows={2}
                   />
                 </div>
@@ -122,15 +175,29 @@ export function ItemsStep(props: IItemsStepProps) {
                   <div className="flex items-center justify-between">
                     <Label>Relevância</Label>
                     <AISuggestionButton
-                      onGenerate={() => handleGenerateItemDetails(item.id, 'relevance', item.name || 'Item')}
-                      onAccept={(suggestion) => handleUpdateItem(item.id, 'relevance', suggestion)}
-                      disabled={generatingFor === `${item.id}-relevance` || isGeneratingAll || !item.name}
+                      onGenerate={() =>
+                        handleGenerateItemDetails(
+                          item.id,
+                          "relevance",
+                          item.name || "Item"
+                        )
+                      }
+                      onAccept={(suggestion) =>
+                        handleUpdateItem(item.id, "relevance", suggestion)
+                      }
+                      disabled={
+                        generatingFor === `${item.id}-relevance` ||
+                        isGeneratingAll ||
+                        !item.name
+                      }
                     />
                   </div>
                   <Textarea
                     placeholder="Por que este item é importante para a história?"
-                    value={item.relevance || ''}
-                    onChange={(e) => handleUpdateItem(item.id, 'relevance', e.target.value)}
+                    value={item.relevance || ""}
+                    onChange={(e) =>
+                      handleUpdateItem(item.id, "relevance", e.target.value)
+                    }
                     rows={2}
                   />
                 </div>
@@ -140,5 +207,5 @@ export function ItemsStep(props: IItemsStepProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

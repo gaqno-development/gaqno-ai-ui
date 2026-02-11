@@ -1,10 +1,15 @@
-import { Input, Label, Textarea, Button } from '@gaqno-development/frontcore/components/ui'
-import { AISuggestionButton } from '../../AISuggestionButton'
-import { useToneStyleStep } from './hooks/useToneStyleStep'
-import type { IToneStyleStepProps } from './types'
-import { TONE_OPTIONS, PACING_OPTIONS } from './types'
-import { SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { Loader2 } from 'lucide-react';
+import {
+  Input,
+  Label,
+  Textarea,
+  Button,
+} from "@gaqno-development/frontcore/components/ui";
+import { AISuggestionButton } from "../../AISuggestionButton";
+import { useToneStyleStep } from "@/hooks/useToneStyleStep";
+import type { IToneStyleStepProps } from "./types";
+import { TONE_OPTIONS, PACING_OPTIONS } from "./types";
+import { SparklesIcon } from "@gaqno-development/frontcore/components/icons";
+import { Loader2 } from "lucide-react";
 
 export function ToneStyleStep(props: IToneStyleStepProps) {
   const {
@@ -17,7 +22,7 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
     handleGenerateAudience,
     handleGenerateThemes,
     handleGenerateAll,
-  } = useToneStyleStep(props)
+  } = useToneStyleStep(props);
 
   return (
     <div className="space-y-6 p-6">
@@ -47,15 +52,15 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
           <Label htmlFor="narrative_tone">Tom Narrativo</Label>
           <AISuggestionButton
             onGenerate={handleGenerateTone}
-            onAccept={(suggestion) => setValue('narrative_tone', suggestion)}
-            disabled={generatingFor === 'tone' || isGeneratingAll}
+            onAccept={(suggestion) => setValue("narrative_tone", suggestion)}
+            disabled={generatingFor === "tone" || isGeneratingAll}
           />
         </div>
         <Input
           id="narrative_tone"
           placeholder="Ex: leve, sombrio, épico, intimista..."
           list="tone-options"
-          {...register('narrative_tone')}
+          {...register("narrative_tone")}
         />
         <datalist id="tone-options">
           {TONE_OPTIONS.map((tone) => (
@@ -69,15 +74,15 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
           <Label htmlFor="pacing">Ritmo</Label>
           <AISuggestionButton
             onGenerate={handleGeneratePacing}
-            onAccept={(suggestion) => setValue('pacing', suggestion)}
-            disabled={generatingFor === 'pacing' || isGeneratingAll}
+            onAccept={(suggestion) => setValue("pacing", suggestion)}
+            disabled={generatingFor === "pacing" || isGeneratingAll}
           />
         </div>
         <Input
           id="pacing"
           placeholder="Ex: rápido, contemplativo, equilibrado..."
           list="pacing-options"
-          {...register('pacing')}
+          {...register("pacing")}
         />
         <datalist id="pacing-options">
           {PACING_OPTIONS.map((pace) => (
@@ -91,14 +96,14 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
           <Label htmlFor="target_audience">Público Alvo</Label>
           <AISuggestionButton
             onGenerate={handleGenerateAudience}
-            onAccept={(suggestion) => setValue('target_audience', suggestion)}
-            disabled={generatingFor === 'audience' || isGeneratingAll}
+            onAccept={(suggestion) => setValue("target_audience", suggestion)}
+            disabled={generatingFor === "audience" || isGeneratingAll}
           />
         </div>
         <Input
           id="target_audience"
           placeholder="Ex: Jovens adultos, Adultos, Público geral..."
-          {...register('target_audience')}
+          {...register("target_audience")}
         />
       </div>
 
@@ -107,17 +112,17 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
           <Label htmlFor="central_themes">Mensagem / Temas Centrais</Label>
           <AISuggestionButton
             onGenerate={handleGenerateThemes}
-            onAccept={(suggestion) => setValue('central_themes', suggestion)}
-            disabled={generatingFor === 'themes' || isGeneratingAll}
+            onAccept={(suggestion) => setValue("central_themes", suggestion)}
+            disabled={generatingFor === "themes" || isGeneratingAll}
           />
         </div>
         <Textarea
           id="central_themes"
           placeholder="Quais são os temas centrais, mensagens ou questões que o livro explora?"
           rows={4}
-          {...register('central_themes')}
+          {...register("central_themes")}
         />
       </div>
     </div>
-  )
+  );
 }

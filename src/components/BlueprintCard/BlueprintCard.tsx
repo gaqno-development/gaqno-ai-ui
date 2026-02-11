@@ -1,16 +1,17 @@
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { XIcon } from '@gaqno-development/frontcore/components/icons';
-import { Save } from 'lucide-react';
-import { useBlueprintCard } from './hooks/useBlueprintCard';
-import type { BlueprintCardProps } from './types';
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { XIcon } from "@gaqno-development/frontcore/components/icons";
+import { Save } from "lucide-react";
+import { useBlueprintCard } from "@/hooks/useBlueprintCard";
+import type { BlueprintCardProps } from "./types";
 
-export function BlueprintCard({ content, isEditing, onSave }: BlueprintCardProps) {
-  const { editedContent, setEditedContent, handleSave, handleCancel } = useBlueprintCard(
-    content,
-    isEditing,
-    onSave,
-  );
+export function BlueprintCard({
+  content,
+  isEditing,
+  onSave,
+}: BlueprintCardProps) {
+  const { editedContent, setEditedContent, handleSave, handleCancel } =
+    useBlueprintCard(content, isEditing, onSave);
 
   if (!isEditing) {
     return (

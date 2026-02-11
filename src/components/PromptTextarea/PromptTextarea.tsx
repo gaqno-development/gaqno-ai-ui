@@ -1,7 +1,7 @@
-import React from 'react';
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { BulbSvg } from '@gaqno-development/frontcore/components/icons';
+import React from "react";
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { BulbSvg } from "@gaqno-development/frontcore/components/icons";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@gaqno-development/frontcore/components/ui';
-import { usePromptTextarea } from './hooks/usePromptTextarea';
-import type { PromptTextareaProps } from './types';
+} from "@gaqno-development/frontcore/components/ui";
+import { usePromptTextarea } from "@/hooks/usePromptTextarea";
+import type { PromptTextareaProps } from "./types";
 
 export const PromptTextarea: React.FC<PromptTextareaProps> = ({
   value,
   onChange,
-  placeholder = 'Describe the changes you want to make to the video...',
+  placeholder = "Describe the changes you want to make to the video...",
   className,
 }) => {
-  const { isOpen, onOpenChange, handleExampleClick, PROMPT_EXAMPLES } = usePromptTextarea(onChange);
+  const { isOpen, onOpenChange, handleExampleClick, PROMPT_EXAMPLES } =
+    usePromptTextarea(onChange);
 
   return (
     <div className={className}>

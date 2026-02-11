@@ -1,10 +1,10 @@
-import React from 'react';
-import { Card, CardContent } from '@gaqno-development/frontcore/components/ui';
-import { XIcon } from '@gaqno-development/frontcore/components/icons';
-import { Upload, Video } from 'lucide-react';
-import { cn } from '@gaqno-development/frontcore/lib/utils';
-import { useVideoUploadArea } from './hooks/useVideoUploadArea';
-import type { VideoUploadAreaProps } from './types';
+import React from "react";
+import { Card, CardContent } from "@gaqno-development/frontcore/components/ui";
+import { XIcon } from "@gaqno-development/frontcore/components/icons";
+import { Upload, Video } from "lucide-react";
+import { cn } from "@gaqno-development/frontcore/lib/utils";
+import { useVideoUploadArea } from "@/hooks/useVideoUploadArea";
+import type { VideoUploadAreaProps } from "./types";
 
 export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
   onFileSelect,
@@ -24,8 +24,10 @@ export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
   return (
     <Card
       className={cn(
-        'relative border-2 border-dashed transition-colors',
-        isDragging ? 'border-primary bg-primary/5' : 'border-muted-foreground/25',
+        "relative border-2 border-dashed transition-colors",
+        isDragging
+          ? "border-primary bg-primary/5"
+          : "border-muted-foreground/25",
         className
       )}
       onDragOver={handleDragOver}
@@ -48,7 +50,8 @@ export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
               <XIcon className="h-4 w-4" size={16} />
             </button>
             <div className="mt-2 text-sm text-muted-foreground">
-              {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+              {selectedFile.name} (
+              {(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
             </div>
           </div>
         ) : (

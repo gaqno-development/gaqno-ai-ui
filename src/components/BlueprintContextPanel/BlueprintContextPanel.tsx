@@ -1,13 +1,22 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { BookIcon, FileDescriptionIcon, GearIcon } from '@gaqno-development/frontcore/components/icons';
-import { Save } from 'lucide-react';
-import { CharacterList } from '../CharacterList';
-import { ConsistencyAlerts } from '../ConsistencyAlerts';
-import { useBlueprintContextPanel } from './hooks/useBlueprintContextPanel';
-import type { BlueprintContextPanelProps } from './types';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import {
+  BookIcon,
+  FileDescriptionIcon,
+  GearIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { Save } from "lucide-react";
+import { CharacterList } from "../CharacterList";
+import { ConsistencyAlerts } from "../ConsistencyAlerts";
+import { useBlueprintContextPanel } from "@/hooks/useBlueprintContextPanel";
+import type { BlueprintContextPanelProps } from "./types";
 
 export function BlueprintContextPanel({ bookId }: BlueprintContextPanelProps) {
   const {
@@ -35,10 +44,12 @@ export function BlueprintContextPanel({ bookId }: BlueprintContextPanelProps) {
         <CardContent>
           <div className="text-sm space-y-3">
             <div>
-              <span className="font-medium">Gênero:</span> {book?.genre || 'Não definido'}
+              <span className="font-medium">Gênero:</span>{" "}
+              {book?.genre || "Não definido"}
             </div>
             <div>
-              <span className="font-medium">Estilo:</span> {book?.style || 'Não definido'}
+              <span className="font-medium">Estilo:</span>{" "}
+              {book?.style || "Não definido"}
             </div>
             <div className="pt-2 border-t">
               <div className="font-medium mb-1">Progresso</div>
@@ -97,7 +108,8 @@ export function BlueprintContextPanel({ bookId }: BlueprintContextPanelProps) {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Cada capítulo gerado terá pelo menos {localMinPages} páginas (~{localMinPages * 250} palavras)
+              Cada capítulo gerado terá pelo menos {localMinPages} páginas (~
+              {localMinPages * 250} palavras)
             </p>
           </div>
         </CardContent>

@@ -5,7 +5,7 @@ import { Button, Textarea, Label, Input, Select, SelectContent, SelectItem, Sele
 import { BookIcon } from '@gaqno-development/frontcore/components/icons';
 import { useVoices } from '@/hooks/queries/useAudioQueries';
 import { GeneratedAudioCard } from '../GeneratedAudioCard';
-import { usePodcastTab } from './hooks/usePodcastTab';
+import { usePodcastTab } from '@/hooks/usePodcastTab';
 
 export function PodcastTab() {
   const { voices, isLoading } = useVoices();

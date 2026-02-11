@@ -1,16 +1,25 @@
-import { FormProvider } from 'react-hook-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { Progress } from '@gaqno-development/frontcore/components/ui';
-import { ArrowNarrowLeftIcon, RightChevron } from '@gaqno-development/frontcore/components/icons';
-import { Save, Loader2 } from 'lucide-react';
-import { useCreateBookWizardPage } from './hooks/useCreateBookWizardPage';
-import { BasicInfoStep } from './BasicInfoStep';
-import { WorldSettingsStep } from './WorldSettingsStep';
-import { CharactersStep } from './CharactersStep';
-import { ItemsStep } from './ItemsStep';
-import { ToneStyleStep } from './ToneStyleStep';
-import { StructureStep } from './StructureStep';
+import { FormProvider } from "react-hook-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { Progress } from "@gaqno-development/frontcore/components/ui";
+import {
+  ArrowNarrowLeftIcon,
+  RightChevron,
+} from "@gaqno-development/frontcore/components/icons";
+import { Save, Loader2 } from "lucide-react";
+import { useCreateBookWizardPage } from "@/hooks/useCreateBookWizardPage";
+import { BasicInfoStep } from "./BasicInfoStep";
+import { WorldSettingsStep } from "./WorldSettingsStep";
+import { CharactersStep } from "./CharactersStep";
+import { ItemsStep } from "./ItemsStep";
+import { ToneStyleStep } from "./ToneStyleStep";
+import { StructureStep } from "./StructureStep";
 
 export function CreateBookWizard() {
   const {
@@ -57,15 +66,39 @@ export function CreateBookWizard() {
           />
         );
       case 2:
-        return <WorldSettingsStep settings={settings} onSettingsChange={setSettings} bookContext={bookContext} />;
+        return (
+          <WorldSettingsStep
+            settings={settings}
+            onSettingsChange={setSettings}
+            bookContext={bookContext}
+          />
+        );
       case 3:
-        return <CharactersStep characters={characters} onCharactersChange={setCharacters} bookContext={bookContext} />;
+        return (
+          <CharactersStep
+            characters={characters}
+            onCharactersChange={setCharacters}
+            bookContext={bookContext}
+          />
+        );
       case 4:
-        return <ItemsStep items={items} onItemsChange={setItems} bookContext={bookContext} />;
+        return (
+          <ItemsStep
+            items={items}
+            onItemsChange={setItems}
+            bookContext={bookContext}
+          />
+        );
       case 5:
         return <ToneStyleStep bookContext={bookContext} />;
       case 6:
-        return <StructureStep bookContext={bookContext} onStructureChange={setStructure} structure={structure} />;
+        return (
+          <StructureStep
+            bookContext={bookContext}
+            onStructureChange={setStructure}
+            structure={structure}
+          />
+        );
       default:
         return null;
     }
@@ -77,7 +110,8 @@ export function CreateBookWizard() {
         <CardHeader>
           <CardTitle className="text-3xl">Criar Novo Livro</CardTitle>
           <CardDescription>
-            Defina os elementos essenciais da sua história. Você pode escrever manualmente ou pedir sugestões da IA.
+            Defina os elementos essenciais da sua história. Você pode escrever
+            manualmente ou pedir sugestões da IA.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -85,9 +119,12 @@ export function CreateBookWizard() {
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="font-medium">
-                  Passo {currentStep} de {totalSteps}: {STEP_TITLES[currentStep - 1]}
+                  Passo {currentStep} de {totalSteps}:{" "}
+                  {STEP_TITLES[currentStep - 1]}
                 </span>
-                <span className="text-muted-foreground">{Math.round(getProgress())}%</span>
+                <span className="text-muted-foreground">
+                  {Math.round(getProgress())}%
+                </span>
               </div>
               <Progress value={getProgress()} className="h-2" />
             </div>
@@ -98,7 +135,12 @@ export function CreateBookWizard() {
 
             <div className="flex items-center justify-between pt-4 border-t">
               <div className="flex gap-2">
-                <Button type="button" variant="outline" onClick={handleSaveDraft} disabled={isSaving}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleSaveDraft}
+                  disabled={isSaving}
+                >
                   {isSaving ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -112,7 +154,11 @@ export function CreateBookWizard() {
                   )}
                 </Button>
                 {canGoPrevious && (
-                  <Button type="button" variant="outline" onClick={previousStep}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={previousStep}
+                  >
                     <ArrowNarrowLeftIcon className="h-4 w-4 mr-2" size={16} />
                     Anterior
                   </Button>
@@ -121,7 +167,11 @@ export function CreateBookWizard() {
 
               <div className="flex gap-2">
                 {currentStep < totalSteps ? (
-                  <Button type="button" onClick={nextStep} disabled={!canGoNext}>
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    disabled={!canGoNext}
+                  >
                     Próximo
                     <RightChevron className="h-4 w-4 ml-2" size={16} />
                   </Button>
@@ -137,7 +187,7 @@ export function CreateBookWizard() {
                         Criando...
                       </>
                     ) : (
-                      'Criar Livro'
+                      "Criar Livro"
                     )}
                   </Button>
                 )}

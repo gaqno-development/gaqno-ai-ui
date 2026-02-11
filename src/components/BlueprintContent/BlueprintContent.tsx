@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqn
 import { Button } from '@gaqno-development/frontcore/components/ui';
 import { BlueprintCard } from '../BlueprintCard';
 import { BlueprintStructure } from '../BlueprintStructure';
-import { useBlueprintContent } from './hooks/useBlueprintContent';
+import { useBlueprintContent } from '@/hooks/useBlueprintContent';
 import type { BlueprintContentProps } from './types';
 import { RefreshIcon, PenIcon } from '@gaqno-development/frontcore/components/icons';
 

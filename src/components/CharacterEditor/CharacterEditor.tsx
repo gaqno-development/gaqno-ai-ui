@@ -1,22 +1,37 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { Avatar, AvatarFallback, AvatarImage } from '@gaqno-development/frontcore/components/ui';
-import { Badge } from '@gaqno-development/frontcore/components/ui';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gaqno-development/frontcore/components/ui';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@gaqno-development/frontcore/components/ui";
+import { Badge } from "@gaqno-development/frontcore/components/ui";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@gaqno-development/frontcore/components/ui";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gaqno-development/frontcore/components/ui';
-import { Wand2, Loader2, Image as ImageIcon, Save, User } from 'lucide-react';
-import type { CharacterRole } from '@/types/books/character';
-import { useCharacterEditor } from './hooks/useCharacterEditor';
-import type { CharacterEditorProps } from './types';
+} from "@gaqno-development/frontcore/components/ui";
+import { Wand2, Loader2, Image as ImageIcon, Save, User } from "lucide-react";
+import type { CharacterRole } from "@/types/books/character";
+import { useCharacterEditor } from "@/hooks/useCharacterEditor";
+import type { CharacterEditorProps } from "./types";
 
 export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
   const {
@@ -40,7 +55,9 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
     return (
       <Card>
         <CardContent className="py-8 text-center">
-          <p className="text-muted-foreground">Selecione um personagem para editar</p>
+          <p className="text-muted-foreground">
+            Selecione um personagem para editar
+          </p>
         </CardContent>
       </Card>
     );
@@ -64,7 +81,12 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleAnalyzeCharacter} disabled={isAnalyzing}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAnalyzeCharacter}
+                disabled={isAnalyzing}
+              >
                 {isAnalyzing ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -114,7 +136,11 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
             <TabsContent value="basic" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Nome</Label>
-                <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Descrição</Label>
@@ -131,7 +157,9 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
                   <Label>Papel na História</Label>
                   <Select
                     value={characterDetails.role}
-                    onValueChange={(value: CharacterRole) => updateCharacterDetails({ role: value })}
+                    onValueChange={(value: CharacterRole) =>
+                      updateCharacterDetails({ role: value })
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -153,7 +181,9 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
                   <Label>História (Backstory)</Label>
                   <Textarea
                     value={characterDetails.backstory}
-                    onChange={(e) => updateCharacterDetails({ backstory: e.target.value })}
+                    onChange={(e) =>
+                      updateCharacterDetails({ backstory: e.target.value })
+                    }
                     rows={6}
                   />
                 </div>
@@ -167,7 +197,9 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
                   <Label>Prompt para Avatar</Label>
                   <Textarea
                     value={characterDetails.avatarPrompt}
-                    onChange={(e) => updateCharacterDetails({ avatarPrompt: e.target.value })}
+                    onChange={(e) =>
+                      updateCharacterDetails({ avatarPrompt: e.target.value })
+                    }
                     rows={3}
                     readOnly
                   />
@@ -191,11 +223,13 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
                   <div className="space-y-2">
                     <Label>Características Psicológicas</Label>
                     <div className="flex flex-wrap gap-2">
-                      {characterDetails.traits.psychological.map((trait, idx) => (
-                        <Badge key={idx} variant="secondary">
-                          {trait}
-                        </Badge>
-                      ))}
+                      {characterDetails.traits.psychological.map(
+                        (trait, idx) => (
+                          <Badge key={idx} variant="secondary">
+                            {trait}
+                          </Badge>
+                        )
+                      )}
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -217,15 +251,22 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
             </TabsContent>
 
             <TabsContent value="relationships" className="space-y-4 mt-4">
-              {characterDetails?.relationships && characterDetails.relationships.length > 0 ? (
+              {characterDetails?.relationships &&
+              characterDetails.relationships.length > 0 ? (
                 <div className="space-y-3">
                   {characterDetails.relationships.map((rel, idx) => (
                     <Card key={idx}>
                       <CardContent className="pt-4">
                         <div className="space-y-2">
-                          <div className="font-medium">{rel.characterName || 'Personagem'}</div>
-                          <Badge variant="outline">{rel.relationshipType}</Badge>
-                          <p className="text-sm text-muted-foreground">{rel.description}</p>
+                          <div className="font-medium">
+                            {rel.characterName || "Personagem"}
+                          </div>
+                          <Badge variant="outline">
+                            {rel.relationshipType}
+                          </Badge>
+                          <p className="text-sm text-muted-foreground">
+                            {rel.description}
+                          </p>
                         </div>
                       </CardContent>
                     </Card>

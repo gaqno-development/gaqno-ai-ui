@@ -1,12 +1,31 @@
-import { Card, CardContent, CardHeader } from '@gaqno-development/frontcore/components/ui'
-import { Input, Label, Textarea, Button } from '@gaqno-development/frontcore/components/ui'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@gaqno-development/frontcore/components/ui'
-import { AISuggestionButton } from '../../AISuggestionButton'
-import { useCharactersStep } from './hooks/useCharactersStep'
-import type { ICharactersStepProps } from './types'
-import { CHARACTER_ROLES } from './types'
-import { UserIcon, TrashIcon, SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { Plus, Loader2, Trash2 } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Input,
+  Label,
+  Textarea,
+  Button,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@gaqno-development/frontcore/components/ui";
+import { AISuggestionButton } from "../../AISuggestionButton";
+import { useCharactersStep } from "@/hooks/useCharactersStep";
+import type { ICharactersStepProps } from "./types";
+import { CHARACTER_ROLES } from "./types";
+import {
+  UserIcon,
+  TrashIcon,
+  SparklesIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { Plus, Loader2, Trash2 } from "lucide-react";
 
 export function CharactersStep(props: ICharactersStepProps) {
   const {
@@ -17,8 +36,8 @@ export function CharactersStep(props: ICharactersStepProps) {
     handleUpdateCharacter,
     handleGenerateCharacterDetails,
     handleGenerateAll,
-  } = useCharactersStep(props)
-  const { characters } = props
+  } = useCharactersStep(props);
+  const { characters } = props;
 
   return (
     <div className="space-y-4">
@@ -49,7 +68,12 @@ export function CharactersStep(props: ICharactersStepProps) {
               </>
             )}
           </Button>
-          <Button type="button" onClick={handleAddCharacter} size="sm" variant="outline">
+          <Button
+            type="button"
+            onClick={handleAddCharacter}
+            size="sm"
+            variant="outline"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Personagem
           </Button>
@@ -61,7 +85,8 @@ export function CharactersStep(props: ICharactersStepProps) {
           <CardContent className="py-8 text-center">
             <UserIcon className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-sm text-muted-foreground">
-              Nenhum personagem adicionado ainda. Clique em &quot;Adicionar Personagem&quot; para começar.
+              Nenhum personagem adicionado ainda. Clique em &quot;Adicionar
+              Personagem&quot; para começar.
             </p>
           </CardContent>
         </Card>
@@ -77,12 +102,20 @@ export function CharactersStep(props: ICharactersStepProps) {
                       <Input
                         placeholder="Nome do personagem"
                         value={character.name}
-                        onChange={(e) => handleUpdateCharacter(character.id, 'name', e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateCharacter(
+                            character.id,
+                            "name",
+                            e.target.value
+                          )
+                        }
                         className="max-w-xs"
                       />
                       <Select
-                        value={character.role || 'supporting'}
-                        onValueChange={(value) => handleUpdateCharacter(character.id, 'role', value)}
+                        value={character.role || "supporting"}
+                        onValueChange={(value) =>
+                          handleUpdateCharacter(character.id, "role", value)
+                        }
                       >
                         <SelectTrigger className="w-40">
                           <SelectValue />
@@ -97,7 +130,12 @@ export function CharactersStep(props: ICharactersStepProps) {
                       </Select>
                     </div>
                   </div>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => handleRemoveCharacter(character.id)}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveCharacter(character.id)}
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -107,15 +145,36 @@ export function CharactersStep(props: ICharactersStepProps) {
                   <div className="flex items-center justify-between">
                     <Label>Descrição</Label>
                     <AISuggestionButton
-                      onGenerate={() => handleGenerateCharacterDetails(character.id, character.name || 'Personagem')}
-                      onAccept={(suggestion) => handleUpdateCharacter(character.id, 'description', suggestion)}
-                      disabled={generatingFor === character.id || isGeneratingAll || !character.name}
+                      onGenerate={() =>
+                        handleGenerateCharacterDetails(
+                          character.id,
+                          character.name || "Personagem"
+                        )
+                      }
+                      onAccept={(suggestion) =>
+                        handleUpdateCharacter(
+                          character.id,
+                          "description",
+                          suggestion
+                        )
+                      }
+                      disabled={
+                        generatingFor === character.id ||
+                        isGeneratingAll ||
+                        !character.name
+                      }
                     />
                   </div>
                   <Textarea
                     placeholder="Descreva o personagem, sua personalidade, aparência física e papel na história..."
-                    value={character.description || ''}
-                    onChange={(e) => handleUpdateCharacter(character.id, 'description', e.target.value)}
+                    value={character.description || ""}
+                    onChange={(e) =>
+                      handleUpdateCharacter(
+                        character.id,
+                        "description",
+                        e.target.value
+                      )
+                    }
                     rows={4}
                   />
                 </div>
@@ -125,5 +184,5 @@ export function CharactersStep(props: ICharactersStepProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

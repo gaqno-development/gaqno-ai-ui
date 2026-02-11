@@ -1,14 +1,28 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { ScrollArea } from '@gaqno-development/frontcore/components/ui';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@gaqno-development/frontcore/components/ui';
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { BookIcon, UsersIcon } from '@gaqno-development/frontcore/components/icons';
-import { Plus, BookOpen } from 'lucide-react';
-import { useBookStructureMap } from './hooks/useBookStructureMap';
-import type { BookStructureMapProps } from './types';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { ScrollArea } from "@gaqno-development/frontcore/components/ui";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@gaqno-development/frontcore/components/ui";
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import {
+  BookIcon,
+  UsersIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { Plus, BookOpen } from "lucide-react";
+import { useBookStructureMap } from "@/hooks/useBookStructureMap";
+import type { BookStructureMapProps } from "./types";
 
 export function BookStructureMap({ bookId }: BookStructureMapProps) {
   const {
@@ -41,7 +55,11 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
               <BookOpen className="h-4 w-4" />
               Capítulos
             </CardTitle>
-            <Button size="sm" variant="ghost" onClick={() => setShowChapterDialog(true)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowChapterDialog(true)}
+            >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
@@ -53,7 +71,9 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
                 <p className="text-sm text-muted-foreground">Carregando...</p>
               ) : chapters.length === 0 ? (
                 <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">Nenhum capítulo ainda</p>
+                  <p className="text-sm text-muted-foreground">
+                    Nenhum capítulo ainda
+                  </p>
                   <Button
                     size="sm"
                     variant="outline"
@@ -73,7 +93,8 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
                       className="p-2 rounded border hover:bg-muted cursor-pointer transition-colors"
                     >
                       <div className="text-sm font-medium">
-                        {chapter.chapter_number}. {chapter.title || 'Sem título'}
+                        {chapter.chapter_number}.{" "}
+                        {chapter.title || "Sem título"}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {chapter.word_count} palavras
@@ -94,7 +115,11 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
               <UsersIcon className="h-4 w-4" size={16} />
               Personagens
             </CardTitle>
-            <Button size="sm" variant="ghost" onClick={() => setShowCharacterDialog(true)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowCharacterDialog(true)}
+            >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
@@ -105,7 +130,9 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
               {charactersLoading ? (
                 <p className="text-sm text-muted-foreground">Carregando...</p>
               ) : characters.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Nenhum personagem ainda</p>
+                <p className="text-sm text-muted-foreground">
+                  Nenhum personagem ainda
+                </p>
               ) : (
                 <div className="space-y-2">
                   {characters.map((character) => (
@@ -113,7 +140,9 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
                       key={character.id}
                       className="p-2 rounded border hover:bg-muted cursor-pointer transition-colors"
                     >
-                      <div className="text-sm font-medium">{character.name}</div>
+                      <div className="text-sm font-medium">
+                        {character.name}
+                      </div>
                       {character.description && (
                         <div className="text-xs text-muted-foreground line-clamp-2">
                           {character.description}
@@ -132,7 +161,9 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Novo Capítulo</DialogTitle>
-            <DialogDescription>Adicione um novo capítulo ao seu livro</DialogDescription>
+            <DialogDescription>
+              Adicione um novo capítulo ao seu livro
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -145,7 +176,10 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowChapterDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowChapterDialog(false)}
+              >
                 Cancelar
               </Button>
               <Button onClick={handleCreateChapter}>Criar Capítulo</Button>
@@ -158,7 +192,9 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Novo Personagem</DialogTitle>
-            <DialogDescription>Adicione um novo personagem ao seu livro</DialogDescription>
+            <DialogDescription>
+              Adicione um novo personagem ao seu livro
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -182,10 +218,16 @@ export function BookStructureMap({ bookId }: BookStructureMapProps) {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowCharacterDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowCharacterDialog(false)}
+              >
                 Cancelar
               </Button>
-              <Button onClick={handleCreateCharacter} disabled={!characterName.trim()}>
+              <Button
+                onClick={handleCreateCharacter}
+                disabled={!characterName.trim()}
+              >
                 Criar Personagem
               </Button>
             </div>

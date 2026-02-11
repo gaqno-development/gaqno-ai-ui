@@ -1,10 +1,22 @@
-import { Card, CardContent, CardHeader } from '@gaqno-development/frontcore/components/ui'
-import { Input, Label, Textarea, Button } from '@gaqno-development/frontcore/components/ui'
-import { AISuggestionButton } from '../../AISuggestionButton'
-import { useWorldSettingsStep } from './hooks/useWorldSettingsStep'
-import type { IWorldSettingsStepProps } from './types'
-import { TrashIcon, SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { MapPin, Plus, Loader2 } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Input,
+  Label,
+  Textarea,
+  Button,
+} from "@gaqno-development/frontcore/components/ui";
+import { AISuggestionButton } from "../../AISuggestionButton";
+import { useWorldSettingsStep } from "@/hooks/useWorldSettingsStep";
+import type { IWorldSettingsStepProps } from "./types";
+import {
+  TrashIcon,
+  SparklesIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { MapPin, Plus, Loader2 } from "lucide-react";
 
 export function WorldSettingsStep(props: IWorldSettingsStepProps) {
   const {
@@ -15,8 +27,8 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
     handleUpdateSetting,
     handleGenerateDescription,
     handleGenerateAll,
-  } = useWorldSettingsStep(props)
-  const { settings } = props
+  } = useWorldSettingsStep(props);
+  const { settings } = props;
 
   return (
     <div className="space-y-4">
@@ -47,7 +59,12 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
               </>
             )}
           </Button>
-          <Button type="button" onClick={handleAddSetting} size="sm" variant="outline">
+          <Button
+            type="button"
+            onClick={handleAddSetting}
+            size="sm"
+            variant="outline"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Adicionar Cenário
           </Button>
@@ -59,7 +76,8 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
           <CardContent className="py-8 text-center">
             <MapPin className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-sm text-muted-foreground">
-              Nenhum cenário adicionado ainda. Clique em &quot;Adicionar Cenário&quot; para começar.
+              Nenhum cenário adicionado ainda. Clique em &quot;Adicionar
+              Cenário&quot; para começar.
             </p>
           </CardContent>
         </Card>
@@ -75,12 +93,23 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
                       <Input
                         placeholder="Nome do cenário"
                         value={setting.name}
-                        onChange={(e) => handleUpdateSetting(setting.id, 'name', e.target.value)}
+                        onChange={(e) =>
+                          handleUpdateSetting(
+                            setting.id,
+                            "name",
+                            e.target.value
+                          )
+                        }
                         className="max-w-xs"
                       />
                     </div>
                   </div>
-                  <Button type="button" variant="ghost" size="sm" onClick={() => handleRemoveSetting(setting.id)}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveSetting(setting.id)}
+                  >
                     <TrashIcon className="h-4 w-4" />
                   </Button>
                 </div>
@@ -90,15 +119,36 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
                   <div className="flex items-center justify-between">
                     <Label>Descrição</Label>
                     <AISuggestionButton
-                      onGenerate={() => handleGenerateDescription(setting.id, setting.name || 'Cenário')}
-                      onAccept={(suggestion) => handleUpdateSetting(setting.id, 'description', suggestion)}
-                      disabled={generatingFor === setting.id || isGeneratingAll || !setting.name}
+                      onGenerate={() =>
+                        handleGenerateDescription(
+                          setting.id,
+                          setting.name || "Cenário"
+                        )
+                      }
+                      onAccept={(suggestion) =>
+                        handleUpdateSetting(
+                          setting.id,
+                          "description",
+                          suggestion
+                        )
+                      }
+                      disabled={
+                        generatingFor === setting.id ||
+                        isGeneratingAll ||
+                        !setting.name
+                      }
                     />
                   </div>
                   <Textarea
                     placeholder="Descreva o cenário, sua atmosfera, características físicas e importância na história..."
                     value={setting.description}
-                    onChange={(e) => handleUpdateSetting(setting.id, 'description', e.target.value)}
+                    onChange={(e) =>
+                      handleUpdateSetting(
+                        setting.id,
+                        "description",
+                        e.target.value
+                      )
+                    }
                     rows={4}
                   />
                 </div>
@@ -106,8 +156,14 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
                   <Label>Linha do Tempo (Opcional)</Label>
                   <Textarea
                     placeholder="Resumo histórico ou contexto temporal do cenário..."
-                    value={setting.timeline_summary || ''}
-                    onChange={(e) => handleUpdateSetting(setting.id, 'timeline_summary', e.target.value)}
+                    value={setting.timeline_summary || ""}
+                    onChange={(e) =>
+                      handleUpdateSetting(
+                        setting.id,
+                        "timeline_summary",
+                        e.target.value
+                      )
+                    }
                     rows={2}
                   />
                 </div>
@@ -117,5 +173,5 @@ export function WorldSettingsStep(props: IWorldSettingsStepProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

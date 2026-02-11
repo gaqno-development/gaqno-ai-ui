@@ -1,8 +1,17 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button, Textarea, Label } from '@gaqno-development/frontcore/components/ui';
-import { PenIcon } from '@gaqno-development/frontcore/components/icons';
-import { useEditImageTab } from './hooks/useEditImageTab';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Button,
+  Textarea,
+  Label,
+} from "@gaqno-development/frontcore/components/ui";
+import { PenIcon } from "@gaqno-development/frontcore/components/icons";
+import { useEditImageTab } from "@/hooks/useEditImageTab";
 
 export function EditImageTab() {
   const {
@@ -46,7 +55,9 @@ export function EditImageTab() {
                 className="max-h-24 rounded mt-1"
               />
             )}
-            {fileError && <p className="text-sm text-destructive mt-1">{fileError}</p>}
+            {fileError && (
+              <p className="text-sm text-destructive mt-1">{fileError}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="edit-instruction">
@@ -57,12 +68,14 @@ export function EditImageTab() {
             </Label>
             <Textarea
               id="edit-instruction"
-              {...register('instruction')}
+              {...register("instruction")}
               placeholder="Descreva a alteração: cor, estilo, objetos a adicionar ou remover…"
               className="min-h-[120px]"
             />
             {errors.instruction && (
-              <p className="text-sm text-destructive mt-1">{errors.instruction.message}</p>
+              <p className="text-sm text-destructive mt-1">
+                {errors.instruction.message}
+              </p>
             )}
           </div>
           {apiErrorMessage && (
@@ -84,7 +97,11 @@ export function EditImageTab() {
               alt="Imagem editada"
               className="w-full rounded-lg"
             />
-            <a download="edited.png" href={editedImageUrl} className="text-sm underline">
+            <a
+              download="edited.png"
+              href={editedImageUrl}
+              className="text-sm underline"
+            >
               Baixar
             </a>
           </CardContent>

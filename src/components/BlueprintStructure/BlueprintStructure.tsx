@@ -3,8 +3,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaqno-deve
 import { BookIcon, DownChevron, RightChevron } from '@gaqno-development/frontcore/components/icons';
 import { Circle, Loader2, ChevronRight } from 'lucide-react';
 import { cn } from '@gaqno-development/frontcore/lib/utils';
-import { useBlueprintStructure } from './hooks/useBlueprintStructure';
-import { SECTION_NAMES, SECTION_ORDER } from './hooks/useBlueprintStructure';
+import {
+  useBlueprintStructure,
+  SECTION_NAMES,
+  SECTION_ORDER,
+} from '@/hooks/useBlueprintStructure';
 import type { BlueprintStructureProps } from './types';
 
 export function BlueprintStructure({ bookId, structure }: BlueprintStructureProps) {

@@ -1,13 +1,28 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@gaqno-development/frontcore/components/ui';
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { Avatar, AvatarImage, AvatarFallback } from '@gaqno-development/frontcore/components/ui';
-import { Plus } from 'lucide-react';
-import { useCharacterList } from './hooks/useCharacterList';
-import type { CharacterListProps } from './types';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@gaqno-development/frontcore/components/ui";
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "@gaqno-development/frontcore/components/ui";
+import { Plus } from "lucide-react";
+import { useCharacterList } from "@/hooks/useCharacterList";
+import type { CharacterListProps } from "./types";
 
 export function CharacterList({ bookId }: CharacterListProps) {
   const {
@@ -29,7 +44,11 @@ export function CharacterList({ bookId }: CharacterListProps) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm">Personagens</CardTitle>
-            <Button size="sm" variant="ghost" onClick={() => setShowDialog(true)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowDialog(true)}
+            >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
@@ -38,7 +57,9 @@ export function CharacterList({ bookId }: CharacterListProps) {
           {isLoading ? (
             <p className="text-sm text-muted-foreground">Carregando...</p>
           ) : characters.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Nenhum personagem ainda</p>
+            <p className="text-sm text-muted-foreground">
+              Nenhum personagem ainda
+            </p>
           ) : (
             <div className="space-y-3">
               {characters.map((character) => {
@@ -48,7 +69,10 @@ export function CharacterList({ bookId }: CharacterListProps) {
                   <div key={character.id} className="flex items-start gap-3">
                     <Avatar>
                       {character.avatar_url && (
-                        <AvatarImage src={character.avatar_url} alt={character.name} />
+                        <AvatarImage
+                          src={character.avatar_url}
+                          alt={character.name}
+                        />
                       )}
                       <AvatarFallback>
                         {character.name.charAt(0).toUpperCase()}
@@ -56,7 +80,9 @@ export function CharacterList({ bookId }: CharacterListProps) {
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <div className="text-sm font-medium">{character.name}</div>
+                        <div className="text-sm font-medium">
+                          {character.name}
+                        </div>
                         {role && (
                           <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground">
                             {getRoleLabel(role)}

@@ -1,11 +1,20 @@
-import { Input, Label, Textarea, Button, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@gaqno-development/frontcore/components/ui'
-import { GenreSelector } from '../../GenreSelector'
-import { AISuggestionButton } from '../../AISuggestionButton'
-import { AIModelSelect } from '../../AIModelSelect'
-import { useBasicInfoStep } from './hooks/useBasicInfoStep'
-import type { IBasicInfoStepProps } from './types'
-import { SparklesIcon } from '@gaqno-development/frontcore/components/icons';
-import { Loader2 } from 'lucide-react';
+import {
+  Input,
+  Label,
+  Textarea,
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@gaqno-development/frontcore/components/ui";
+import { GenreSelector } from "../../GenreSelector";
+import { AISuggestionButton } from "../../AISuggestionButton";
+import { AIModelSelect } from "../../AIModelSelect";
+import { useBasicInfoStep } from "@/hooks/useBasicInfoStep";
+import type { IBasicInfoStepProps } from "./types";
+import { SparklesIcon } from "@gaqno-development/frontcore/components/icons";
+import { Loader2 } from "lucide-react";
 
 export function BasicInfoStep(props: IBasicInfoStepProps) {
   const {
@@ -18,7 +27,7 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
     handleGenerateTitle,
     handleGeneratePremise,
     handleGenerateAll,
-  } = useBasicInfoStep(props)
+  } = useBasicInfoStep(props);
 
   return (
     <div className="space-y-6 p-6">
@@ -37,11 +46,16 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
                 <Button
                   type="button"
                   onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    void handleGenerateAll()
+                    e.preventDefault();
+                    e.stopPropagation();
+                    void handleGenerateAll();
                   }}
-                  disabled={isGeneratingAll || isGeneratingTitle || isGeneratingPremise || !props.selectedGenre}
+                  disabled={
+                    isGeneratingAll ||
+                    isGeneratingTitle ||
+                    isGeneratingPremise ||
+                    !props.selectedGenre
+                  }
                   variant="outline"
                   className="gap-2"
                 >
@@ -61,8 +75,8 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
             </TooltipTrigger>
             <TooltipContent>
               {props.selectedGenre
-                ? 'Gera título, gênero e premissa com IA'
-                : 'Selecione pelo menos um gênero para usar esta função'}
+                ? "Gera título, gênero e premissa com IA"
+                : "Selecione pelo menos um gênero para usar esta função"}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -73,18 +87,20 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
           <Label htmlFor="title">Título do Livro</Label>
           <AISuggestionButton
             onGenerate={handleGenerateTitle}
-            onAccept={(suggestion) => setValue('title', suggestion)}
+            onAccept={(suggestion) => setValue("title", suggestion)}
             disabled={isGeneratingTitle || isGeneratingAll}
           />
         </div>
         <Input
           id="title"
           placeholder="Ex: A Jornada do Herói"
-          {...register('title', { required: 'Título é obrigatório' })}
-          className={errors.title ? 'border-destructive' : ''}
+          {...register("title", { required: "Título é obrigatório" })}
+          className={errors.title ? "border-destructive" : ""}
         />
         {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message as string}</p>
+          <p className="text-sm text-destructive">
+            {errors.title.message as string}
+          </p>
         )}
       </div>
 
@@ -98,7 +114,7 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
           <Label htmlFor="description">Premissa / Sinopse Curta</Label>
           <AISuggestionButton
             onGenerate={handleGeneratePremise}
-            onAccept={(suggestion) => setValue('description', suggestion)}
+            onAccept={(suggestion) => setValue("description", suggestion)}
             disabled={isGeneratingPremise || isGeneratingAll}
           />
         </div>
@@ -106,9 +122,9 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
           id="description"
           placeholder="Descreva a ideia central do seu livro, os personagens principais, o conflito ou qualquer informação que ajude a criar o livro..."
           rows={6}
-          {...register('description')}
+          {...register("description")}
         />
       </div>
     </div>
-  )
+  );
 }

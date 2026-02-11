@@ -1,6 +1,9 @@
 import { createAxiosClient } from "@gaqno-development/frontcore/utils/api";
 import { getAiServiceBaseUrl } from "@/lib/env";
-import type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+import type {
+  CampaignRecord,
+  AttributionReport,
+} from "@gaqno-development/types/attribution";
 import type { BillingSummary } from "@gaqno-development/types/billing";
 import type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
 import type { VideoGenerationResponse } from "@gaqno-development/types/video";
@@ -206,7 +209,10 @@ export interface CreateCampaignBody {
   endAt: string;
 }
 
-export type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+export type {
+  CampaignRecord,
+  AttributionReport,
+} from "@gaqno-development/types/attribution";
 export type { BillingSummary } from "@gaqno-development/types/billing";
 export type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
 export type { VideoGenerationResponse } from "@gaqno-development/types/video";
@@ -215,16 +221,6 @@ export interface GenerateVideoFromTemplateBody {
   templateId: string;
   product?: { name?: string; description?: string };
   model?: string;
-}
-
-export interface VideoGenerationResponse {
-  id: string;
-  status: string;
-  created_at?: string;
-  video_url?: string;
-  thumbnail_url?: string;
-  progress?: number;
-  error?: string;
 }
 
 const DEFAULT_SYSTEM = "You are a helpful assistant.";

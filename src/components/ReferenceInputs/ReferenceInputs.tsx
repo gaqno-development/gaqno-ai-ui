@@ -1,10 +1,15 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { XIcon } from '@gaqno-development/frontcore/components/icons';
-import { Upload, Image as ImageIcon } from 'lucide-react';
-import { cn } from '@gaqno-development/frontcore/lib/utils';
-import { useReferenceInputs } from './hooks/useReferenceInputs';
-import type { ReferenceInputsProps } from './types';
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { XIcon } from "@gaqno-development/frontcore/components/icons";
+import { Upload, Image as ImageIcon } from "lucide-react";
+import { cn } from "@gaqno-development/frontcore/lib/utils";
+import { useReferenceInputs } from "@/hooks/useReferenceInputs";
+import type { ReferenceInputsProps } from "./types";
 
 export const ReferenceInputs: React.FC<ReferenceInputsProps> = ({
   referenceImage,
@@ -13,11 +18,11 @@ export const ReferenceInputs: React.FC<ReferenceInputsProps> = ({
 }) => {
   const { imageUrl, handleFileInput, handleRemove } = useReferenceInputs(
     referenceImage,
-    onImageSelect,
+    onImageSelect
   );
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       <Card>
         <CardHeader>
           <CardTitle className="text-sm font-medium">Reference Image</CardTitle>
@@ -41,8 +46,12 @@ export const ReferenceInputs: React.FC<ReferenceInputsProps> = ({
           ) : (
             <label className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
               <ImageIcon className="h-6 w-6 text-muted-foreground mb-2" />
-              <span className="text-sm text-muted-foreground">Upload Reference Image</span>
-              <span className="text-xs text-muted-foreground mt-1">JPG/PNG</span>
+              <span className="text-sm text-muted-foreground">
+                Upload Reference Image
+              </span>
+              <span className="text-xs text-muted-foreground mt-1">
+                JPG/PNG
+              </span>
               <input
                 type="file"
                 accept="image/jpeg,image/png"
