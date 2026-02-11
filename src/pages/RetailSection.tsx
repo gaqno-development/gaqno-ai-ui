@@ -79,6 +79,7 @@ export default function RetailSection() {
       title="Retail"
       variant="vertical"
       breadcrumbRoot={{ label: "AI", href: "/ai/books" }}
+      enableContentTransition
     />
   );
 }
