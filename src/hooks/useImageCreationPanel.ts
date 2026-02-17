@@ -3,7 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useImageGeneration, useImageModels } from "@/hooks/images";
-import { useAIModelPreferences } from "@gaqno-development/frontcore/hooks/ai";
+import {
+  useAIModelPreferences,
+  useTaskStatus,
+} from "@gaqno-development/frontcore/hooks/ai";
 
 const imageFormSchema = z.object({
   prompt: z.string().min(1, "Prompt is required"),
@@ -15,6 +18,21 @@ const imageFormSchema = z.object({
 
 export type ImageFormData = z.infer<typeof imageFormSchema>;
 
+function imageUrlFromTaskResult(result: unknown): string | null {
+  if (!result || typeof result !== "object") return null;
+  const r = result as Record<string, unknown>;
+  if (
+    Array.isArray(r.images) &&
+    r.images[0] &&
+    typeof (r.images[0] as Record<string, unknown>).url === "string"
+  ) {
+    return (r.images[0] as Record<string, unknown>).url as string;
+  }
+  if (typeof r.image_url === "string") return r.image_url;
+  if (typeof r.url === "string") return r.url;
+  return null;
+}
+
 export const useImageCreationPanel = () => {
   const { generate } = useImageGeneration();
   const { providers, allModels, isLoading: modelsLoading } = useImageModels();
@@ -22,6 +40,8 @@ export const useImageCreationPanel = () => {
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
     null
   );
+  const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
+  const { data: taskStatus } = useTaskStatus(currentTaskId);
 
   const {
     register,
@@ -47,6 +67,17 @@ export const useImageCreationPanel = () => {
       setValue("provider", preferences.image.provider);
   }, [preferences.image?.model, preferences.image?.provider, setValue]);
 
+  useEffect(() => {
+    if (taskStatus?.status === "completed" && taskStatus.result) {
+      const url = imageUrlFromTaskResult(taskStatus.result);
+      if (url) setGeneratedImageUrl(url);
+      setCurrentTaskId(null);
+    }
+    if (taskStatus?.status === "failed") {
+      setCurrentTaskId(null);
+    }
+  }, [taskStatus?.status, taskStatus?.result]);
+
   const prompt = watch("prompt");
   const selectedProvider = watch("provider");
 
@@ -60,6 +91,7 @@ export const useImageCreationPanel = () => {
   const onSubmit = useCallback(
     async (data: ImageFormData) => {
       try {
+        setGeneratedImageUrl(null);
         const result = await generate.mutateAsync({
           prompt: data.prompt,
           style: data.style ?? undefined,
@@ -67,7 +99,9 @@ export const useImageCreationPanel = () => {
           model: data.model ?? undefined,
           provider: data.provider === "auto" ? undefined : data.provider,
         });
-        setGeneratedImageUrl(result.imageUrl);
+        if (result.taskId) {
+          setCurrentTaskId(result.taskId);
+        }
       } catch (error) {
         console.error("Error generating image:", error);
       }
@@ -82,7 +116,13 @@ export const useImageCreationPanel = () => {
     errors,
     onSubmit,
     generatedImageUrl,
-    isSubmitLoading: generate.isPending,
+    isSubmitLoading:
+      generate.isPending ||
+      Boolean(
+        currentTaskId &&
+        taskStatus?.status !== "completed" &&
+        taskStatus?.status !== "failed"
+      ),
     isSubmitDisabled: !prompt,
     providers,
     modelsForProvider,

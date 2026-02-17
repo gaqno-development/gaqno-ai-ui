@@ -30,7 +30,7 @@ const VIEW_ROUTES: Record<string, string> = {
   images: "/ai/images/text",
   video: "/ai/video/modify",
   discovery: "/ai/discovery",
-  retail: "/ai/retail/profile",
+  retail: "/ai/retail/dashboard",
 };
 
 function viewFromPathname(pathname: string): string | null {
