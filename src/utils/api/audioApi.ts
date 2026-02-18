@@ -33,6 +33,7 @@ export const audioApi = {
     const { data } = await client.post<Blob>(
       '/v1/audio/text-to-speech',
       {
+        provider: 'elevenlabs',
         ...(body.voiceId && { voice_id: body.voiceId }),
         payload: {
           text: body.text,
