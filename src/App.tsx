@@ -1,10 +1,5 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  AuthProvider,
-  QueryProvider,
-  TenantProvider,
-} from "@gaqno-development/frontcore";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
 import { Music, Image, Video, Database, ShoppingBag } from "lucide-react";
 import { AIPageLayout } from "./layouts/AIPageLayout";
@@ -90,13 +85,5 @@ function AIPage() {
 }
 
 export default function App() {
-  return (
-    <QueryProvider>
-      <AuthProvider>
-        <TenantProvider>
-          <AIPage />
-        </TenantProvider>
-      </AuthProvider>
-    </QueryProvider>
-  );
+  return <AIPage />;
 }
