@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
 import { Music, Image, Video, Database, ShoppingBag } from "lucide-react";
 import { AIPageLayout } from "./layouts/AIPageLayout";
+import { ChunkLoadErrorBoundary } from "./components/ChunkLoadErrorBoundary";
 import BookPage from "./pages/BookPage";
 import AudioSection from "./pages/AudioSection";
 import ImagesSection from "./pages/ImagesSection";
@@ -79,7 +80,7 @@ function AIPage() {
       onTabChange={handleTabChange}
       title="AI"
     >
-      {renderView()}
+      <ChunkLoadErrorBoundary>{renderView()}</ChunkLoadErrorBoundary>
     </AIPageLayout>
   );
 }
