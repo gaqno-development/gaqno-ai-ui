@@ -20,7 +20,7 @@ const formDataHeaders = { 'Content-Type': undefined as unknown as string };
 
 export const audioApi = {
   async getVoices(): Promise<GetVoicesResponse> {
-    const { data } = await client.get<GetVoicesResponse>('/audio/voices');
+    const { data } = await client.get<GetVoicesResponse>('/v1/audio/voices');
     return data;
   },
 
@@ -31,7 +31,7 @@ export const audioApi = {
     similarityBoost?: number;
   }): Promise<Blob> {
     const { data } = await client.post<Blob>(
-      '/audio/text-to-speech',
+      '/v1/audio/text-to-speech',
       {
         ...(body.voiceId && { voice_id: body.voiceId }),
         payload: {
@@ -61,7 +61,7 @@ export const audioApi = {
       form.append('tag_audio_events', String(params.tag_audio_events));
     if (params.diarize != null) form.append('diarize', String(params.diarize));
 
-    const { data } = await client.post<TranscribeResponse>('/audio/speech-to-text', form, {
+    const { data } = await client.post<TranscribeResponse>('/v1/audio/speech-to-text', form, {
       headers: formDataHeaders,
     });
     return data;
@@ -69,14 +69,14 @@ export const audioApi = {
 
   async getRealtimeSttToken(): Promise<RealtimeSttTokenResponse> {
     const { data } = await client.post<RealtimeSttTokenResponse>(
-      '/audio/speech-to-text/realtime-token',
+      '/v1/audio/speech-to-text/realtime-token',
     );
     return data;
   },
 
   async getTtsStreamInputToken(): Promise<TtsStreamInputTokenResponse> {
     const { data } = await client.post<TtsStreamInputTokenResponse>(
-      '/audio/tts-stream-input-token',
+      '/v1/audio/tts-stream-input-token',
     );
     return data;
   },
@@ -86,7 +86,7 @@ export const audioApi = {
     outputFormat?: string,
   ): Promise<Blob> {
     const params = outputFormat ? { output_format: outputFormat } : undefined;
-    const { data } = await client.post<Blob>('/audio/music/stream', body, {
+    const { data } = await client.post<Blob>('/v1/audio/music/stream', body, {
       params,
       responseType: 'blob',
     });
@@ -107,7 +107,7 @@ export const audioApi = {
       params.remove_background_noise = String(query.remove_background_noise);
 
     const { data } = await client.post<Blob>(
-      `/audio/voice-changer/${encodeURIComponent(voiceId)}`,
+      `/v1/audio/voice-changer/${encodeURIComponent(voiceId)}`,
       form,
       {
         params: Object.keys(params).length ? params : undefined,
@@ -123,7 +123,7 @@ export const audioApi = {
     outputFormat?: string,
   ): Promise<Blob> {
     const params = outputFormat ? { output_format: outputFormat } : undefined;
-    const { data } = await client.post<Blob>('/audio/sound-effects', body, {
+    const { data } = await client.post<Blob>('/v1/audio/sound-effects', body, {
       params,
       responseType: 'blob',
     });
@@ -137,7 +137,7 @@ export const audioApi = {
     const form = new FormData();
     form.append('audio', audio);
     const params = fileFormat ? { file_format: fileFormat } : undefined;
-    const { data } = await client.post<Blob>('/audio/audio-isolation/stream', form, {
+    const { data } = await client.post<Blob>('/v1/audio/audio-isolation/stream', form, {
       params,
       headers: formDataHeaders,
       responseType: 'blob',
