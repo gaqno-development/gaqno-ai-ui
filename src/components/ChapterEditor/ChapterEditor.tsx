@@ -10,7 +10,8 @@ import { Label } from "@gaqno-development/frontcore/components/ui";
 import { Button } from "@gaqno-development/frontcore/components/ui";
 import { Progress } from "@gaqno-development/frontcore/components/ui";
 import { SparklesIcon } from "@gaqno-development/frontcore/components/icons";
-import { Save, Wand2, Loader2 } from "lucide-react";
+import { Save, Wand2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { useChapterEditor } from "@/hooks/useChapterEditor";
 import type { ChapterEditorProps } from "./types";
 
@@ -90,7 +91,7 @@ export function ChapterEditor({ bookId, chapterId }: ChapterEditorProps) {
             >
               {isGenerating ? (
                 <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Spinner className="h-4 w-4 mr-2" />
                   {buttonLabel}
                 </>
               ) : (

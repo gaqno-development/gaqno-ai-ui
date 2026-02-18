@@ -9,7 +9,7 @@ import { useToneStyleStep } from "@/hooks/useToneStyleStep";
 import type { IToneStyleStepProps } from "./types";
 import { TONE_OPTIONS, PACING_OPTIONS } from "./types";
 import { SparklesIcon } from "@gaqno-development/frontcore/components/icons";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 
 export function ToneStyleStep(props: IToneStyleStepProps) {
   const {
@@ -36,7 +36,7 @@ export function ToneStyleStep(props: IToneStyleStepProps) {
         >
           {isGeneratingAll ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Spinner className="h-4 w-4" />
               Gerando...
             </>
           ) : (

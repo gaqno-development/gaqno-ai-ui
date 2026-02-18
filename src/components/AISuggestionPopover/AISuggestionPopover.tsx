@@ -10,7 +10,7 @@ import {
   XIcon,
   RefreshIcon,
 } from "@gaqno-development/frontcore/components/icons";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { useAISuggestionPopover } from "@/hooks/useAISuggestionPopover";
 import type { AISuggestionPopoverProps } from "./types";
 
@@ -72,7 +72,7 @@ export function AISuggestionPopover({
 
           {isGenerating && (
             <div className="flex items-center gap-2 py-4">
-              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              <Spinner className="h-4 w-4 text-primary" />
               <p className="text-sm text-muted-foreground">
                 Gerando sugestão...
               </p>

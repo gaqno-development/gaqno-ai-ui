@@ -28,7 +28,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@gaqno-development/frontcore/components/ui";
-import { Wand2, Loader2, Image as ImageIcon, Save, User } from "lucide-react";
+import { Wand2, Image as ImageIcon, Save, User } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import type { CharacterRole } from "@/types/books/character";
 import { useCharacterEditor } from "@/hooks/useCharacterEditor";
 import type { CharacterEditorProps } from "./types";
@@ -89,7 +90,7 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
               >
                 {isAnalyzing ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Spinner className="h-4 w-4 mr-2" />
                     Analisando...
                   </>
                 ) : (
@@ -107,7 +108,7 @@ export function CharacterEditor({ bookId, characterId }: CharacterEditorProps) {
               >
                 {isGeneratingAvatar ? (
                   <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    <Spinner className="h-4 w-4 mr-2" />
                     Gerando...
                   </>
                 ) : (

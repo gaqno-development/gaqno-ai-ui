@@ -12,7 +12,8 @@ import {
   ArrowNarrowLeftIcon,
   RightChevron,
 } from "@gaqno-development/frontcore/components/icons";
-import { Save, Loader2 } from "lucide-react";
+import { Save } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { useCreateBookWizardPage } from "@/hooks/useCreateBookWizardPage";
 import { BasicInfoStep } from "./BasicInfoStep";
 import { WorldSettingsStep } from "./WorldSettingsStep";
@@ -143,7 +144,7 @@ export function CreateBookWizard() {
                 >
                   {isSaving ? (
                     <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      <Spinner className="h-4 w-4 mr-2" />
                       Salvando...
                     </>
                   ) : (
@@ -183,7 +184,7 @@ export function CreateBookWizard() {
                   >
                     {isCreating || isCreatingBook ? (
                       <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        <Spinner className="h-4 w-4 mr-2" />
                         Criando...
                       </>
                     ) : (

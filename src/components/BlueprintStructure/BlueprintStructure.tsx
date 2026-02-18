@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@gaqno-development/frontcore/components/ui';
 import { BookIcon, DownChevron, RightChevron } from '@gaqno-development/frontcore/components/icons';
-import { Circle, Loader2, ChevronRight } from 'lucide-react';
+import { Circle, ChevronRight } from 'lucide-react';
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 import { cn } from '@gaqno-development/frontcore/lib/utils';
 import {
   useBlueprintStructure,
@@ -89,7 +90,7 @@ export function BlueprintStructure({ bookId, structure }: BlueprintStructureProp
                           <div className="flex items-start gap-3">
                             <div className="mt-0.5">
                               {isProcessing ? (
-                                <Loader2 className="h-5 w-5 text-primary animate-spin" />
+                                <Spinner className="h-5 w-5 text-primary" />
                               ) : (
                                 <Circle className="h-5 w-5 text-muted-foreground" />
                               )}

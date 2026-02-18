@@ -25,7 +25,8 @@ import {
   TrashIcon,
   SparklesIcon,
 } from "@gaqno-development/frontcore/components/icons";
-import { Plus, Loader2, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 
 export function CharactersStep(props: ICharactersStepProps) {
   const {
@@ -58,7 +59,7 @@ export function CharactersStep(props: ICharactersStepProps) {
           >
             {isGeneratingAll ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Spinner className="h-4 w-4" />
                 Gerando...
               </>
             ) : (

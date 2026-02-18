@@ -1,7 +1,7 @@
 import { ExportOptions } from '@/components/ExportOptions'
 import { ExportPreview } from '@/components/ExportPreview'
 import { useBook } from '@/hooks/books/useBooks'
-import { Loader2 } from 'lucide-react'
+import { Spinner } from "@gaqno-development/frontcore/components/ui"
 
 interface IBookExportPageProps {
   id: string
@@ -13,7 +13,7 @@ export function BookExportPage({ id }: IBookExportPageProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Spinner className="h-8 w-8 text-muted-foreground" />
       </div>
     )
   }

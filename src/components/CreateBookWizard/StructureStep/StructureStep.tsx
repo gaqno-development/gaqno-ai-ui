@@ -22,7 +22,7 @@ import {
   RightChevron,
   SparklesIcon,
 } from "@gaqno-development/frontcore/components/icons";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 
 export function StructureStep(props: IStructureStepProps) {
   const {
@@ -79,7 +79,7 @@ export function StructureStep(props: IStructureStepProps) {
               >
                 {isGeneratingAll ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Spinner className="h-4 w-4" />
                     Gerando...
                   </>
                 ) : (

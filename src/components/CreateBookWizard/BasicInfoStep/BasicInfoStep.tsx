@@ -14,7 +14,7 @@ import { AIModelSelect } from "../../AIModelSelect";
 import { useBasicInfoStep } from "@/hooks/useBasicInfoStep";
 import type { IBasicInfoStepProps } from "./types";
 import { SparklesIcon } from "@gaqno-development/frontcore/components/icons";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 
 export function BasicInfoStep(props: IBasicInfoStepProps) {
   const {
@@ -61,7 +61,7 @@ export function BasicInfoStep(props: IBasicInfoStepProps) {
                 >
                   {isGeneratingAll ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Spinner className="h-4 w-4" />
                       Gerando...
                     </>
                   ) : (

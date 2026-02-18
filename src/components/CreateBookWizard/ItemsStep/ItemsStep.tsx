@@ -16,7 +16,8 @@ import {
   TrashIcon,
   SparklesIcon,
 } from "@gaqno-development/frontcore/components/icons";
-import { Package, Plus, Loader2 } from "lucide-react";
+import { Package, Plus } from "lucide-react";
+import { Spinner } from "@gaqno-development/frontcore/components/ui";
 
 export function ItemsStep(props: IItemsStepProps) {
   const {
@@ -49,7 +50,7 @@ export function ItemsStep(props: IItemsStepProps) {
           >
             {isGeneratingAll ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Spinner className="h-4 w-4" />
                 Gerando...
               </>
             ) : (
