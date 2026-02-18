@@ -1,4 +1,4 @@
-import type { BookFormValues } from './hooks/useBookForm';
+import type { BookFormValues } from "@/hooks/useBookForm";
 
 export type { BookFormValues };
 

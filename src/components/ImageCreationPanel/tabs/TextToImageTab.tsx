@@ -17,7 +17,7 @@ import {
 } from "@gaqno-development/frontcore/components/ui";
 import { Label } from "@gaqno-development/frontcore/components/ui";
 import { Image as ImageIcon } from "lucide-react";
-import { useImageCreationPanel } from "../hooks/useImageCreationPanel";
+import { useImageCreationPanel } from "@/hooks/useImageCreationPanel";
 
 export function TextToImageTab() {
   const {

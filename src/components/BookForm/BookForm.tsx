@@ -1,13 +1,17 @@
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { Textarea } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { GenreSelector } from '../GenreSelector';
-import { StyleSelector } from '../StyleSelector';
-import { useBookForm } from './hooks/useBookForm';
-import type { BookFormProps } from './types';
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Textarea } from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { GenreSelector } from "../GenreSelector";
+import { StyleSelector } from "../StyleSelector";
+import { useBookForm } from "@/hooks/useBookForm";
+import type { BookFormProps } from "./types";
 
-export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) {
+export function BookForm({
+  onSubmit,
+  defaultValues,
+  isLoading,
+}: BookFormProps) {
   const {
     register,
     handleSubmit,
@@ -25,15 +29,18 @@ export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) 
         <Input
           id="title"
           placeholder="Não tem título? Nós criamos para você"
-          {...register('title')}
-          className={errors.title ? 'border-destructive' : ''}
+          {...register("title")}
+          className={errors.title ? "border-destructive" : ""}
         />
         {errors.title && (
           <p className="text-sm text-destructive">{errors.title.message}</p>
         )}
       </div>
 
-      <GenreSelector selectedGenre={selectedGenre} onGenreSelect={handleGenreSelect} />
+      <GenreSelector
+        selectedGenre={selectedGenre}
+        onGenreSelect={handleGenreSelect}
+      />
 
       <div className="space-y-2">
         <Label htmlFor="description">Descrição ou Prompt Inicial</Label>
@@ -41,11 +48,14 @@ export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) 
           id="description"
           placeholder="Descreva sua ideia, personagens, enredo ou qualquer informação que ajude a criar o livro..."
           rows={6}
-          {...register('description')}
+          {...register("description")}
         />
       </div>
 
-      <StyleSelector selectedStyle={selectedStyle} onStyleSelect={handleStyleSelect} />
+      <StyleSelector
+        selectedStyle={selectedStyle}
+        onStyleSelect={handleStyleSelect}
+      />
 
       <div className="pt-2">
         <Button
@@ -53,7 +63,11 @@ export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) 
           size="lg"
           className="w-full"
           disabled={isLoading}
-          aria-label={isLoading ? 'Gerando estrutura do livro' : 'Criar livro e gerar estrutura'}
+          aria-label={
+            isLoading
+              ? "Gerando estrutura do livro"
+              : "Criar livro e gerar estrutura"
+          }
         >
           {isLoading ? (
             <>
@@ -61,7 +75,7 @@ export function BookForm({ onSubmit, defaultValues, isLoading }: BookFormProps) 
               Gerando Estrutura...
             </>
           ) : (
-            'Gerar Estrutura'
+            "Gerar Estrutura"
           )}
         </Button>
         {isLoading && (

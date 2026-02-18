@@ -1,9 +1,18 @@
-import { Popover, PopoverContent, PopoverTrigger } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { SparklesIcon, CheckedIcon, XIcon, RefreshIcon } from '@gaqno-development/frontcore/components/icons';
-import { Loader2 } from 'lucide-react';
-import { useAISuggestionPopover } from './hooks/useAISuggestionPopover';
-import type { AISuggestionPopoverProps } from './types';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import {
+  SparklesIcon,
+  CheckedIcon,
+  XIcon,
+  RefreshIcon,
+} from "@gaqno-development/frontcore/components/icons";
+import { Loader2 } from "lucide-react";
+import { useAISuggestionPopover } from "@/hooks/useAISuggestionPopover";
+import type { AISuggestionPopoverProps } from "./types";
 
 export function AISuggestionPopover({
   onGenerate,
@@ -37,9 +46,7 @@ export function AISuggestionPopover({
 
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
-      <PopoverTrigger asChild>
-        {trigger || defaultTrigger}
-      </PopoverTrigger>
+      <PopoverTrigger asChild>{trigger || defaultTrigger}</PopoverTrigger>
       <PopoverContent className="w-80" align="start">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -66,7 +73,9 @@ export function AISuggestionPopover({
           {isGenerating && (
             <div className="flex items-center gap-2 py-4">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">Gerando sugestão...</p>
+              <p className="text-sm text-muted-foreground">
+                Gerando sugestão...
+              </p>
             </div>
           )}
 
@@ -90,11 +99,7 @@ export function AISuggestionPopover({
                 <p className="text-sm whitespace-pre-wrap">{suggestion}</p>
               </div>
               <div className="flex gap-2">
-                <Button
-                  onClick={handleAccept}
-                  size="sm"
-                  className="flex-1"
-                >
+                <Button onClick={handleAccept} size="sm" className="flex-1">
                   <CheckedIcon className="h-4 w-4 mr-2" size={16} />
                   Usar
                 </Button>
@@ -107,11 +112,7 @@ export function AISuggestionPopover({
                   <RefreshIcon className="h-4 w-4 mr-2" size={16} />
                   Gerar Outra
                 </Button>
-                <Button
-                  onClick={handleClose}
-                  size="sm"
-                  variant="ghost"
-                >
+                <Button onClick={handleClose} size="sm" variant="ghost">
                   <XIcon className="h-4 w-4" size={16} />
                 </Button>
               </div>

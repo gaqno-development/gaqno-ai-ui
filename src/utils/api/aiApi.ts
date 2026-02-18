@@ -1,6 +1,9 @@
 import { createAxiosClient } from "@gaqno-development/frontcore/utils/api";
 import { getAiServiceBaseUrl } from "@/lib/env";
-import type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+import type {
+  CampaignRecord,
+  AttributionReport,
+} from "@gaqno-development/types/attribution";
 import type { BillingSummary } from "@gaqno-development/types/billing";
 import type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
 import type { VideoGenerationResponse } from "@gaqno-development/types/video";
@@ -69,9 +72,27 @@ export interface GenerateImageOptions {
     | "vertex"
     | "replicate"
     | "fireworks"
-    | "auto";
+    | "auto"
+    | string;
   negative_tags?: string[];
   negative_prompt?: string;
+  tenant_id?: string;
+}
+
+export interface ImageGenerationTaskResponse {
+  taskId: string;
+  status: string;
+  model: string;
+  price?: number;
+}
+
+export interface TaskStatusResponse {
+  taskId: string;
+  status: string;
+  model?: string;
+  result?: unknown;
+  price?: number;
+  error?: string;
 }
 
 export interface GenerateBlueprintBody {
@@ -206,7 +227,10 @@ export interface CreateCampaignBody {
   endAt: string;
 }
 
-export type { CampaignRecord, AttributionReport } from "@gaqno-development/types/attribution";
+export type {
+  CampaignRecord,
+  AttributionReport,
+} from "@gaqno-development/types/attribution";
 export type { BillingSummary } from "@gaqno-development/types/billing";
 export type { VideoTemplateSummary } from "@gaqno-development/types/video-template";
 export type { VideoGenerationResponse } from "@gaqno-development/types/video";
@@ -215,16 +239,6 @@ export interface GenerateVideoFromTemplateBody {
   templateId: string;
   product?: { name?: string; description?: string };
   model?: string;
-}
-
-export interface VideoGenerationResponse {
-  id: string;
-  status: string;
-  created_at?: string;
-  video_url?: string;
-  thumbnail_url?: string;
-  progress?: number;
-  error?: string;
 }
 
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
@@ -328,19 +342,27 @@ export const aiApi = {
 
   async generateImage(
     options: GenerateImageOptions
-  ): Promise<{ imageUrl: string; metadata: Record<string, unknown> }> {
-    const { data } = await client.post<{
-      imageUrl: string;
-      metadata: Record<string, unknown>;
-    }>("/v1/images/generate", {
-      prompt: options.prompt,
-      style: options.style,
-      aspect_ratio: options.aspect_ratio,
-      model: options.model,
-      provider: options.provider,
-      negative_tags: options.negative_tags,
-      negative_prompt: options.negative_prompt,
-    });
+  ): Promise<ImageGenerationTaskResponse> {
+    const { data } = await client.post<ImageGenerationTaskResponse>(
+      "/v1/images/generate",
+      {
+        prompt: options.prompt,
+        style: options.style,
+        aspect_ratio: options.aspect_ratio,
+        model: options.model,
+        provider: options.provider,
+        negative_tags: options.negative_tags,
+        negative_prompt: options.negative_prompt,
+        tenant_id: options.tenant_id,
+      }
+    );
+    return data;
+  },
+
+  async getTaskStatus(taskId: string): Promise<TaskStatusResponse> {
+    const { data } = await client.get<TaskStatusResponse>(
+      `/v1/tasks/${encodeURIComponent(taskId)}/status`
+    );
     return data;
   },
 

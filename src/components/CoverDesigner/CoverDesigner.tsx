@@ -1,21 +1,19 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button } from '@gaqno-development/frontcore/components/ui';
-import { Input } from '@gaqno-development/frontcore/components/ui';
-import { Label } from '@gaqno-development/frontcore/components/ui';
-import { useCoverDesigner } from './hooks/useCoverDesigner';
-import type { CoverDesignerProps } from './types';
-import { Wand2 } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import { Button } from "@gaqno-development/frontcore/components/ui";
+import { Input } from "@gaqno-development/frontcore/components/ui";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { useCoverDesigner } from "@/hooks/useCoverDesigner";
+import type { CoverDesignerProps } from "./types";
+import { Wand2 } from "lucide-react";
 
 export function CoverDesigner({ bookId }: CoverDesignerProps) {
-  const {
-    book,
-    cover,
-    title,
-    setTitle,
-    author,
-    setAuthor,
-    handleGenerateAI,
-  } = useCoverDesigner(bookId);
+  const { book, cover, title, setTitle, author, setAuthor, handleGenerateAI } =
+    useCoverDesigner(bookId);
 
   return (
     <div className="grid grid-cols-12 gap-4">
@@ -25,7 +23,9 @@ export function CoverDesigner({ bookId }: CoverDesignerProps) {
             <CardTitle>Templates</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Templates disponíveis em breve</p>
+            <p className="text-sm text-muted-foreground">
+              Templates disponíveis em breve
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -81,7 +81,9 @@ export function CoverDesigner({ bookId }: CoverDesignerProps) {
             <CardTitle>Paleta</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground">Paleta de cores em breve</p>
+            <p className="text-sm text-muted-foreground">
+              Paleta de cores em breve
+            </p>
           </CardContent>
         </Card>
       </div>
