@@ -169,6 +169,7 @@ export function TextToImageTab() {
 
           <Button
             type="submit"
+            variant="default"
             className="w-full"
             loading={isSubmitLoading}
             disabled={isSubmitDisabled}
