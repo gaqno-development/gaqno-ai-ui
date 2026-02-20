@@ -1,18 +1,32 @@
-import React, { useRef, useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
-import { Button, Textarea, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@gaqno-development/frontcore/components/ui';
-import { Volume2Icon } from '@gaqno-development/frontcore/components/icons';
-import { useVoices } from '@/hooks/queries/useAudioQueries';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useAudioGenerationMutations } from '@/hooks/mutations/useAudioMutations';
-import { AudioBarsVisualizer } from '../AudioBarsVisualizer';
-import type { AudioBarsVisualizerState } from '../AudioBarsVisualizer';
+import React, { useRef, useState } from "react";
+import { Controller } from "react-hook-form";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@gaqno-development/frontcore/components/ui";
+import {
+  Button,
+  Textarea,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@gaqno-development/frontcore/components/ui";
+import { Volume2Icon } from "@gaqno-development/frontcore/components/icons";
+import { useVoices } from "@/hooks/queries/useAudioQueries";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useAudioGenerationMutations } from "@/hooks/mutations/useAudioMutations";
+import { AudioBarsVisualizer } from "../AudioBarsVisualizer";
+import type { AudioBarsVisualizerState } from "../AudioBarsVisualizer";
 
 const schema = z.object({
-  text: z.string().min(1, 'Text is required'),
+  text: z.string().min(1, "Text is required"),
   voiceId: z.string().optional(),
 });
 type FormData = z.infer<typeof schema>;
@@ -24,11 +38,17 @@ export function TtsTab() {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const { register, handleSubmit, control, watch, formState: { errors } } = useForm<FormData>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { text: '', voiceId: '' },
+    defaultValues: { text: "", voiceId: "" },
   });
-  const text = watch('text');
+  const text = watch("text");
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -42,7 +62,9 @@ export function TtsTab() {
     }
   };
 
-  const generateBarState: AudioBarsVisualizerState = generate.isPending ? 'loading' : 'idle';
+  const generateBarState: AudioBarsVisualizerState = generate.isPending
+    ? "loading"
+    : "idle";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-6">
@@ -58,12 +80,14 @@ export function TtsTab() {
             <Label htmlFor="tts-text">Text</Label>
             <Textarea
               id="tts-text"
-              {...register('text')}
+              {...register("text")}
               placeholder="Enter the text you want to convert to speech..."
               className="min-h-[120px]"
             />
             {errors.text && (
-              <p className="text-sm text-destructive mt-1">{errors.text.message}</p>
+              <p className="text-sm text-destructive mt-1">
+                {errors.text.message}
+              </p>
             )}
           </div>
           <div>
@@ -73,12 +97,20 @@ export function TtsTab() {
               control={control}
               render={({ field }) => (
                 <Select
-                  value={field.value === '' || field.value == null ? '__default__' : field.value}
-                  onValueChange={(val) => field.onChange(val === '__default__' ? '' : val)}
+                  value={
+                    field.value === "" || field.value == null
+                      ? "__default__"
+                      : field.value
+                  }
+                  onValueChange={(val) =>
+                    field.onChange(val === "__default__" ? "" : val)
+                  }
                   disabled={isLoading}
                 >
                   <SelectTrigger id="tts-voice">
-                    <SelectValue placeholder={isLoading ? 'Loading voices…' : 'Default'} />
+                    <SelectValue
+                      placeholder={isLoading ? "Loading voices…" : "Default"}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="__default__">Default</SelectItem>
@@ -97,12 +129,15 @@ export function TtsTab() {
             {generate.isPending && (
               <div className="flex flex-col items-center gap-2 py-2">
                 <AudioBarsVisualizer state={generateBarState} />
-                <p className="text-sm text-muted-foreground">Generating audio…</p>
+                <p className="text-sm text-muted-foreground">
+                  Generating audio…
+                </p>
               </div>
             )}
             <Button
               type="submit"
               className="w-full"
+              variant="outline"
               loading={generate.isPending}
               disabled={!text}
             >
@@ -112,9 +147,11 @@ export function TtsTab() {
 
           {audioUrl && (
             <div className="rounded-lg border border-border bg-muted/30 px-4 py-4 space-y-3">
-              <p className="text-sm font-medium text-foreground">Generated Audio</p>
+              <p className="text-sm font-medium text-foreground">
+                Generated Audio
+              </p>
               <AudioBarsVisualizer
-                state={isPlaying ? 'playing' : 'idle'}
+                state={isPlaying ? "playing" : "idle"}
                 audioRef={audioRef}
                 className="mb-2"
               />
