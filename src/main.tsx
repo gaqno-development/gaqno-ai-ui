@@ -7,7 +7,7 @@ import {
   TenantProvider,
 } from '@gaqno-development/frontcore'
 import App from './App'
-import '@gaqno-development/frontcore/styles/globals.css'
+import "./styles/index.css";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

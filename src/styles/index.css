@@ -1,0 +1,3 @@
+@import "@gaqno-development/frontcore/styles/globals.css";
+@source "../**/*.{js,ts,jsx,tsx}";
+@source "../../index.html";

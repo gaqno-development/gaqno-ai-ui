@@ -13,7 +13,7 @@
     "test": "echo \"No tests\""
   },
   "dependencies": {
-    "@gaqno-development/frontcore": "^1.0.54",
+    "@gaqno-development/frontcore": "^1.0.68",
     "@gaqno-development/types": "^1.0.0",
     "@hookform/resolvers": "^3.10.0",
     "@tanstack/react-query": "^5.90.12",
@@ -48,6 +48,6 @@
     "@commitlint/config-conventional": "^19.6.0"
   },
   "overrides": {
-    "@gaqno-development/core": "npm:@gaqno-development/frontcore@^1.0.54"
+    "@gaqno-development/core": "npm:@gaqno-development/frontcore@^1.0.68"
   }
 }
