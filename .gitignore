@@ -255,3 +255,27 @@ packages/*/lib/  # If you build packages to lib/
 .local/
 .localhost/
 .local/
+
+# Coverage reports (comprehensive)
+*.lcov
+lcov.info
+junit.xml
+clover.xml
+coverage-summary.json
+coverage-final.json
+coverage-*.xml
+coverage-*.json
+coverage-report/
+test-results/
+
+# Coverage reports (comprehensive)
+*.lcov
+lcov.info
+junit.xml
+clover.xml
+coverage-summary.json
+coverage-final.json
+coverage-*.xml
+coverage-*.json
+coverage-report/
+test-results/

@@ -16,7 +16,7 @@ import {
   SelectValue,
   Textarea,
 } from "@gaqno-development/frontcore/components/ui";
-import { useErpProducts } from "@gaqno-development/frontcore/hooks/ai";
+import { useErpProducts } from "@gaqno-development/frontcore/hooks/erp";
 import {
   AIProductProfileBuilder,
   AIContentGenerator,

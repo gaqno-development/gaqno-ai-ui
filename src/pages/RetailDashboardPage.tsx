@@ -16,10 +16,12 @@ import {
   SelectValue,
 } from "@gaqno-development/frontcore/components/ui";
 import {
-  useErpProducts,
   useCampaigns,
   useBillingSummary,
 } from "@gaqno-development/frontcore/hooks/ai";
+import {
+  useErpProducts,
+} from "@gaqno-development/frontcore/hooks/erp";
 import {
   ShoppingBag,
   FileText,
