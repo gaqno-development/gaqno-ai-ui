@@ -73,7 +73,6 @@ export default defineConfig(async () => {
         external: [],
         output: {
           format: "es",
-          assetFileNames: "assets/[name].[ext]",
         },
       },
     },
