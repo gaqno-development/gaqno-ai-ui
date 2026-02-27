@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
 import {
   Card,
@@ -50,13 +50,22 @@ export function TtsTab() {
   });
   const text = watch("text");
 
+  useEffect(() => {
+    return () => {
+      if (audioUrl?.startsWith("blob:")) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
+
   const onSubmit = async (data: FormData) => {
     try {
       const result = await generate.mutateAsync({
         text: data.text,
         voiceId: data.voiceId?.trim() || undefined,
       });
-      setAudioUrl(result.audioUrl);
+      setAudioUrl((prev) => {
+        if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+        return result.audioUrl;
+      });
     } catch (e) {
       console.error(e);
     }
@@ -156,14 +165,15 @@ export function TtsTab() {
                 className="mb-2"
               />
               <audio
+                key={audioUrl}
                 ref={audioRef}
+                src={audioUrl}
                 controls
                 className="w-full h-10"
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onEnded={() => setIsPlaying(false)}
               >
-                <source src={audioUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
             </div>
