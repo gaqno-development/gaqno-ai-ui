@@ -57,6 +57,14 @@ export default defineConfig(async () => {
             singleton: true,
             requiredVersion: "*",
           },
+          i18next: {
+            singleton: true,
+            requiredVersion: "^24.0.0",
+          },
+          "react-i18next": {
+            singleton: true,
+            requiredVersion: "^15.0.0",
+          },
         } as any,
       }),
     ],

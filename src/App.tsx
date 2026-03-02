@@ -4,7 +4,7 @@ import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
 
 initI18n();
-import { Music, Image, Video, Database, ShoppingBag } from "lucide-react";
+import { Music, Image, Video, Database, ShoppingBag, LayoutDashboard, Share2 } from "lucide-react";
 import { AIPageLayout } from "./layouts/AIPageLayout";
 import { ChunkLoadErrorBoundary } from "./components/ChunkLoadErrorBoundary";
 import BookPage from "./pages/BookPage";
@@ -13,12 +13,18 @@ import ImagesSection from "./pages/ImagesSection";
 import VideoSection from "./pages/VideoSection";
 import { ProductDataDiscoveryPage } from "./pages/ProductDataDiscoveryPage";
 import RetailSection from "./pages/RetailSection";
+import { StudioDashboard } from "./pages/studio/StudioDashboard";
+import { NewProjectPage } from "./pages/studio/NewProjectPage";
+import { ProjectDetailPage } from "./pages/studio/ProjectDetailPage";
+import { SocialAccountsPage } from "./pages/social/SocialAccountsPage";
 
 const AI_TABS = [
   { id: "books", label: "Books", icon: BookIcon, tKey: "ai.books" },
   { id: "audio", label: "Audio", icon: Music, tKey: "ai.audio" },
   { id: "images", label: "Images", icon: Image, tKey: "ai.images" },
   { id: "video", label: "Video", icon: Video, tKey: "ai.video" },
+  { id: "studio", label: "Studio", icon: LayoutDashboard, tKey: "ai.studio" },
+  { id: "social", label: "Social", icon: Share2, tKey: "ai.social" },
   { id: "discovery", label: "Discovery", icon: Database, tKey: "ai.discovery" },
   { id: "retail", label: "Retail", icon: ShoppingBag, tKey: "ai.retail" },
 ] as const;
@@ -28,6 +34,8 @@ const VIEW_ROUTES: Record<string, string> = {
   audio: "/ai/audio/tts",
   images: "/ai/images/text",
   video: "/ai/video/modify",
+  studio: "/ai/studio",
+  social: "/ai/social",
   discovery: "/ai/discovery",
   retail: "/ai/retail/dashboard",
 };
@@ -37,6 +45,8 @@ function viewFromPathname(pathname: string): string | null {
   if (pathname.startsWith("/ai/audio")) return "audio";
   if (pathname.startsWith("/ai/images")) return "images";
   if (pathname.startsWith("/ai/video")) return "video";
+  if (pathname.startsWith("/ai/studio")) return "studio";
+  if (pathname.startsWith("/ai/social")) return "social";
   if (pathname.startsWith("/ai/discovery")) return "discovery";
   if (pathname.startsWith("/ai/retail")) return "retail";
   return null;
@@ -65,6 +75,11 @@ function AIPage() {
     if (pathname.startsWith("/ai/audio")) return <AudioSection />;
     if (pathname.startsWith("/ai/images")) return <ImagesSection />;
     if (pathname.startsWith("/ai/video")) return <VideoSection />;
+    if (pathname === "/ai/studio" || pathname === "/ai/studio/") return <StudioDashboard />;
+    if (pathname === "/ai/studio/new") return <NewProjectPage />;
+    if (pathname.startsWith("/ai/studio/") && pathname !== "/ai/studio/new")
+      return <ProjectDetailPage />;
+    if (pathname.startsWith("/ai/social")) return <SocialAccountsPage />;
     if (pathname.startsWith("/ai/discovery"))
       return <ProductDataDiscoveryPage />;
     if (pathname.startsWith("/ai/retail")) return <RetailSection />;
