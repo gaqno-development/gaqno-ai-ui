@@ -12,12 +12,12 @@ import { ProductDataDiscoveryPage } from "./pages/ProductDataDiscoveryPage";
 import RetailSection from "./pages/RetailSection";
 
 const AI_TABS = [
-  { id: "books", label: "Books", icon: BookIcon },
-  { id: "audio", label: "Audio", icon: Music },
-  { id: "images", label: "Images", icon: Image },
-  { id: "video", label: "Video", icon: Video },
-  { id: "discovery", label: "Discovery", icon: Database },
-  { id: "retail", label: "Retail", icon: ShoppingBag },
+  { id: "books", label: "Books", icon: BookIcon, tKey: "ai.books" },
+  { id: "audio", label: "Audio", icon: Music, tKey: "ai.audio" },
+  { id: "images", label: "Images", icon: Image, tKey: "ai.images" },
+  { id: "video", label: "Video", icon: Video, tKey: "ai.video" },
+  { id: "discovery", label: "Discovery", icon: Database, tKey: "ai.discovery" },
+  { id: "retail", label: "Retail", icon: ShoppingBag, tKey: "ai.retail" },
 ] as const;
 
 const VIEW_ROUTES: Record<string, string> = {
@@ -78,7 +78,6 @@ function AIPage() {
       tabs={AI_TABS}
       activeTab={currentView}
       onTabChange={handleTabChange}
-      title="AI"
     >
       <ChunkLoadErrorBoundary>{renderView()}</ChunkLoadErrorBoundary>
     </AIPageLayout>
