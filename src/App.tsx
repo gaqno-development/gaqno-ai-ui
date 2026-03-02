@@ -1,6 +1,9 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
+
+initI18n();
 import { Music, Image, Video, Database, ShoppingBag } from "lucide-react";
 import { AIPageLayout } from "./layouts/AIPageLayout";
 import { ChunkLoadErrorBoundary } from "./components/ChunkLoadErrorBoundary";
@@ -85,5 +88,9 @@ function AIPage() {
 }
 
 export default function App() {
-  return <AIPage />;
+  return (
+    <I18nProvider>
+      <AIPage />
+    </I18nProvider>
+  );
 }
