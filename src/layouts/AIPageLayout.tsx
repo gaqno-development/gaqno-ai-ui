@@ -46,3 +46,5 @@ export function AIPageLayout({ tabs, activeTab, onTabChange, children, title }: 
     </PageLayout>
   );
 }
+
+export default AIPageLayout;

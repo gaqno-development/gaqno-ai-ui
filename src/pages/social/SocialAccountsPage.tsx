@@ -233,3 +233,5 @@ export function SocialAccountsPage() {
     </div>
   );
 }
+
+export default SocialAccountsPage;

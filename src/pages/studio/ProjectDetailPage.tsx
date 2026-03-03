@@ -1,8 +1,14 @@
 import React from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useVideoProjectQuery } from "@/hooks/studio/useVideoProjects";
 import { useSocialAccountsQuery } from "@/hooks/social/useSocialAccounts";
 import { usePublishVideoMutation } from "@/hooks/social/useVideoPublish";
+import { useTikTokCreatorInfo } from "@/hooks/social/useTikTokCreatorInfo";
+import {
+  usePublishVideoTikTokMutation,
+  useTikTokPublishStatus,
+} from "@/hooks/social/useTikTokPublish";
 import {
   Card,
   CardContent,
@@ -12,8 +18,14 @@ import {
   Badge,
   Button,
   Label,
+  Input,
   Textarea,
   Checkbox,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Separator,
   Skeleton,
   EmptyState,
@@ -51,8 +63,11 @@ const STATUS_CONFIG: Record<
   { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: React.ElementType; color: string }
 > = {
   queued: { label: "Na fila", variant: "outline", icon: Clock, color: "text-muted-foreground" },
+  pending: { label: "Na fila", variant: "outline", icon: Clock, color: "text-muted-foreground" },
   processing: { label: "Processando", variant: "secondary", icon: Loader2, color: "text-blue-500" },
+  publishing: { label: "Publicando", variant: "secondary", icon: Loader2, color: "text-blue-500" },
   completed: { label: "Concluído", variant: "default", icon: CheckCircle2, color: "text-green-500" },
+  published: { label: "Publicado", variant: "default", icon: CheckCircle2, color: "text-green-500" },
   failed: { label: "Falhou", variant: "destructive", icon: XCircle, color: "text-destructive" },
 };
 
@@ -95,18 +110,72 @@ function PlatformIcon({ platform }: { platform: string }) {
   );
 }
 
+function PendingTikTokRow({
+  videoId,
+  publishId,
+  onTerminal,
+}: {
+  videoId: string;
+  publishId: string;
+  onTerminal: () => void;
+}) {
+  const { data } = useTikTokPublishStatus(videoId, publishId);
+  const isTerminal = data?.status === "PUBLISH_COMPLETE" || data?.status === "FAILED";
+  React.useEffect(() => {
+    if (isTerminal) onTerminal();
+  }, [isTerminal, onTerminal]);
+  const config =
+    data?.status === "PUBLISH_COMPLETE"
+      ? STATUS_CONFIG.published
+      : data?.status === "FAILED"
+        ? STATUS_CONFIG.failed
+        : STATUS_CONFIG.publishing;
+  const Icon = config.icon;
+  return (
+    <div className="flex items-center justify-between rounded-lg border px-4 py-3">
+      <PlatformIcon platform="tiktok" />
+      <div className="flex items-center gap-2">
+        <Icon
+          className={`h-4 w-4 ${config.color} ${!isTerminal ? "animate-spin" : ""}`}
+        />
+        <Badge variant={config.variant}>{config.label}</Badge>
+        {data?.failReason && (
+          <span className="text-xs text-destructive">{data.failReason}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data: project, isLoading } = useVideoProjectQuery(id ?? null);
   const { data: socialAccounts = [] } = useSocialAccountsQuery();
   const publishVideo = usePublishVideoMutation();
+  const publishTikTok = usePublishVideoTikTokMutation();
   const [selectedAccounts, setSelectedAccounts] = React.useState<string[]>([]);
   const [caption, setCaption] = React.useState("");
+  const [tiktokTitle, setTiktokTitle] = React.useState("");
+  const [tiktokPrivacy, setTiktokPrivacy] = React.useState<string>("PUBLIC_TO_EVERYONE");
+  const [tiktokDisableDuet, setTiktokDisableDuet] = React.useState(false);
+  const [tiktokDisableComment, setTiktokDisableComment] = React.useState(false);
+  const [tiktokDisableStitch, setTiktokDisableStitch] = React.useState(false);
+  const [pendingTikTokPublishes, setPendingTikTokPublishes] = React.useState<
+    Array<{ publishId: string; socialAccountId: string }>
+  >([]);
+  const queryClient = useQueryClient();
 
   const proj = project as Project | null;
   const accounts = socialAccounts as SocialAccount[];
   const canPublish = proj?.status === "completed" && proj?.videoUrl;
+
+  const selectedAccountList = accounts.filter((a) => selectedAccounts.includes(a.id));
+  const onlyTikTokSelected =
+    selectedAccountList.length > 0 &&
+    selectedAccountList.every((a) => a.platform === "tiktok");
+  const firstTikTokAccountId = onlyTikTokSelected ? selectedAccountList[0]?.id ?? null : null;
+  const { data: creatorInfo } = useTikTokCreatorInfo(firstTikTokAccountId);
 
   const toggleAccount = (accountId: string) => {
     setSelectedAccounts((prev) =>
@@ -116,6 +185,27 @@ export function ProjectDetailPage() {
 
   const handlePublish = async () => {
     if (!id || selectedAccounts.length === 0) return;
+    if (onlyTikTokSelected) {
+      const result = await publishTikTok.mutateAsync({
+        videoId: id,
+        body: {
+          title: (tiktokTitle || proj?.title) ?? "Vídeo",
+          privacyLevel: tiktokPrivacy as "PUBLIC_TO_EVERYONE" | "MUTUAL_FOLLOW_FRIENDS" | "SELF_ONLY" | "FOLLOWER_OF_CREATOR",
+          disableDuet: tiktokDisableDuet,
+          disableComment: tiktokDisableComment,
+          disableStitch: tiktokDisableStitch,
+          socialAccountIds: selectedAccounts,
+        },
+      });
+      setPendingTikTokPublishes(result.publishIds);
+      setSelectedAccounts([]);
+      setTiktokTitle("");
+      setTiktokPrivacy("PUBLIC_TO_EVERYONE");
+      setTiktokDisableDuet(false);
+      setTiktokDisableComment(false);
+      setTiktokDisableStitch(false);
+      return;
+    }
     await publishVideo.mutateAsync({
       videoId: id,
       socialAccountIds: selectedAccounts,
@@ -281,18 +371,84 @@ export function ProjectDetailPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
-            {/* Caption */}
-            <div className="space-y-2">
-              <Label htmlFor="caption">Legenda</Label>
-              <Textarea
-                id="caption"
-                value={caption}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCaption(e.target.value)}
-                placeholder="Escreva uma legenda para o vídeo (opcional)..."
-                rows={3}
-                className="resize-y"
-              />
-            </div>
+            {onlyTikTokSelected ? (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="tiktok-title">Título / Legenda (TikTok)</Label>
+                  <Input
+                    id="tiktok-title"
+                    value={tiktokTitle}
+                    onChange={(e) => setTiktokTitle(e.target.value)}
+                    placeholder={proj?.title ?? "Título do vídeo"}
+                    maxLength={2200}
+                  />
+                </div>
+                {creatorInfo && (
+                  <div className="space-y-2">
+                    <Label>Privacidade</Label>
+                    <Select
+                      value={tiktokPrivacy}
+                      onValueChange={setTiktokPrivacy}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {creatorInfo.privacyLevelOptions.map((opt) => (
+                          <SelectItem key={opt} value={opt}>
+                            {opt === "PUBLIC_TO_EVERYONE"
+                              ? "Público"
+                              : opt === "MUTUAL_FOLLOW_FRIENDS"
+                                ? "Amigos em comum"
+                                : opt === "SELF_ONLY"
+                                  ? "Apenas eu"
+                                  : opt}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={tiktokDisableDuet}
+                      onCheckedChange={(c) => setTiktokDisableDuet(Boolean(c))}
+                      disabled={creatorInfo?.duetDisabled}
+                    />
+                    Desativar Duet
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={tiktokDisableComment}
+                      onCheckedChange={(c) => setTiktokDisableComment(Boolean(c))}
+                      disabled={creatorInfo?.commentDisabled}
+                    />
+                    Desativar comentários
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <Checkbox
+                      checked={tiktokDisableStitch}
+                      onCheckedChange={(c) => setTiktokDisableStitch(Boolean(c))}
+                      disabled={creatorInfo?.stitchDisabled}
+                    />
+                    Desativar Stitch
+                  </label>
+                </div>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="caption">Legenda</Label>
+                <Textarea
+                  id="caption"
+                  value={caption}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setCaption(e.target.value)}
+                  placeholder="Escreva uma legenda para o vídeo (opcional)..."
+                  rows={3}
+                  className="resize-y"
+                />
+              </div>
+            )}
 
             <Separator />
 
@@ -354,10 +510,13 @@ export function ProjectDetailPage() {
               <div className="flex justify-end">
                 <Button
                   onClick={handlePublish}
-                  disabled={publishVideo.isPending || selectedAccounts.length === 0}
+                  disabled={
+                    (publishVideo.isPending || publishTikTok.isPending) ||
+                    selectedAccounts.length === 0
+                  }
                   className="gap-2"
                 >
-                  {publishVideo.isPending ? (
+                  {(publishVideo.isPending || publishTikTok.isPending) ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Publicando...
@@ -365,12 +524,43 @@ export function ProjectDetailPage() {
                   ) : (
                     <>
                       <Send className="h-4 w-4" />
-                      Publicar em {selectedAccounts.length || ""} conta{selectedAccounts.length !== 1 ? "s" : ""}
+                      {onlyTikTokSelected
+                        ? `Publicar no TikTok (${selectedAccounts.length})`
+                        : `Publicar em ${selectedAccounts.length || ""} conta${selectedAccounts.length !== 1 ? "s" : ""}`}
                     </>
                   )}
                 </Button>
               </div>
             )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Pending TikTok publishes */}
+      {canPublish && pendingTikTokPublishes.length > 0 && id && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Publicando no TikTok
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {pendingTikTokPublishes.map((p) => (
+                <PendingTikTokRow
+                  key={p.publishId}
+                  videoId={id}
+                  publishId={p.publishId}
+                  onTerminal={() => {
+                    setPendingTikTokPublishes((prev) =>
+                      prev.filter((x) => x.publishId !== p.publishId)
+                    );
+                    queryClient.invalidateQueries({ queryKey: ["ai", "videos", id] });
+                  }}
+                />
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}
@@ -398,7 +588,9 @@ export function ProjectDetailPage() {
                     <div className="flex items-center gap-2">
                       <PubIcon
                         className={`h-4 w-4 ${pubStatus.color} ${
-                          p.status === "processing" ? "animate-spin" : ""
+                          p.status === "processing" || p.status === "publishing"
+                            ? "animate-spin"
+                            : ""
                         }`}
                       />
                       <Badge variant={pubStatus.variant} className="text-xs">
