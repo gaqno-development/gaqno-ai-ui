@@ -1,9 +1,13 @@
 import React from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { AuthProvider, TenantProvider } from "@gaqno-development/frontcore/contexts";
+import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
 import { Music, Image, Video, Database, ShoppingBag, LayoutDashboard, Share2 } from "lucide-react";
 import { AIPageLayout } from "./AIPageLayout";
 import { ChunkLoadErrorBoundary } from "../components/ChunkLoadErrorBoundary";
+
+initI18n();
 
 const AI_TABS = [
   { id: "books", label: "Books", icon: BookIcon, tKey: "ai.books" },
@@ -51,15 +55,21 @@ export function AIRouteLayout() {
   };
 
   return (
-    <AIPageLayout
-      tabs={AI_TABS}
-      activeTab={currentView}
-      onTabChange={handleTabChange}
-    >
-      <ChunkLoadErrorBoundary>
-        <Outlet />
-      </ChunkLoadErrorBoundary>
-    </AIPageLayout>
+    <AuthProvider>
+      <TenantProvider>
+        <I18nProvider>
+          <AIPageLayout
+            tabs={AI_TABS}
+            activeTab={currentView}
+            onTabChange={handleTabChange}
+          >
+            <ChunkLoadErrorBoundary>
+              <Outlet />
+            </ChunkLoadErrorBoundary>
+          </AIPageLayout>
+        </I18nProvider>
+      </TenantProvider>
+    </AuthProvider>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthProvider, TenantProvider } from "@gaqno-development/frontcore/contexts";
 import { initI18n, I18nProvider } from "@gaqno-development/frontcore/i18n";
 import { BookIcon } from "@gaqno-development/frontcore/components/icons";
 
@@ -104,8 +105,12 @@ function AIPage() {
 
 export default function App() {
   return (
-    <I18nProvider>
-      <AIPage />
-    </I18nProvider>
+    <AuthProvider>
+      <TenantProvider>
+        <I18nProvider>
+          <AIPage />
+        </I18nProvider>
+      </TenantProvider>
+    </AuthProvider>
   );
 }
