@@ -26,6 +26,9 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "socket.io-client": "^4.8.0",
+    "use-sync-external-store": "^1.2.0",
+    "zustand": "^4.5.0",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@gaqno-development/types": "^1.0.0",
