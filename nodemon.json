@@ -2,6 +2,6 @@
   "watch": ["src"],
   "ext": "js,ts,jsx,tsx,json",
   "ignore": ["**/*.test.*", "**/*.spec.*", "**/node_modules/**", "**/dist/**"],
-  "exec": "vite build && vite preview --port 3002 --strictPort --host 0.0.0.0",
+  "exec": "VITE_APP_BASE=http://localhost:3002/ vite build && vite preview --port 3002 --strictPort --host 0.0.0.0",
   "delay": 1000
 }

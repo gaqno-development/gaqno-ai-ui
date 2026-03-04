@@ -17,6 +17,8 @@ RUN npm config set fetch-timeout 1200000 && \
     npm install --legacy-peer-deps --include=dev
 
 COPY . .
+ARG VITE_APP_BASE=/ai
+ENV VITE_APP_BASE=${VITE_APP_BASE}
 RUN npm run build
 
 FROM nginx:alpine AS runner

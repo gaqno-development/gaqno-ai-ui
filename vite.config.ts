@@ -6,14 +6,24 @@ import path from "path";
 
 export default defineConfig(async () => {
   const tailwindcss = (await import("@tailwindcss/vite")).default;
+  const base =
+    typeof process.env.VITE_APP_BASE === "string" && process.env.VITE_APP_BASE.length > 0
+      ? process.env.VITE_APP_BASE.replace(/\/?$/, "/")
+      : "/";
 
   return {
-    base: "/",
+    base,
     server: {
       port: 3002,
       origin: "http://localhost:3002",
       fs: {
         allow: [".", "../shared"],
+      },
+    },
+    preview: {
+      port: 3002,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
       },
     },
     resolve: {
