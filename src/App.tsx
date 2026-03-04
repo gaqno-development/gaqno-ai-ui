@@ -38,7 +38,7 @@ const VIEW_ROUTES: Record<string, string> = {
   studio: "/ai/studio",
   social: "/ai/social",
   discovery: "/ai/discovery",
-  retail: "/ai/retail/dashboard",
+  retail: "/ai/retail#dashboard",
 };
 
 function viewFromPathname(pathname: string): string | null {

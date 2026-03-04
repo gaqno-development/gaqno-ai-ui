@@ -53,6 +53,7 @@ const ContentStudioTab = lazy(() =>
   }))
 );
 
+const RETAIL_BASE = "/ai/retail";
 const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
   {
     label: "Overview",
@@ -60,7 +61,7 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "dashboard",
         label: "Dashboard",
-        href: "/ai/retail/dashboard",
+        href: `${RETAIL_BASE}#dashboard`,
         icon: LayoutDashboard,
       },
     ],
@@ -71,25 +72,25 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "studio",
         label: "Content Studio (guia)",
-        href: "/ai/retail/studio",
+        href: `${RETAIL_BASE}#studio`,
         icon: Sparkles,
       },
       {
         segment: "profile",
         label: "Perfil do Produto",
-        href: "/ai/retail/profile",
+        href: `${RETAIL_BASE}#profile`,
         icon: ShoppingBag,
       },
       {
         segment: "content",
         label: "Texto Marketing",
-        href: "/ai/retail/content",
+        href: `${RETAIL_BASE}#content`,
         icon: FileText,
       },
       {
         segment: "video",
         label: "Video Promocional",
-        href: "/ai/retail/video",
+        href: `${RETAIL_BASE}#video`,
         icon: Film,
       },
     ],
@@ -100,7 +101,7 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "distribution",
         label: "WhatsApp / Canais",
-        href: "/ai/retail/distribution",
+        href: `${RETAIL_BASE}#distribution`,
         icon: Send,
       },
     ],
@@ -111,13 +112,13 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "attribution",
         label: "Atribuicao GMV",
-        href: "/ai/retail/attribution",
+        href: `${RETAIL_BASE}#attribution`,
         icon: BarChart,
       },
       {
         segment: "billing",
         label: "Faturamento",
-        href: "/ai/retail/billing",
+        href: `${RETAIL_BASE}#billing`,
         icon: CreditCard,
       },
     ],
