@@ -22,23 +22,24 @@ const InpaintingTab = lazy(() =>
   }))
 );
 
+const IMAGES_BASE = "/ai/images";
 const IMAGE_CHILDREN = [
   {
     segment: "text",
     label: "Texto para Imagem",
-    href: "/ai/images/text",
+    href: `${IMAGES_BASE}#text`,
     icon: FileDescriptionIcon,
   },
   {
     segment: "edit",
     label: "Editar Imagem",
-    href: "/ai/images/edit",
+    href: `${IMAGES_BASE}#edit`,
     icon: PenIcon,
   },
   {
     segment: "inpainting",
     label: "Inpainting",
-    href: "/ai/images/inpainting",
+    href: `${IMAGES_BASE}#inpainting`,
     icon: PaintIcon,
   },
 ];

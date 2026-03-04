@@ -33,8 +33,8 @@ const AI_TABS = [
 const VIEW_ROUTES: Record<string, string> = {
   books: "/ai/books",
   audio: "/ai/audio#tts",
-  images: "/ai/images/text",
-  video: "/ai/video/modify",
+  images: "/ai/images#text",
+  video: "/ai/video#modify",
   studio: "/ai/studio",
   social: "/ai/social",
   discovery: "/ai/discovery",

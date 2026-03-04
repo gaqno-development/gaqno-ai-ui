@@ -19,23 +19,24 @@ const TextToVideoTab = lazy(() =>
   }))
 );
 
+const VIDEO_BASE = "/ai/video";
 const VIDEO_CHILDREN = [
   {
     segment: "modify",
     label: "Modificar Vídeo",
-    href: "/ai/video/modify",
+    href: `${VIDEO_BASE}#modify`,
     icon: Video,
   },
   {
     segment: "reference",
     label: "Usar Referência",
-    href: "/ai/video/reference",
+    href: `${VIDEO_BASE}#reference`,
     icon: Film,
   },
   {
     segment: "text",
     label: "Texto para Vídeo",
-    href: "/ai/video/text",
+    href: `${VIDEO_BASE}#text`,
     icon: FileDescriptionIcon,
   },
 ];
