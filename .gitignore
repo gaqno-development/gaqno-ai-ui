@@ -1,7 +1,6 @@
-# ============================================
 # Dependencies
-# ============================================
 node_modules/
+**/node_modules/
 .pnp
 .pnp.js
 .yarn/cache
@@ -10,9 +9,7 @@ node_modules/
 .yarn/install-state.gz
 .pnp.*
 
-# ============================================
 # Testing
-# ============================================
 coverage/
 *.lcov
 .nyc_output
@@ -20,10 +17,7 @@ coverage/
 *.test.js.snap
 __tests__/coverage/
 
-# ============================================
-# Next.js
-# ============================================
-# Build outputs
+# Build
 .next/
 out/
 dist/
@@ -37,22 +31,16 @@ build/
 next-env.d.ts
 next.config.js.bak
 
-# ============================================
 # Turborepo
-# ============================================
 .turbo/
 .turbo-cache/
 
-# ============================================
 # TypeScript
-# ============================================
 *.tsbuildinfo
 *.tsbuildinfo.*
 tsconfig.tsbuildinfo
 
-# ============================================
-# Environment Variables
-# ============================================
+# Environment
 .env
 .env.*
 .env.local
@@ -64,9 +52,7 @@ tsconfig.tsbuildinfo
 !.env.template
 !.env.sample
 
-# ============================================
-# IDEs and Editors
-# ============================================
+# IDE
 # VSCode
 .vscode/
 !.vscode/settings.json
@@ -97,9 +83,7 @@ out/
 \#*\#
 .\#*
 
-# ============================================
-# OS Files
-# ============================================
+# OS
 # macOS
 .DS_Store
 .AppleDouble
@@ -130,9 +114,7 @@ $RECYCLE.BIN/
 .Trash-*
 .nfs*
 
-# ============================================
 # Logs
-# ============================================
 logs/
 *.log
 npm-debug.log*
@@ -142,48 +124,36 @@ pnpm-debug.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
-# ============================================
-# Runtime Data
-# ============================================
+# Runtime
 pids/
 *.pid
 *.seed
 *.pid.lock
 
-# ============================================
-# Build Artifacts
-# ============================================
+# Build artifacts
 *.tgz
 *.tar.gz
 *.zip
 *.rar
 *.7z
 
-# ============================================
 # Docker
-# ============================================
 .dockerignore
 docker-compose.override.yml
 *.dockerfile.bak
 
-# ============================================
 # Supabase
-# ============================================
 .supabase/
 supabase/.branches/
 supabase/.temp/
 
-# ============================================
 # Database
-# ============================================
 *.db
 *.sqlite
 *.sqlite3
 *.db-journal
 
-# ============================================
-# Temporary Files
-# ============================================
+# Temp
 tmp/
 temp/
 *.tmp
@@ -193,9 +163,7 @@ temp/
 *.old
 *.orig
 
-# ============================================
-# Security & Secrets
-# ============================================
+# Secrets
 *.pem
 *.key
 *.cert
@@ -207,23 +175,16 @@ secrets/
 *.secret
 .npmrc
 
-# ============================================
-# Package Manager Locks (Optional)
-# ============================================
-# Uncomment if you want to ignore lock files
+# Lock files (optional, uncomment if needed)
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
 
-# ============================================
 # Storybook
-# ============================================
 storybook-static/
 .out/
 
-# ============================================
 # Misc
-# ============================================
 .cache/
 .parcel-cache/
 .eslintcache
@@ -233,10 +194,7 @@ storybook-static/
 *.js.map
 *.sourcemap
 
-# ============================================
-# Monorepo Specific
-# ============================================
-# App-specific build outputs (if not using .next/)
+# Monorepo
 apps/*/dist/
 apps/*/build/
 apps/*/.next/
@@ -249,33 +207,19 @@ packages/*/.next/
 packages/*/out/
 packages/*/lib/  # If you build packages to lib/
 
-# ============================================
-# Local Development
-# ============================================
+# Local dev
 .local/
 .localhost/
 .local/
 
-# Coverage reports (comprehensive)
+# Coverage
+coverage/
 *.lcov
 lcov.info
 junit.xml
 clover.xml
 coverage-summary.json
 coverage-final.json
-coverage-*.xml
-coverage-*.json
 coverage-report/
 test-results/
-
-# Coverage reports (comprehensive)
-*.lcov
-lcov.info
-junit.xml
-clover.xml
-coverage-summary.json
-coverage-final.json
-coverage-*.xml
-coverage-*.json
-coverage-report/
-test-results/
+.nyc_output/
