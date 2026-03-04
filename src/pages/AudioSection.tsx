@@ -43,37 +43,38 @@ const PodcastTab = lazy(() =>
   }))
 );
 
+const AUDIO_BASE = "/ai/audio";
 const AUDIO_CHILDREN = [
   {
     segment: "tts",
     label: "Texto para Audio",
-    href: "/ai/audio/tts",
+    href: `${AUDIO_BASE}#tts`,
     icon: Volume2Icon,
   },
   {
     segment: "stt",
     label: "Audio para Texto",
-    href: "/ai/audio/stt",
+    href: `${AUDIO_BASE}#stt`,
     icon: Mic,
   },
-  { segment: "music", label: "Música", href: "/ai/audio/music", icon: Music },
+  { segment: "music", label: "Música", href: `${AUDIO_BASE}#music`, icon: Music },
   {
     segment: "voice",
     label: "Voice Changer",
-    href: "/ai/audio/voice",
+    href: `${AUDIO_BASE}#voice`,
     icon: Mic2,
   },
-  { segment: "sfx", label: "Sound FX", href: "/ai/audio/sfx", icon: Wand2 },
+  { segment: "sfx", label: "Sound FX", href: `${AUDIO_BASE}#sfx`, icon: Wand2 },
   {
     segment: "isolation",
     label: "Isolar Audio",
-    href: "/ai/audio/isolation",
+    href: `${AUDIO_BASE}#isolation`,
     icon: ShieldCheck,
   },
   {
     segment: "podcast",
     label: "Podcast",
-    href: "/ai/audio/podcast",
+    href: `${AUDIO_BASE}#podcast`,
     icon: BookIcon,
   },
 ];
@@ -91,7 +92,7 @@ const SEGMENT_TO_COMPONENT = {
 export default function AudioSection() {
   return (
     <SectionWithSubNav
-      basePath="/ai/audio"
+      basePath={AUDIO_BASE}
       defaultSegment="tts"
       children={AUDIO_CHILDREN}
       segmentToComponent={SEGMENT_TO_COMPONENT}
