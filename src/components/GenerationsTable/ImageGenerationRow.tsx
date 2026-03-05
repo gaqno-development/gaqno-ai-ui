@@ -1,5 +1,5 @@
 import React from "react";
-import { useTaskStatus } from "@gaqno-development/frontcore/hooks/ai";
+import { useLocalTaskStatus } from "@/hooks/useLocalTaskStatus";
 import {
   TableCell,
   TableRow,
@@ -16,7 +16,7 @@ interface ImageGenerationRowProps {
 }
 
 export function ImageGenerationRow({ job, onRemove }: ImageGenerationRowProps) {
-  const { data, isLoading } = useTaskStatus(job.id);
+  const { data, isLoading } = useLocalTaskStatus(job.id);
   const status = (data as TaskStatusResponse | undefined)?.status;
   const result = (data as TaskStatusResponse | undefined)?.result;
   const price = (data as TaskStatusResponse | undefined)?.price;

@@ -7,8 +7,8 @@ import { useImageGeneration, useImageModels } from "@/hooks/images";
 import { useSaveGalleryImageMutation } from "@/hooks/gallery";
 import {
   useAIModelPreferences,
-  useTaskStatus,
 } from "@gaqno-development/frontcore/hooks/ai";
+import { useLocalTaskStatus } from "@/hooks/useLocalTaskStatus";
 import { useGenerations } from "@/contexts/GenerationsContext";
 
 const imageFormSchema = z.object({
@@ -60,7 +60,7 @@ export const useImageCreationPanel = () => {
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
   const resultsSectionRef = useRef<HTMLDivElement | null>(null);
   const formSectionRef = useRef<HTMLDivElement | null>(null);
-  const { data: taskStatus } = useTaskStatus(currentTaskId);
+  const { data: taskStatus } = useLocalTaskStatus(currentTaskId);
 
   const {
     register,
