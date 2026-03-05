@@ -41,6 +41,8 @@ export function AIPageLayout({ tabs, activeTab, onTabChange, children, title }: 
       activeTab={activeTab}
       onTabChange={onTabChange}
       layoutId="aiActiveTab"
+      mobileTabsLimit={8}
+      mobileMaxVisible={3}
     >
       {children}
     </PageLayout>
