@@ -27,19 +27,24 @@ export const useVideoTemplatesQueries = () => {
   };
 };
 
+function getPollingInterval(query: { state: { data?: unknown; dataUpdatedAt: number } }): number | false {
+  const data = query.state.data as { status?: string } | undefined;
+  if (data?.status === "completed" || data?.status === "failed") return false;
+
+  const elapsed = Date.now() - query.state.dataUpdatedAt;
+  if (elapsed < 30_000) return 3_000;
+  if (elapsed < 2 * 60_000) return 5_000;
+  if (elapsed < 10 * 60_000) return 10_000;
+  return 30_000;
+}
+
 export const useVideoGenerationQueries = () => {
   const getStatus = (videoId: string) => {
     return useQuery({
       queryKey: ["video-generation", videoId],
       queryFn: () => aiApi.getVideoStatus(videoId),
       enabled: !!videoId,
-      refetchInterval: (query) => {
-        const data = query.state.data;
-        if (data?.status === "completed" || data?.status === "failed") {
-          return false;
-        }
-        return 2000;
-      },
+      refetchInterval: getPollingInterval,
     });
   };
 
