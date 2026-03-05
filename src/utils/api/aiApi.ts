@@ -357,7 +357,7 @@ export const aiApi = {
 
   async getTaskStatus(taskId: string): Promise<TaskStatusResponse> {
     const { data } = await client.get<TaskStatusResponse>(
-      `/tasks/${encodeURIComponent(taskId)}/status`
+      `tasks/${encodeURIComponent(taskId)}/status`
     );
     return data;
   },
