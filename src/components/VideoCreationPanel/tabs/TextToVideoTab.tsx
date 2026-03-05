@@ -34,7 +34,10 @@ export function TextToVideoTab() {
   const [showConfirmNewDialog, setShowConfirmNewDialog] = useState(false);
   const { addJob } = useGenerations();
 
-  const { data: models = [], isLoading: modelsLoading } = useVideoModels();
+  const { data: allModels = [], isLoading: modelsLoading } = useVideoModels();
+
+  const REQUIRES_FRAMES_PATTERN = /first-last-frame|image-to-video|img2vid|frame-to-video/i;
+  const models = allModels.filter((m) => !REQUIRES_FRAMES_PATTERN.test(m.id) && !REQUIRES_FRAMES_PATTERN.test(m.name));
   const { generate, getStatus } = useVideoGeneration();
   const statusQuery = getStatus(jobId ?? '');
 
