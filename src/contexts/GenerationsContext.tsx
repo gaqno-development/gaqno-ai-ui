@@ -44,6 +44,10 @@ function saveToStorage(jobs: GenerationJob[]) {
   }
 }
 
+const NOOP_ADD_JOB = (_id: string, _type: GenerationType) => {};
+const NOOP_REMOVE_JOB = (_id: string) => {};
+const EMPTY_JOBS: GenerationJob[] = [];
+
 const GenerationsContext = createContext<GenerationsContextValue | null>(null);
 
 export function GenerationsProvider({ children }: { children: React.ReactNode }) {
@@ -83,7 +87,11 @@ export function GenerationsProvider({ children }: { children: React.ReactNode })
 export function useGenerations(): GenerationsContextValue {
   const ctx = useContext(GenerationsContext);
   if (!ctx) {
-    throw new Error("useGenerations must be used within GenerationsProvider");
+    return {
+      jobs: EMPTY_JOBS,
+      addJob: NOOP_ADD_JOB,
+      removeJob: NOOP_REMOVE_JOB,
+    };
   }
   return ctx;
 }
