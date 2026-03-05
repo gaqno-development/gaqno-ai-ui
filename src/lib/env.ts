@@ -14,5 +14,6 @@ export function getAiServiceBaseUrl(): string {
     "VITE_SERVICE_AI_URL",
     "https://api.gaqno.com.br/ai"
   );
-  return aiServiceUrl.replace(/\/$/, "");
+  const base = aiServiceUrl.replace(/\/$/, "").replace(/\/v1$/i, "");
+  return base.endsWith("/v1") ? base : `${base}/v1`;
 }

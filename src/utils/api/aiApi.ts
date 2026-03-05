@@ -263,25 +263,25 @@ function textPayload(
 
 export const aiApi = {
   async getImageModels(): Promise<ImageModelsResponse> {
-    const { data } = await client.get<ImageModelsResponse>("/v1/images/models");
+    const { data } = await client.get<ImageModelsResponse>("/images/models");
     return data;
   },
 
   async getModelsRegistry(): Promise<ModelsRegistryResponse> {
     const { data } = await client.get<ModelsRegistryResponse>(
-      "/v1/models/registry"
+      "/models/registry"
     );
     return data;
   },
 
   async getModels(): Promise<AIModel[]> {
-    const { data } = await client.get<AIModelsResponse>("/v1/models");
+    const { data } = await client.get<AIModelsResponse>("/models");
     return data.data ?? [];
   },
 
   async generateText(options: GenerateTextOptions): Promise<string> {
     const { data } = await client.post<{ content?: string }>(
-      "/v1/responses",
+      "/responses",
       textPayload(options)
     );
     return typeof data.content === "string"
@@ -294,7 +294,7 @@ export const aiApi = {
     signal?: AbortSignal
   ): Promise<ReadableStream<Uint8Array>> {
     const { data } = await client.post<ArrayBuffer>(
-      "/v1/responses/stream",
+      "/responses/stream",
       textPayload(options),
       {
         responseType: "arraybuffer",
@@ -330,7 +330,7 @@ export const aiApi = {
         : "json",
     };
     const { data } = await client.post<{ content?: unknown } | T>(
-      "/v1/responses",
+      "/responses",
       body
     );
     const out =
@@ -344,7 +344,7 @@ export const aiApi = {
     options: GenerateImageOptions
   ): Promise<ImageGenerationTaskResponse> {
     const { data } = await client.post<ImageGenerationTaskResponse>(
-      "/v1/images/generate",
+      "/images/generate",
       {
         prompt: options.prompt,
         style: options.style,
@@ -361,7 +361,7 @@ export const aiApi = {
 
   async getTaskStatus(taskId: string): Promise<TaskStatusResponse> {
     const { data } = await client.get<TaskStatusResponse>(
-      `/v1/tasks/${encodeURIComponent(taskId)}/status`
+      `/tasks/${encodeURIComponent(taskId)}/status`
     );
     return data;
   },
@@ -374,14 +374,14 @@ export const aiApi = {
     form.append("image", file);
     form.append("instruction", instruction);
     const { data } = await client.post<{ imageUrl: string }>(
-      "/v1/images/edit",
+      "/images/edit",
       form
     );
     return data;
   },
 
   async generateBlueprint(body: GenerateBlueprintBody): Promise<unknown> {
-    const { data } = await client.post("/v1/ai/books/generate-blueprint", body);
+    const { data } = await client.post("/ai/books/generate-blueprint", body);
     return data;
   },
 
@@ -389,7 +389,7 @@ export const aiApi = {
     body: AnalyzeCharacterBody
   ): Promise<{ characterDetails?: unknown }> {
     const { data } = await client.post<{ characterDetails?: unknown }>(
-      "/v1/ai/books/analyze-character",
+      "/ai/books/analyze-character",
       body
     );
     return data;
@@ -402,7 +402,7 @@ export const aiApi = {
     const { data } = await client.post<{
       imageUrl?: string;
       avatarPrompt?: string;
-    }>("/v1/ai/books/generate-character-avatar", body);
+    }>("/ai/books/generate-character-avatar", body);
     return data;
   },
 
@@ -410,7 +410,7 @@ export const aiApi = {
     body: AnalyzeContextBody
   ): Promise<{ analysis: string }> {
     const { data } = await client.post<{ analysis: string }>(
-      "/v1/ai/books/analyze-context",
+      "/ai/books/analyze-context",
       body
     );
     return data;
@@ -424,20 +424,20 @@ export const aiApi = {
     expanded?: boolean;
     expansionAttempts?: number;
   }> {
-    const { data } = await client.post("/v1/ai/books/generate-chapter", body);
+    const { data } = await client.post("/ai/books/generate-chapter", body);
     return data;
   },
 
   async getVideoModels(): Promise<unknown[]> {
     const { data } = await client.get<{ data?: unknown[] }>(
-      "/v1/videos/models"
+      "/videos/models"
     );
     return data?.data ?? [];
   },
 
   async getVideoTemplates(): Promise<VideoTemplateSummary[]> {
     const { data } = await client.get<VideoTemplateSummary[]>(
-      "/v1/videos/templates"
+      "/videos/templates"
     );
     return data ?? [];
   },
@@ -446,19 +446,19 @@ export const aiApi = {
     body: GenerateVideoFromTemplateBody
   ): Promise<VideoGenerationResponse> {
     const { data } = await client.post<VideoGenerationResponse>(
-      "/v1/videos/generate-from-template",
+      "/videos/generate-from-template",
       body
     );
     return data;
   },
 
   async generateVideo(body: GenerateVideoBody): Promise<unknown> {
-    const { data } = await client.post("/v1/videos/generate", body);
+    const { data } = await client.post("/videos/generate", body);
     return data;
   },
 
   async getVideoStatus(videoId: string): Promise<unknown> {
-    const { data } = await client.get(`/v1/videos/${videoId}/status`);
+    const { data } = await client.get(`/videos/${videoId}/status`);
     return data;
   },
 
@@ -469,7 +469,7 @@ export const aiApi = {
     const form = new FormData();
     form.append("file", file);
     form.append("type", type);
-    const { data } = await client.post("/v1/videos/upload-asset", form);
+    const { data } = await client.post("/videos/upload-asset", form);
     return data;
   },
 

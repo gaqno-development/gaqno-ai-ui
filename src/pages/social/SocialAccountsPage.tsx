@@ -24,12 +24,9 @@ import {
   Instagram,
 } from "lucide-react";
 
-const AUTH_PATH = (() => {
-  const base =
-    (import.meta.env.VITE_SERVICE_AI_URL as string)?.replace(/\/$/, "") ||
-    "https://api.gaqno.com.br/ai";
-  return `${base}/v1/auth`;
-})();
+import { getAiServiceBaseUrl } from "@/lib/env";
+
+const AUTH_PATH = `${getAiServiceBaseUrl()}/auth`;
 
 type SocialAccount = {
   id: string;
