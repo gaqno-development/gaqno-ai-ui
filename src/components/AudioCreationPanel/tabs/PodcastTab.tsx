@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Textarea, Label, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@gaqno-development/frontcore/components/ui';
@@ -6,9 +6,14 @@ import { BookIcon } from '@gaqno-development/frontcore/components/icons';
 import { useVoices } from '@/hooks/queries/useAudioQueries';
 import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { usePodcastTab } from '@/hooks/usePodcastTab';
+import { GenerationLoadingCard } from "@/components/shared";
+import { useScrollToResult } from '@/hooks/useScrollToResult';
+import { RefreshCw } from 'lucide-react';
 
 export function PodcastTab() {
   const { voices, isLoading } = useVoices();
+  const formSectionRef = useRef<HTMLDivElement | null>(null);
+  const resultSectionRef = useRef<HTMLDivElement | null>(null);
   const {
     register,
     handleSubmit,
@@ -19,10 +24,19 @@ export function PodcastTab() {
     generate,
     apiErrorMessage,
     script,
+    resetToForm,
   } = usePodcastTab();
+
+  useScrollToResult(resultSectionRef, Boolean(audioUrl));
+
+  const handleResetToForm = () => {
+    resetToForm();
+    formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
+      <div ref={formSectionRef}>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -124,16 +138,28 @@ export function PodcastTab() {
           </Button>
         </CardContent>
       </Card>
+      </div>
+      {generate.isPending && (
+        <GenerationLoadingCard title="Gerando áudio" message="Aguarde enquanto o áudio do podcast é gerado." />
+      )}
       {audioUrl && (
-        <GeneratedAudioCard
-          audioUrl={audioUrl}
-          title="Áudio gerado"
-          extra={
-            <a download="podcast.mp3" href={audioUrl} className="text-sm underline">
-              Baixar
-            </a>
-          }
-        />
+        <div ref={resultSectionRef}>
+          <GeneratedAudioCard
+            audioUrl={audioUrl}
+            title="Áudio gerado"
+            extra={
+              <div className="flex flex-wrap gap-2">
+                <a download="podcast.mp3" href={audioUrl} className="text-sm underline">
+                  Baixar
+                </a>
+                <Button type="button" variant="secondary" size="sm" onClick={handleResetToForm} className="gap-2">
+                  <RefreshCw className="h-4 w-4" />
+                  Gerar novamente
+                </Button>
+              </div>
+            }
+          />
+        </div>
       )}
     </form>
   );

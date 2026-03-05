@@ -53,6 +53,8 @@ export const usePodcastTab = () => {
       : "Erro ao gerar áudio."
     : null;
 
+  const resetToForm = useCallback(() => setAudioUrl(null), []);
+
   return {
     register,
     handleSubmit,
@@ -64,5 +66,6 @@ export const usePodcastTab = () => {
     generate,
     apiErrorMessage,
     script,
+    resetToForm,
   };
 };

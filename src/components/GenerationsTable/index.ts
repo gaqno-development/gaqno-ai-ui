@@ -1,0 +1,1 @@
+export { GenerationsTable } from "./GenerationsTable";

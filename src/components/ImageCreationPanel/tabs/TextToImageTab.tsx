@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Card,
@@ -15,9 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@gaqno-development/frontcore/components/ui";
-import { Label, Spinner } from "@gaqno-development/frontcore/components/ui";
-import { Image as ImageIcon, Download, History } from "lucide-react";
+import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Image as ImageIcon, Download, History, Copy, Check, RefreshCw } from "lucide-react";
 import { useImageCreationPanel } from "@/hooks/useImageCreationPanel";
+import { GenerationLoadingCard } from "@/components/shared";
 
 export function TextToImageTab() {
   const {
@@ -26,17 +27,34 @@ export function TextToImageTab() {
     control,
     errors,
     onSubmit,
-    generatedImageUrl,
+    generatedImageUrls,
+    selectedImageUrl,
+    selectImage,
+    resetToForm,
     recordedImages,
+    resultsSectionRef,
+    formSectionRef,
     isSubmitLoading,
     isSubmitDisabled,
     providers,
     modelsForProvider,
     modelsLoading,
   } = useImageCreationPanel();
+  const [copiedUrl, setCopiedUrl] = useState(false);
+
+  const handleCopyUrl = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedUrl(true);
+      setTimeout(() => setCopiedUrl(false), 2000);
+    } catch {
+      setCopiedUrl(false);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-6">
+      <div ref={formSectionRef}>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -179,34 +197,101 @@ export function TextToImageTab() {
           </Button>
         </CardContent>
       </Card>
+      </div>
 
-      {isSubmitLoading && !generatedImageUrl && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Gerando imagem</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center justify-center gap-4 py-12">
-            <Spinner className="h-10 w-10 text-primary" />
-            <p className="text-sm text-muted-foreground">
-              Aguarde enquanto a imagem é gerada...
-            </p>
-          </CardContent>
-        </Card>
+      {isSubmitLoading && generatedImageUrls.length === 0 && (
+        <GenerationLoadingCard
+          title="Gerando imagem"
+          message="Aguarde enquanto a imagem é gerada."
+        />
       )}
 
-      {generatedImageUrl && (
+      {generatedImageUrls.length > 0 && !selectedImageUrl && (
+        <div ref={resultsSectionRef}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Escolha sua favorita</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Clique na imagem que deseja salvar.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <ul className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {generatedImageUrls.map((url) => (
+                <li key={url}>
+                  <button
+                    type="button"
+                    onClick={() => selectImage(url)}
+                    className="w-full rounded-lg border-2 border-transparent overflow-hidden bg-muted/30 hover:border-primary hover:ring-2 hover:ring-primary/20 transition-all focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    <span className="block aspect-square relative">
+                      <img
+                        src={url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity text-white font-medium text-sm">
+                        Selecionar
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+        </div>
+      )}
+
+      {selectedImageUrl && (
+        <div ref={resultsSectionRef}>
         <Card>
           <CardHeader>
             <CardTitle>Imagem gerada</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <img
-              src={generatedImageUrl}
+              src={selectedImageUrl}
               alt="Generated"
               className="w-full rounded-lg"
             />
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => handleCopyUrl(selectedImageUrl)}
+                className="gap-2"
+              >
+                {copiedUrl ? (
+                  <Check className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copiedUrl ? "Copiado!" : "Copiar URL"}
+              </Button>
+              <a
+                href={selectedImageUrl}
+                download={`generated-image-${Date.now()}.png`}
+                className="inline-flex items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium ring-offset-background hover:bg-accent hover:text-accent-foreground"
+              >
+                <Download className="h-4 w-4" />
+                Baixar
+              </a>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={resetToForm}
+                className="gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Gerar novamente
+              </Button>
+            </div>
           </CardContent>
         </Card>
+        </div>
       )}
 
       {recordedImages.length > 0 && (

@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@gaqno-development/frontcore/components/ui';
 import { Button, Textarea, Label } from '@gaqno-development/frontcore/components/ui';
-import { Music } from 'lucide-react';
+import { Music, RefreshCw } from 'lucide-react';
 import { GeneratedAudioCard } from '../GeneratedAudioCard';
 import { useMusicMutations } from '@/hooks/mutations/useAudioMutations';
+import { GenerationLoadingCard } from "@/components/shared";
+import { useScrollToResult } from '@/hooks/useScrollToResult';
 
 export function MusicTab() {
   const { generateMusic } = useMusicMutations();
   const [prompt, setPrompt] = useState('');
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const formSectionRef = useRef<HTMLDivElement | null>(null);
+  const resultSectionRef = useRef<HTMLDivElement | null>(null);
+
+  useScrollToResult(resultSectionRef, Boolean(audioUrl));
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +27,14 @@ export function MusicTab() {
     }
   };
 
+  const resetToForm = () => {
+    setAudioUrl(null);
+    formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-6 p-6">
+      <div ref={formSectionRef}>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -51,7 +63,24 @@ export function MusicTab() {
           </Button>
         </CardContent>
       </Card>
-      {audioUrl && <GeneratedAudioCard audioUrl={audioUrl} title="Generated Music" />}
+      </div>
+      {generateMusic.isPending && (
+        <GenerationLoadingCard title="Gerando música" message="Aguarde enquanto a música é gerada." />
+      )}
+      {audioUrl && (
+        <div ref={resultSectionRef}>
+          <GeneratedAudioCard
+            audioUrl={audioUrl}
+            title="Música gerada"
+            extra={
+              <Button type="button" variant="secondary" size="sm" onClick={resetToForm} className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Gerar novamente
+              </Button>
+            }
+          />
+        </div>
+      )}
     </form>
   );
 }

@@ -18,6 +18,8 @@ import { StudioDashboard } from "./pages/studio/StudioDashboard";
 import { NewProjectPage } from "./pages/studio/NewProjectPage";
 import { ProjectDetailPage } from "./pages/studio/ProjectDetailPage";
 import { SocialAccountsPage } from "./pages/social/SocialAccountsPage";
+import { GenerationsProvider } from "./contexts/GenerationsContext";
+import { GenerationsTable } from "./components/GenerationsTable";
 
 const AI_TABS = [
   { id: "books", label: "Books", icon: BookIcon, tKey: "ai.books" },
@@ -112,6 +114,7 @@ function AIPage() {
       activeTab={currentView}
       onTabChange={handleTabChange}
     >
+      <GenerationsTable />
       <ChunkLoadErrorBoundary>{renderView()}</ChunkLoadErrorBoundary>
     </AIPageLayout>
   );
@@ -122,7 +125,9 @@ export default function App() {
     <AuthProvider>
       <TenantProvider>
         <I18nProvider>
-          <AIPage />
+          <GenerationsProvider>
+            <AIPage />
+          </GenerationsProvider>
         </I18nProvider>
       </TenantProvider>
     </AuthProvider>

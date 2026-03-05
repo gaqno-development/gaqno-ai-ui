@@ -21,6 +21,7 @@ export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
     handleFileInput,
   } = useVideoUploadArea(onFileSelect, selectedFile);
 
+  const isCompact = className?.includes("compact");
   return (
     <Card
       className={cn(
@@ -34,13 +35,16 @@ export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      <CardContent className="p-6">
+      <CardContent className={isCompact ? "p-4" : "p-6"}>
         {selectedFile && videoUrl ? (
           <div className="relative">
             <video
               src={videoUrl}
               controls
-              className="w-full rounded-lg max-h-[400px]"
+              className={cn(
+                "w-full rounded-lg",
+                isCompact ? "max-h-[200px]" : "max-h-[400px]"
+              )}
             />
             <button
               onClick={onRemove}
@@ -55,13 +59,18 @@ export const VideoUploadArea: React.FC<VideoUploadAreaProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="mb-4 rounded-full bg-muted p-4">
-              <Video className="h-8 w-8 text-muted-foreground" />
+          <div
+            className={cn(
+              "flex flex-col items-center justify-center text-center",
+              isCompact ? "py-6" : "py-12"
+            )}
+          >
+            <div className={cn("rounded-full bg-muted", isCompact ? "mb-2 p-2" : "mb-4 p-4")}>
+              <Video className={cn("text-muted-foreground", isCompact ? "h-5 w-5" : "h-8 w-8")} />
             </div>
-            <h3 className="text-lg font-semibold mb-2">Upload Video</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Supports MP4/MOV files, 200MB max
+            <h3 className={cn("font-semibold mb-2", isCompact ? "text-sm" : "text-lg")}>Upload Video</h3>
+            <p className={cn("text-muted-foreground", isCompact ? "text-xs mb-2" : "text-sm mb-4")}>
+              MP4/MOV, máx. 200MB
             </p>
             <label className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 cursor-pointer">
               <Upload className="mr-2 h-4 w-4" />

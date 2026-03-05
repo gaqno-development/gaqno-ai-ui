@@ -23,7 +23,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAudioGenerationMutations } from "@/hooks/mutations/useAudioMutations";
 import { AudioBarsVisualizer } from "../AudioBarsVisualizer";
-import type { AudioBarsVisualizerState } from "../AudioBarsVisualizer";
+import { GenerationLoadingCard } from "@/components/shared";
+import { useScrollToResult } from "@/hooks/useScrollToResult";
+import { RefreshCw } from "lucide-react";
 
 const schema = z.object({
   text: z.string().min(1, "Text is required"),
@@ -37,6 +39,10 @@ export function TtsTab() {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const formSectionRef = useRef<HTMLDivElement | null>(null);
+  const resultSectionRef = useRef<HTMLDivElement | null>(null);
+
+  useScrollToResult(resultSectionRef, Boolean(audioUrl));
 
   const {
     register,
@@ -71,12 +77,20 @@ export function TtsTab() {
     }
   };
 
-  const generateBarState: AudioBarsVisualizerState = generate.isPending
-    ? "loading"
-    : "idle";
+  const resetToForm = () => {
+    setAudioUrl((prev) => {
+      if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return null;
+    });
+    formSectionRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+      <div ref={formSectionRef}>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -135,14 +149,6 @@ export function TtsTab() {
           </div>
 
           <div className="space-y-4">
-            {generate.isPending && (
-              <div className="flex flex-col items-center gap-2 py-2">
-                <AudioBarsVisualizer state={generateBarState} />
-                <p className="text-sm text-muted-foreground">
-                  Generating audio…
-                </p>
-              </div>
-            )}
             <Button
               type="submit"
               className="w-full"
@@ -153,12 +159,24 @@ export function TtsTab() {
               Generate Audio
             </Button>
           </div>
+        </CardContent>
+      </Card>
+      </div>
 
-          {audioUrl && (
-            <div className="rounded-lg border border-border bg-muted/30 px-4 py-4 space-y-3">
-              <p className="text-sm font-medium text-foreground">
-                Generated Audio
-              </p>
+      {generate.isPending && (
+        <GenerationLoadingCard
+          title="Gerando áudio"
+          message="Aguarde enquanto o áudio é gerado."
+        />
+      )}
+
+      {audioUrl && (
+        <div ref={resultSectionRef} className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Áudio gerado</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <AudioBarsVisualizer
                 state={isPlaying ? "playing" : "idle"}
                 audioRef={audioRef}
@@ -176,10 +194,20 @@ export function TtsTab() {
               >
                 Your browser does not support the audio element.
               </audio>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={resetToForm}
+                className="gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Gerar novamente
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </form>
   );
 }

@@ -20,20 +20,24 @@ export const ReferenceInputs: React.FC<ReferenceInputsProps> = ({
     referenceImage,
     onImageSelect
   );
+  const isCompact = className?.includes("compact");
 
   return (
     <div className={cn("space-y-4", className)}>
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm font-medium">Reference Image</CardTitle>
+        <CardHeader className={isCompact ? "py-2" : undefined}>
+          <CardTitle className="text-sm font-medium">Imagem de referência</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className={isCompact ? "pt-0" : undefined}>
           {referenceImage && imageUrl ? (
             <div className="relative">
               <img
                 src={imageUrl}
                 alt="Reference"
-                className="w-full rounded-lg max-h-[200px] object-cover"
+                className={cn(
+                  "w-full rounded-lg object-cover",
+                  isCompact ? "max-h-[120px]" : "max-h-[200px]"
+                )}
               />
               <button
                 onClick={handleRemove}
@@ -44,8 +48,13 @@ export const ReferenceInputs: React.FC<ReferenceInputsProps> = ({
               </button>
             </div>
           ) : (
-            <label className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-muted-foreground/25 rounded-lg cursor-pointer hover:border-primary/50 transition-colors">
-              <ImageIcon className="h-6 w-6 text-muted-foreground mb-2" />
+            <label
+              className={cn(
+                "flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground/25 rounded-lg cursor-pointer hover:border-primary/50 transition-colors",
+                isCompact ? "py-4" : "py-8"
+              )}
+            >
+              <ImageIcon className={cn("text-muted-foreground mb-2", isCompact ? "h-5 w-5" : "h-6 w-6")} />
               <span className="text-sm text-muted-foreground">
                 Upload Reference Image
               </span>

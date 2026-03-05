@@ -8,6 +8,7 @@ import {
   useVideoGeneration,
   useVideoUpload,
 } from "@/hooks/videos";
+import { useGenerations } from "@/contexts/GenerationsContext";
 
 const videoFormSchema = z.object({
   prompt: z.string().min(1, "Prompt is required"),
@@ -29,6 +30,7 @@ export const useVideoCreationPanel = (
   const { data: models = [], isLoading: modelsLoading } = useVideoModels();
   const { generate } = useVideoGeneration();
   const uploadMutation = useVideoUpload();
+  const { addJob } = useGenerations();
 
   const { handleSubmit, setValue, watch } = useForm<VideoFormData>({
     resolver: zodResolver(videoFormSchema),
@@ -64,7 +66,7 @@ export const useVideoCreationPanel = (
           referenceImageUrl = uploadResult.url;
         }
 
-        await generate.mutateAsync({
+        const result = await generate.mutateAsync({
           prompt: data.prompt,
           model: data.model,
           mode: data.mode,
@@ -75,6 +77,8 @@ export const useVideoCreationPanel = (
             add_voice: addVoice,
           },
         });
+        const id = result && typeof result === "object" && "id" in result ? (result as { id: string }).id : undefined;
+        if (typeof id === "string") addJob(id, "video");
       } catch (error) {
         console.error("Error generating video:", error);
       }
@@ -86,6 +90,7 @@ export const useVideoCreationPanel = (
       addVoice,
       uploadMutation,
       generate,
+      addJob,
     ]
   );
 

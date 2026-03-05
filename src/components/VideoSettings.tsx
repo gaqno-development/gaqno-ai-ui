@@ -9,6 +9,7 @@ interface VideoSettingsProps {
   onAddAudioChange: (value: boolean) => void;
   onAddVoiceChange: (value: boolean) => void;
   className?: string;
+  compact?: boolean;
 }
 
 export const VideoSettings: React.FC<VideoSettingsProps> = ({
@@ -17,33 +18,45 @@ export const VideoSettings: React.FC<VideoSettingsProps> = ({
   onAddAudioChange,
   onAddVoiceChange,
   className,
+  compact,
 }) => {
+  const switches = (
+    <>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="add-audio" className="text-sm font-normal">
+          Áudio
+        </Label>
+        <Switch
+          id="add-audio"
+          checked={addAudio}
+          onCheckedChange={onAddAudioChange}
+        />
+      </div>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="add-voice" className="text-sm font-normal">
+          Voz
+        </Label>
+        <Switch
+          id="add-voice"
+          checked={addVoice}
+          onCheckedChange={onAddVoiceChange}
+        />
+      </div>
+    </>
+  );
   return (
     <Card className={className}>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">Settings</CardTitle>
+      <CardHeader className={compact ? "py-2" : undefined}>
+        <CardTitle className="text-sm font-medium">Opções</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="add-audio" className="text-sm font-normal">
-            Add Audio
-          </Label>
-          <Switch
-            id="add-audio"
-            checked={addAudio}
-            onCheckedChange={onAddAudioChange}
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <Label htmlFor="add-voice" className="text-sm font-normal">
-            Add Voice
-          </Label>
-          <Switch
-            id="add-voice"
-            checked={addVoice}
-            onCheckedChange={onAddVoiceChange}
-          />
-        </div>
+      <CardContent className={compact ? "space-y-2 pt-0" : "space-y-4"}>
+        {compact ? (
+          <div className="flex flex-wrap gap-4">
+            {switches}
+          </div>
+        ) : (
+          switches
+        )}
       </CardContent>
     </Card>
   );

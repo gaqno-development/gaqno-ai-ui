@@ -94,6 +94,57 @@ export interface TaskStatusResponse {
   error?: string;
 }
 
+export interface ImageFolderDto {
+  id: string;
+  tenantId: string;
+  name: string;
+  slug: string;
+  parentId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ImageGalleryItemDto {
+  id: string;
+  tenantId: string;
+  userId: string;
+  folderId: string | null;
+  url: string;
+  prompt: string;
+  model: string | null;
+  provider: string | null;
+  style: string | null;
+  aspectRatio: string | null;
+  taskId: string | null;
+  metadata: unknown;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListGalleryImagesParams {
+  folderId?: string | null;
+  page?: number;
+  limit?: number;
+}
+
+export interface ListGalleryImagesResult {
+  items: ImageGalleryItemDto[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface SaveGalleryImageBody {
+  url: string;
+  prompt: string;
+  model?: string;
+  provider?: string;
+  style?: string;
+  aspectRatio?: string;
+  taskId?: string;
+  folderId?: string | null;
+}
+
 export interface GenerateBlueprintBody {
   title?: string;
   genre?: string;
@@ -372,6 +423,80 @@ export const aiApi = {
     const { data } = await client.post<{ imageUrl: string }>(
       "/images/edit",
       form
+    );
+    return data;
+  },
+
+  async listGalleryImages(
+    params?: ListGalleryImagesParams
+  ): Promise<ListGalleryImagesResult> {
+    const searchParams = new URLSearchParams();
+    if (params?.folderId !== undefined) {
+      searchParams.set("folderId", params.folderId ?? "null");
+    }
+    if (params?.page != null) searchParams.set("page", String(params.page));
+    if (params?.limit != null) searchParams.set("limit", String(params.limit));
+    const qs = searchParams.toString();
+    const url = qs ? `/image-gallery?${qs}` : "/image-gallery";
+    const { data } = await client.get<ListGalleryImagesResult>(url);
+    return data;
+  },
+
+  async saveGalleryImage(
+    body: SaveGalleryImageBody
+  ): Promise<ImageGalleryItemDto> {
+    const { data } = await client.post<ImageGalleryItemDto>(
+      "/image-gallery",
+      body
+    );
+    return data;
+  },
+
+  async moveGalleryImage(
+    id: string,
+    folderId: string | null
+  ): Promise<ImageGalleryItemDto> {
+    const { data } = await client.patch<ImageGalleryItemDto>(
+      `/image-gallery/${encodeURIComponent(id)}`,
+      { folderId }
+    );
+    return data;
+  },
+
+  async deleteGalleryImage(id: string): Promise<{ success: boolean }> {
+    const { data } = await client.delete<{ success: boolean }>(
+      `/image-gallery/${encodeURIComponent(id)}`
+    );
+    return data;
+  },
+
+  async listImageFolders(): Promise<ImageFolderDto[]> {
+    const { data } = await client.get<ImageFolderDto[]>("/image-gallery/folders");
+    return data;
+  },
+
+  async createImageFolder(body: { name: string }): Promise<ImageFolderDto> {
+    const { data } = await client.post<ImageFolderDto>(
+      "/image-gallery/folders",
+      body
+    );
+    return data;
+  },
+
+  async updateImageFolder(
+    id: string,
+    body: { name: string }
+  ): Promise<ImageFolderDto> {
+    const { data } = await client.patch<ImageFolderDto>(
+      `/image-gallery/folders/${encodeURIComponent(id)}`,
+      body
+    );
+    return data;
+  },
+
+  async deleteImageFolder(id: string): Promise<{ success: boolean }> {
+    const { data } = await client.delete<{ success: boolean }>(
+      `/image-gallery/folders/${encodeURIComponent(id)}`
     );
     return data;
   },
