@@ -1,2 +1,2 @@
-export { GenerationLoadingCard } from "@gaqno-development/frontcore/components/ui";
-export type { GenerationLoadingCardProps } from "@gaqno-development/frontcore/components/ui";
+export { GenerationLoadingCard } from "./GenerationLoadingCard";
+export type { GenerationLoadingCardProps } from "./GenerationLoadingCard";
