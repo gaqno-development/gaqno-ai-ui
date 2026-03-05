@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@gaqno-development/frontcore/components/ui";
 import { Label, Spinner } from "@gaqno-development/frontcore/components/ui";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, Download, History } from "lucide-react";
 import { useImageCreationPanel } from "@/hooks/useImageCreationPanel";
 
 export function TextToImageTab() {
@@ -27,6 +27,7 @@ export function TextToImageTab() {
     errors,
     onSubmit,
     generatedImageUrl,
+    recordedImages,
     isSubmitLoading,
     isSubmitDisabled,
     providers,
@@ -204,6 +205,53 @@ export function TextToImageTab() {
               alt="Generated"
               className="w-full rounded-lg"
             />
+          </CardContent>
+        </Card>
+      )}
+
+      {recordedImages.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <History className="h-5 w-5" />
+              Imagens geradas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Imagens que você escolheu, disponíveis para download novamente.
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {recordedImages.map((item) => (
+                <li
+                  key={item.id}
+                  className="rounded-lg border overflow-hidden bg-muted/30"
+                >
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block aspect-video relative"
+                  >
+                    <img
+                      src={item.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </a>
+                  <div className="p-2 flex justify-end">
+                    <a
+                      href={item.url}
+                      download={`generated-image-${item.id.slice(0, 8)}.png`}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                    >
+                      <Download className="h-4 w-4" />
+                      Baixar
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </CardContent>
         </Card>
       )}

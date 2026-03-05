@@ -18,6 +18,11 @@ const imageFormSchema = z.object({
 
 export type ImageFormData = z.infer<typeof imageFormSchema>;
 
+export interface RecordedImage {
+  id: string;
+  url: string;
+}
+
 function imageUrlFromTaskResult(result: unknown): string | null {
   if (!result || typeof result !== "object") return null;
   const r = result as Record<string, unknown>;
@@ -40,6 +45,7 @@ export const useImageCreationPanel = () => {
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(
     null
   );
+  const [recordedImages, setRecordedImages] = useState<RecordedImage[]>([]);
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
   const { data: taskStatus } = useTaskStatus(currentTaskId);
 
@@ -70,7 +76,13 @@ export const useImageCreationPanel = () => {
   useEffect(() => {
     if (taskStatus?.status === "completed" && taskStatus.result) {
       const url = imageUrlFromTaskResult(taskStatus.result);
-      if (url) setGeneratedImageUrl(url);
+      if (url) {
+        setGeneratedImageUrl(url);
+        setRecordedImages((prev) => [
+          { id: crypto.randomUUID(), url },
+          ...prev,
+        ]);
+      }
       setCurrentTaskId(null);
     }
     if (taskStatus?.status === "failed") {
@@ -116,6 +128,7 @@ export const useImageCreationPanel = () => {
     errors,
     onSubmit,
     generatedImageUrl,
+    recordedImages,
     isSubmitLoading:
       generate.isPending ||
       Boolean(
