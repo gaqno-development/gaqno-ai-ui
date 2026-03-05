@@ -1,5 +1,4 @@
-import { createAxiosClient } from "@gaqno-development/frontcore/utils/api";
-import { getAiServiceBaseUrl } from "@/lib/env";
+import { coreAxiosClient } from "@gaqno-development/frontcore/utils/api";
 import type {
   CampaignRecord,
   AttributionReport,
@@ -243,10 +242,7 @@ export interface GenerateVideoFromTemplateBody {
 
 const DEFAULT_SYSTEM = "You are a helpful assistant.";
 
-const client = createAxiosClient({
-  baseURL: getAiServiceBaseUrl(),
-  timeout: 180000,
-});
+const client = coreAxiosClient.ai;
 
 function textPayload(
   options: GenerateTextOptions,

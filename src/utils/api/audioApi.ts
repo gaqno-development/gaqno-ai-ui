@@ -1,5 +1,4 @@
-import { createAxiosClient } from '@gaqno-development/frontcore/utils/api';
-import { getAiServiceBaseUrl } from '@/lib/env';
+import { coreAxiosClient } from '@gaqno-development/frontcore/utils/api';
 import type {
   GetVoicesResponse,
   MusicStreamRequest,
@@ -11,10 +10,7 @@ import type {
   VoiceChangerRequest,
 } from '@/types/audio/audio';
 
-const client = createAxiosClient({
-  baseURL: getAiServiceBaseUrl(),
-  timeout: 180000,
-});
+const client = coreAxiosClient.ai;
 
 const formDataHeaders = { 'Content-Type': undefined as unknown as string };
 
