@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@gaqno-development/frontcore/components/ui";
-import { Label } from "@gaqno-development/frontcore/components/ui";
+import { Label, Spinner } from "@gaqno-development/frontcore/components/ui";
 import { Image as ImageIcon } from "lucide-react";
 import { useImageCreationPanel } from "@/hooks/useImageCreationPanel";
 
@@ -178,6 +178,20 @@ export function TextToImageTab() {
           </Button>
         </CardContent>
       </Card>
+
+      {isSubmitLoading && !generatedImageUrl && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Gerando imagem</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col items-center justify-center gap-4 py-12">
+            <Spinner className="h-10 w-10 text-primary" />
+            <p className="text-sm text-muted-foreground">
+              Aguarde enquanto a imagem é gerada...
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {generatedImageUrl && (
         <Card>
