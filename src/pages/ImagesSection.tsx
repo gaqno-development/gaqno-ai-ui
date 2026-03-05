@@ -27,19 +27,19 @@ const IMAGE_CHILDREN = [
   {
     segment: "text",
     label: "Texto para Imagem",
-    href: `${IMAGES_BASE}#text`,
+    href: `${IMAGES_BASE}/text`,
     icon: FileDescriptionIcon,
   },
   {
     segment: "edit",
     label: "Editar Imagem",
-    href: `${IMAGES_BASE}#edit`,
+    href: `${IMAGES_BASE}/edit`,
     icon: PenIcon,
   },
   {
     segment: "inpainting",
     label: "Inpainting",
-    href: `${IMAGES_BASE}#inpainting`,
+    href: `${IMAGES_BASE}/inpainting`,
     icon: PaintIcon,
   },
 ];

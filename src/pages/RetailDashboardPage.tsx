@@ -162,7 +162,7 @@ export default function RetailDashboardPage() {
             <Button
               size="sm"
               variant="default"
-              onClick={() => navigate("/ai/retail#profile")}
+              onClick={() => navigate("/ai/retail/profile")}
               disabled={!selectedProduct}
             >
               Build profile
@@ -170,7 +170,7 @@ export default function RetailDashboardPage() {
             <Button
               size="sm"
               variant="default"
-              onClick={() => navigate("/ai/retail#content")}
+              onClick={() => navigate("/ai/retail/content")}
               disabled={!selectedProduct}
             >
               Generate content
@@ -178,14 +178,14 @@ export default function RetailDashboardPage() {
             <Button
               size="sm"
               variant="default"
-              onClick={() => navigate("/ai/retail#video")}
+              onClick={() => navigate("/ai/retail/video")}
             >
               Create video
             </Button>
             <Button
               size="sm"
               variant="outline"
-              onClick={() => navigate("/ai/retail#distribution")}
+              onClick={() => navigate("/ai/retail/distribution")}
             >
               Publish
             </Button>
@@ -210,7 +210,7 @@ export default function RetailDashboardPage() {
                 key={step.segment}
                 variant="outline"
                 className="h-auto justify-between py-3 px-4"
-                onClick={() => navigate(`/ai/retail#${step.segment}`)}
+                onClick={() => navigate(`/ai/retail/${step.segment}`)}
               >
                 <span className="flex items-center gap-2">
                   <step.icon className="h-4 w-4 shrink-0" />

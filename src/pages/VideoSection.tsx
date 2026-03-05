@@ -24,19 +24,19 @@ const VIDEO_CHILDREN = [
   {
     segment: "modify",
     label: "Modificar Vídeo",
-    href: `${VIDEO_BASE}#modify`,
+    href: `${VIDEO_BASE}/modify`,
     icon: Video,
   },
   {
     segment: "reference",
     label: "Usar Referência",
-    href: `${VIDEO_BASE}#reference`,
+    href: `${VIDEO_BASE}/reference`,
     icon: Film,
   },
   {
     segment: "text",
     label: "Texto para Vídeo",
-    href: `${VIDEO_BASE}#text`,
+    href: `${VIDEO_BASE}/text`,
     icon: FileDescriptionIcon,
   },
 ];

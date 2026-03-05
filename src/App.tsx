@@ -32,13 +32,13 @@ const AI_TABS = [
 
 const VIEW_ROUTES: Record<string, string> = {
   books: "/ai/books",
-  audio: "/ai/audio#tts",
-  images: "/ai/images#text",
-  video: "/ai/video#modify",
+  audio: "/ai/audio/tts",
+  images: "/ai/images/text",
+  video: "/ai/video/modify",
   studio: "/ai/studio",
   social: "/ai/social",
   discovery: "/ai/discovery",
-  retail: "/ai/retail#dashboard",
+  retail: "/ai/retail/dashboard",
 };
 
 function viewFromPathname(pathname: string): string | null {
@@ -63,6 +63,20 @@ function AIPage() {
   React.useEffect(() => {
     if (pathname === "/ai" || pathname === "/ai/") {
       navigate("/ai/books", { replace: true });
+      return;
+    }
+    const basePaths: [string, string][] = [
+      ["/ai/audio", "/ai/audio/tts"],
+      ["/ai/images", "/ai/images/text"],
+      ["/ai/video", "/ai/video/modify"],
+      ["/ai/retail", "/ai/retail/dashboard"],
+    ];
+    const normalized = pathname.replace(/\/$/, "");
+    for (const [base, redirect] of basePaths) {
+      if (normalized === base) {
+        navigate(redirect, { replace: true });
+        return;
+      }
     }
   }, [pathname, navigate]);
 

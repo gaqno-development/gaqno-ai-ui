@@ -61,7 +61,7 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "dashboard",
         label: "Dashboard",
-        href: `${RETAIL_BASE}#dashboard`,
+        href: `${RETAIL_BASE}/dashboard`,
         icon: LayoutDashboard,
       },
     ],
@@ -72,25 +72,25 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "studio",
         label: "Content Studio (guia)",
-        href: `${RETAIL_BASE}#studio`,
+        href: `${RETAIL_BASE}/studio`,
         icon: Sparkles,
       },
       {
         segment: "profile",
         label: "Perfil do Produto",
-        href: `${RETAIL_BASE}#profile`,
+        href: `${RETAIL_BASE}/profile`,
         icon: ShoppingBag,
       },
       {
         segment: "content",
         label: "Texto Marketing",
-        href: `${RETAIL_BASE}#content`,
+        href: `${RETAIL_BASE}/content`,
         icon: FileText,
       },
       {
         segment: "video",
         label: "Video Promocional",
-        href: `${RETAIL_BASE}#video`,
+        href: `${RETAIL_BASE}/video`,
         icon: Film,
       },
     ],
@@ -101,7 +101,7 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "distribution",
         label: "WhatsApp / Canais",
-        href: `${RETAIL_BASE}#distribution`,
+        href: `${RETAIL_BASE}/distribution`,
         icon: Send,
       },
     ],
@@ -112,13 +112,13 @@ const RETAIL_NAV_GROUPS: SectionWithSubNavGroup[] = [
       {
         segment: "attribution",
         label: "Atribuicao GMV",
-        href: `${RETAIL_BASE}#attribution`,
+        href: `${RETAIL_BASE}/attribution`,
         icon: BarChart,
       },
       {
         segment: "billing",
         label: "Faturamento",
-        href: `${RETAIL_BASE}#billing`,
+        href: `${RETAIL_BASE}/billing`,
         icon: CreditCard,
       },
     ],
