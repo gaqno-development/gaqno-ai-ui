@@ -12,18 +12,11 @@ import {
 import { Input } from "@gaqno-development/frontcore/components/ui";
 import { useBillingSummaryQuery } from "@/hooks/queries/useBillingQueries";
 
-const DEFAULT_TENANT_ID = "00000000-0000-4000-a000-000000000000";
-
 export function BillingSection() {
-  const [tenantId, setTenantId] = useState(DEFAULT_TENANT_ID);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
 
-  const summaryQuery = useBillingSummaryQuery(
-    tenantId,
-    from || undefined,
-    to || undefined
-  );
+  const summaryQuery = useBillingSummaryQuery(from || undefined, to || undefined);
   const summary = summaryQuery.data;
 
   return (
@@ -40,15 +33,6 @@ export function BillingSection() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label className="text-xs font-medium">Tenant ID</Label>
-          <Input
-            value={tenantId}
-            onChange={(e) => setTenantId(e.target.value)}
-            placeholder={DEFAULT_TENANT_ID}
-            className="max-w-md font-mono text-xs"
-          />
-        </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label className="text-xs font-medium">From (optional, ISO)</Label>

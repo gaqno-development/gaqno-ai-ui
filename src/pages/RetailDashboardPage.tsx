@@ -34,8 +34,6 @@ import {
 } from "lucide-react";
 import type { ErpProduct } from "@gaqno-development/frontcore/utils/api";
 
-const DEFAULT_TENANT = "00000000-0000-4000-a000-000000000000";
-
 const WORKFLOW_STEPS = [
   { segment: "profile", label: "Perfil do Produto", icon: ShoppingBag },
   { segment: "content", label: "Texto Marketing", icon: FileText },
@@ -47,14 +45,13 @@ const WORKFLOW_STEPS = [
 
 export default function RetailDashboardPage() {
   const navigate = useNavigate();
-  const [tenantId, setTenantId] = useState(DEFAULT_TENANT);
   const [selectedProduct, setSelectedProduct] = useState<ErpProduct | null>(
     null
   );
 
-  const productsQuery = useErpProducts({ tenantId, limit: 50 });
-  const campaignsQuery = useCampaigns(tenantId);
-  const billingQuery = useBillingSummary(tenantId);
+  const productsQuery = useErpProducts({ limit: 50 });
+  const campaignsQuery = useCampaigns();
+  const billingQuery = useBillingSummary();
 
   const products = productsQuery.data ?? [];
   const campaigns = campaignsQuery.data ?? [];

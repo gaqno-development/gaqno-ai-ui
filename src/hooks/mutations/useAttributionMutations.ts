@@ -7,11 +7,9 @@ export const useCreateCampaignMutation = () => {
 
   return useMutation({
     mutationFn: (body: CreateCampaignBody) => aiApi.createCampaign(body),
-    onSuccess: (_, variables) => {
-      const tenantId =
-        variables.tenantId ?? "00000000-0000-0000-0000-000000000000";
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["attribution-campaigns", tenantId],
+        queryKey: ["attribution-campaigns"],
       });
     },
   });

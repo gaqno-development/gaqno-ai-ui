@@ -1,29 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { aiApi } from "@/utils/api/aiApi";
 
-export const useCampaignsQuery = (tenantId: string) => {
+export const useCampaignsQuery = () => {
   return useQuery({
-    queryKey: ["attribution-campaigns", tenantId],
-    queryFn: () => aiApi.listCampaigns(tenantId),
-    enabled: !!tenantId,
+    queryKey: ["attribution-campaigns"],
+    queryFn: () => aiApi.listCampaigns(),
   });
 };
 
-export const useCampaignQuery = (id: string, tenantId: string) => {
+export const useCampaignQuery = (id: string) => {
   return useQuery({
-    queryKey: ["attribution-campaign", id, tenantId],
-    queryFn: () => aiApi.getCampaign(id, tenantId),
-    enabled: !!id && !!tenantId,
+    queryKey: ["attribution-campaign", id],
+    queryFn: () => aiApi.getCampaign(id),
+    enabled: !!id,
   });
 };
 
-export const useAttributionReportQuery = (
-  campaignId: string,
-  tenantId: string
-) => {
+export const useAttributionReportQuery = (campaignId: string) => {
   return useQuery({
-    queryKey: ["attribution-report", campaignId, tenantId],
-    queryFn: () => aiApi.getAttributionReport(campaignId, tenantId),
-    enabled: !!campaignId && !!tenantId,
+    queryKey: ["attribution-report", campaignId],
+    queryFn: () => aiApi.getAttributionReport(campaignId),
+    enabled: !!campaignId,
   });
 };

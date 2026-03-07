@@ -17,10 +17,7 @@ import {
 } from "@/hooks/queries/useAttributionQueries";
 import { useCreateCampaignMutation } from "@/hooks/mutations/useAttributionMutations";
 
-const DEFAULT_TENANT_ID = "00000000-0000-4000-a000-000000000000";
-
 export function AttributionSection() {
-  const [tenantId, setTenantId] = useState(DEFAULT_TENANT_ID);
   const [name, setName] = useState("");
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
@@ -28,18 +25,14 @@ export function AttributionSection() {
     null
   );
 
-  const campaignsQuery = useCampaignsQuery(tenantId);
-  const reportQuery = useAttributionReportQuery(
-    selectedCampaignId ?? "",
-    tenantId
-  );
+  const campaignsQuery = useCampaignsQuery();
+  const reportQuery = useAttributionReportQuery(selectedCampaignId ?? "");
   const createCampaign = useCreateCampaignMutation();
 
   const handleCreate = useCallback(() => {
     if (!name.trim() || !startAt || !endAt) return;
     createCampaign.mutate(
       {
-        tenantId: tenantId || undefined,
         name: name.trim(),
         startAt: new Date(startAt).toISOString(),
         endAt: new Date(endAt).toISOString(),
@@ -52,7 +45,7 @@ export function AttributionSection() {
         },
       }
     );
-  }, [name, startAt, endAt, tenantId, createCampaign]);
+  }, [name, startAt, endAt, createCampaign]);
 
   const canCreate =
     name.trim().length > 0 &&
@@ -80,15 +73,6 @@ export function AttributionSection() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label className="text-xs font-medium">Tenant ID</Label>
-          <Input
-            value={tenantId}
-            onChange={(e) => setTenantId(e.target.value)}
-            placeholder={DEFAULT_TENANT_ID}
-            className="max-w-md font-mono text-xs"
-          />
-        </div>
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="space-y-2">
             <Label className="text-xs font-medium">Campaign name</Label>

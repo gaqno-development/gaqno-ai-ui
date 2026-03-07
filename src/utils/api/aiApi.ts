@@ -647,57 +647,53 @@ export const aiApi = {
   },
 
   async createCampaign(body: CreateCampaignBody): Promise<CampaignRecord> {
+    const { tenantId: _removed, ...rest } = body;
     const { data } = await client.post<CampaignRecord>(
       "/attribution/campaigns",
-      body
+      rest
     );
     return data;
   },
 
   async listCampaigns(
-    tenantId: string,
     options?: { limit?: number; offset?: number }
   ): Promise<CampaignRecord[]> {
-    const params: Record<string, string | number> = { tenantId };
+    const params: Record<string, string | number> = {};
     if (options?.limit != null) params.limit = options.limit;
     if (options?.offset != null) params.offset = options.offset;
     const { data } = await client.get<CampaignRecord[]>(
       "/attribution/campaigns",
-      { params }
+      Object.keys(params).length ? { params } : undefined
     );
     return data ?? [];
   },
 
-  async getCampaign(id: string, tenantId: string): Promise<CampaignRecord> {
+  async getCampaign(id: string): Promise<CampaignRecord> {
     const { data } = await client.get<CampaignRecord>(
-      `/attribution/campaigns/${id}`,
-      { params: { tenantId } }
+      `/attribution/campaigns/${id}`
     );
     return data;
   },
 
   async getAttributionReport(
-    campaignId: string,
-    tenantId: string
+    campaignId: string
   ): Promise<AttributionReport> {
     const { data } = await client.get<AttributionReport>(
-      `/attribution/campaigns/${campaignId}/report`,
-      { params: { tenantId } }
+      `/attribution/campaigns/${campaignId}/report`
     );
     return data;
   },
 
   async getBillingSummary(
-    tenantId: string,
     from?: string,
     to?: string
   ): Promise<BillingSummary> {
-    const params: Record<string, string> = { tenantId };
+    const params: Record<string, string> = {};
     if (from) params.from = from;
     if (to) params.to = to;
-    const { data } = await client.get<BillingSummary>("/billing/summary", {
-      params,
-    });
+    const { data } = await client.get<BillingSummary>("/billing/summary",
+      Object.keys(params).length ? { params } : undefined
+    );
     return data;
   },
 };
